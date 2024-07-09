@@ -1,6 +1,7 @@
-# gcube 0.0.2
+# gcube 0.1.0
 
-* ...
+* Generate species taxonomy
+* Create data cube for multiple species
 
 # gcube 0.0.1
 
