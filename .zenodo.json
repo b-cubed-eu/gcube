@@ -1,6 +1,6 @@
 {
   "title": "gcube: Simulating Biodiversity Data Cubes",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "license": "MIT",
   "upload_type": "software",
   "description": "<p>Simulation framework for biodiversity data cubes.<\/p>",

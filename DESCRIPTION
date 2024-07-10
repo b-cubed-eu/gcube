@@ -43,11 +43,14 @@ Imports:
     cli,
     dplyr,
     gstat,
+    methods,
     mnormt,
+    purrr,
     rlang,
     sf,
     stats,
     terra,
+    tidyr,
     vegan,
     withr
 Suggests: 
