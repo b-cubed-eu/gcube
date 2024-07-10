@@ -43,3 +43,6 @@ reference:
   - title: "Grid designation process helper functions"
     contents:
       - has_concept("designation")
+  - title: "Mapping functions helper function"
+    contents:
+      - has_concept("multispecies_low")

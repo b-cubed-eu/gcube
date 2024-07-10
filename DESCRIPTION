@@ -43,6 +43,7 @@ Imports:
     cli,
     dplyr,
     gstat,
+    methods,
     mnormt,
     purrr,
     rlang,

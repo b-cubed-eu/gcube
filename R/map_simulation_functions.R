@@ -24,11 +24,17 @@
 #' of `nested = FALSE`, this list-column is expanded into additional rows and
 #' columns.
 #'
+#' @export
+#'
 #' @import dplyr
 #' @importFrom purrr pmap
 #' @importFrom tidyr unnest
+#' @importFrom stats setNames
+#'
+#' @family multispecies_low
 #'
 #' @examples
+#' print("to do")
 #'
 
 map_simulation_functions <- function(
@@ -42,7 +48,8 @@ map_simulation_functions <- function(
   function_message <- paste("`f` must be a function.\nOne of",
                             "`simulate_occurrences()`, `sample_observations()`",
                             "or `grid_designation()`.")
-  do.call(stopifnot, setNames(list(inherits(f, "function")), function_message))
+  do.call(stopifnot, stats::setNames(list(inherits(f, "function")),
+                                     function_message))
 
   # Check if df is a dataframe
   stopifnot("`df` must be a dataframe." = inherits(df, "data.frame"))
@@ -53,7 +60,7 @@ map_simulation_functions <- function(
 
   # 2. Other checks
   # Function f must be one of three cube simulation functions
-  do.call(stopifnot, setNames(list(identical(f, simulate_occurrences) ||
+  do.call(stopifnot, stats::setNames(list(identical(f, simulate_occurrences) ||
                                      identical(f, sample_observations) ||
                                      identical(f, grid_designation)),
                               function_message))

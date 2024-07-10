@@ -32,10 +32,12 @@
 #'
 #' @import dplyr
 #' @import assertthat
+#' @importFrom stats setNames
 #'
 #' @family multispecies
 #'
 #' @examples
+#' print("to do")
 #'
 
 map_simulate_occurrences <- function(
@@ -65,8 +67,9 @@ map_simulate_occurrences <- function(
     # Check if arg_list is a named list with single strings
     arg_list_message <- paste("You have provided column names in `arg_list`",
                               "that are not present in `df`.")
-    do.call(stopifnot, setNames(list(all(unlist(arg_list) %in% colnames(df))),
-                                arg_list_message))
+    do.call(stopifnot,
+            stats::setNames(list(all(unlist(arg_list) %in% colnames(df))),
+                            arg_list_message))
   }
   ### End checks
 
