@@ -80,7 +80,8 @@ map_simulation_functions <- function(
   # Unnest if specified
   if (!nested) {
     out_df <- out_df %>%
-      tidyr::unnest(cols = "mapped_col")
+      tidyr::unnest(cols = "mapped_col", names_repair = "minimal")
+    out_df <- out_df[, !duplicated(t(out_df))]
   }
 
   return(out_df)
