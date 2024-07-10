@@ -54,6 +54,7 @@
 #'   spatial_autocorr = "random",
 #'   seed = 123)
 #'
+#' # Simulate occurrences
 #' sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
 #' sim_occ_nested
 #'
@@ -64,7 +65,7 @@
 #'    st_sf()
 #'
 #'
-#' ## Example with simple column names
+#' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
 #'   rename(polygon = plgn,
@@ -76,6 +77,7 @@
 #'     sd_step = "sd"
 #'   )
 #'
+#' # Simulate occurrences
 #' map_simulate_occurrences(
 #'   df = species_dataset_df2,
 #'   arg_list = arg_conv_list)
@@ -84,7 +86,6 @@
 #'   df = species_dataset_df2,
 #'   nested = FALSE,
 #'   arg_list = arg_conv_list)
-#'
 
 map_simulate_occurrences <- function(
     df,
