@@ -4,7 +4,7 @@
 \alias{map_simulation_functions}
 \title{Map cube simulation functions over multiple rows of a dataframe}
 \usage{
-map_simulation_functions(f, df, nested = TRUE, extra_arg_names = NULL)
+map_simulation_functions(f, df, nested = TRUE)
 }
 \arguments{
 \item{f}{One of three cube simulation functions: \code{simulate_occurrences()},
@@ -18,10 +18,6 @@ are not used by this function. They will be retained in the output.}
 \item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
 dataframes calculated by \code{simulate_occurrences()}. Otherwise, expand this
 list-column into rows and columns.}
-
-\item{extra_arg_names}{A character vector of extra arguments from the custom
-temporal_function if it contains and ellipsis (\code{...}). \code{NULL} by default
-(no extra arguments).}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to the input

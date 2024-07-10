@@ -23,9 +23,7 @@ column names in \code{df} are identical to argument names of
 be specified as a named list where the names are the argument names of
 \code{simulate_occurrences()} or the function specified in its \code{temporal_function}
 argument, and their associated values a string of the corresponding column
-name in \code{df}. If \code{temporal_function} is a custom function containing the
-ellipsis argument (\code{...}), you need to specify any arguments used for this
-ellipsis in this list as well.}
+name in \code{df}.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to the input
