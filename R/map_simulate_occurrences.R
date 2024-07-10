@@ -68,7 +68,6 @@ map_simulate_occurrences <- function(
     do.call(stopifnot, setNames(list(all(unlist(arg_list) %in% colnames(df))),
                                 arg_list_message))
   }
-
   ### End checks
 
   # Rename column names if necessary

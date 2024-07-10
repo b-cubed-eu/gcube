@@ -57,7 +57,6 @@ map_simulation_functions <- function(
                                      identical(f, sample_observations) ||
                                      identical(f, grid_designation)),
                               function_message))
-
   ### End checks
 
   ## Select data to map function
