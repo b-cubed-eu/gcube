@@ -119,6 +119,9 @@ map_sample_observations <- function(
   }
   ### End checks
 
+  # Store original column names
+  og_colnames <- colnames(df)
+
   # Rename column names if necessary
   if (assertthat::noNA(arg_list)) {
     df <- df %>%
@@ -131,7 +134,9 @@ map_sample_observations <- function(
     df = df,
     nested = nested)
 
-  # Rename nested output column
+  # Rename columns
+  colnames(out_df)[seq_along(og_colnames)] <- og_colnames
+
   if (nested) {
     out_df <- out_df %>%
       dplyr::rename("observations_total" = "mapped_col")

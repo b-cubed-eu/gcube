@@ -120,6 +120,9 @@ map_simulate_occurrences <- function(
   }
   ### End checks
 
+  # Store original column names
+  og_colnames <- colnames(df)
+
   # Rename column names if necessary
   if (assertthat::noNA(arg_list)) {
     df <- df %>%
@@ -132,7 +135,9 @@ map_simulate_occurrences <- function(
     df = df,
     nested = nested)
 
-  # Rename nested output column
+  # Rename columns
+  colnames(out_df)[seq_along(og_colnames)] <- og_colnames
+
   if (nested) {
     out_df <- out_df %>%
       dplyr::rename("occurrences" = "mapped_col")

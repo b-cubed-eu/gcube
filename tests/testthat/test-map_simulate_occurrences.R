@@ -60,7 +60,7 @@ test_that("map_simulate_occurrences works with arg_list for renaming columns", {
 
   # Are previous column names retained and one extra column name created?
   expect_true("occurrences" %in% colnames(sim_occ_nested))
-  expect_equal(sort(c(colnames(species_dataset_df1), "occurrences")),
+  expect_equal(sort(c(colnames(species_dataset_df2), "occurrences")),
                sort(colnames(sim_occ_nested)))
   # Is the new column a list-column?
   expect_true(inherits(sim_occ_nested$occurrences, "list"))
