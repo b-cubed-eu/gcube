@@ -81,7 +81,8 @@ map_simulate_occurrences <- function(
   out_df <- map_simulation_functions(
     f = simulate_occurrences,
     df = df,
-    nested = nested)
+    nested = nested,
+    extra_arg_names = names(arg_list))
 
   # Rename nested output column
   if (nested) {
