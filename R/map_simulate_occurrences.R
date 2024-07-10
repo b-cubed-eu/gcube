@@ -1,19 +1,18 @@
-#' Simulate occurrences within a spatiotemporal scope
+#' Map `simulate_occurrences()` function over multiple species
 #'
-#' The function simulates occurrences of a species within a given spatial
-#' and/or temporal extend.
+#' The function executes `simulate_occurrences()` over multiple rows of a
+#' dataframe, representing multiple different species, containing potentially
+#' different function arguments over multiple columns.
 #'
 #' @param df ...
-#' @param unnest Logical. If `TRUE` (default), ... Otherwise ...
+#' @param nested Logical. If `TRUE` (default), ... Otherwise ...
 #' @param arg_list ...
 #'
 #' @returns ...
 #'
-#' @export ...
+#' @export
 #'
 #' @import dplyr
-#' @import purrr
-#' @import tidyr
 #' @import assertthat
 #'
 #' @family multispecies
@@ -23,46 +22,35 @@
 
 map_simulate_occurrences <- function(
     df,
-    unnest = TRUE,
+    nested = TRUE,
     arg_list = NA) {
   ### Start checks
   # 1. Check input type and length
   # Check if df is a dataframe
   stopifnot("`df` must be a dataframe." = inherits(df, "data.frame"))
 
-  # Check if aggregate is a logical vector of length 1
-  stopifnot("`unnest` must be a logical vector of length 1." =
-              assertthat::is.flag(unnest) && assertthat::noNA(unnest))
+  # Check if nested is a logical vector of length 1
+  stopifnot("`nested` must be a logical vector of length 1." =
+              assertthat::is.flag(nested) && assertthat::noNA(nested))
 
   ### End checks
 
-  sim_occ_args <- formalArgs(simulate_occurrences)
-  sim_occ_names <- sim_occ_args[sim_occ_args != "..."]
-
-  temp_f_args <- sapply(df$temporal_function, function(f) {
-    if (is.function(f)) formalArgs(f)
-  })
-  temp_f_names <- unique(unlist(temp_f_args))
-
-  col_arg_names <- unique(c(sim_occ_names, temp_f_names))
-
+  # Rename column names if necessary
   if (!is.na(arg_list)) {
     df <- df %>%
-      rename(!!!arg_list)
+      dplyr::rename(!!!arg_list)
   }
 
-  selection_names <- intersect(names(df), col_arg_names)
+  # Map function over all rows
+  out_df <- map_simulation_functions(
+    f = simulate_occurrences,
+    df = df,
+    nested = nested)
 
-  out_df <- df %>%
-    mutate(
-      occurrences = purrr::pmap(
-        dplyr::select(., all_of(selection_names)),
-        simulate_occurrences)
-    )
-
-  if (unnest) {
+  # Rename nested output column
+  if (nested) {
     out_df <- out_df %>%
-      tidyr::unnest(cols = "occurrences")
+      dplyr::rename("occurrences", "mapped_col")
   }
 
   return(out_df)
