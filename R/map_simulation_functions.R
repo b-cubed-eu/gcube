@@ -35,10 +35,10 @@ map_simulation_functions <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if f is a function
-  function_message <- paste("`f` must be a function. One of",
+  function_message <- paste("`f` must be a function.\nOne of",
                             "`simulate_occurrences()`, `sample_observations()`",
                             "or `grid_designation()`.")
-  stopifnot(function_message = inherits(f, "function"))
+  do.call(stopifnot, setNames(list(inherits(f, "function")), function_message))
 
   # Check if df is a dataframe
   stopifnot("`df` must be a dataframe." = inherits(df, "data.frame"))
@@ -49,11 +49,10 @@ map_simulation_functions <- function(
 
   # 2. Other checks
   # Function f must be one of three cube simulation functions
-  stopifnot(function_message =
-              identical(f, simulate_occurrences) ||
-              identical(f, sample_observations) ||
-              identical(f, grid_designation)
-            )
+  do.call(stopifnot, setNames(list(identical(f, simulate_occurrences) ||
+                                     identical(f, sample_observations) ||
+                                     identical(f, grid_designation)),
+                              function_message))
 
   ### End checks
 

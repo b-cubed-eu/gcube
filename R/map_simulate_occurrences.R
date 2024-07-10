@@ -51,7 +51,23 @@ map_simulate_occurrences <- function(
   stopifnot("`nested` must be a logical vector of length 1." =
               assertthat::is.flag(nested) && assertthat::noNA(nested))
 
-  # Check if arg_list is a named list
+  # 2. Other checks
+  # Check arg_list
+  if (assertthat::noNA(arg_list)) {
+    # Check if arg_list is a named list with single strings
+    stopifnot(
+        "`arg_list` must be named list containing one string for each value." =
+        is.list(arg_list) &&
+        !is.null(names(arg_list)) &&
+        all(sapply(arg_list, assertthat::is.string))
+      )
+
+    # Check if arg_list is a named list with single strings
+    arg_list_message <- paste("You have provided column names in `arg_list`",
+                              "that are not present in `df`.")
+    do.call(stopifnot, setNames(list(all(unlist(arg_list) %in% colnames(df))),
+                                arg_list_message))
+  }
 
   ### End checks
 
