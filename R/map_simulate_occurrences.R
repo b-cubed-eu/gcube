@@ -9,7 +9,7 @@
 #' mapping `simulate_occurrences()` for each species. `df` can have columns that
 #' are not used by this function. They will be retained in the output.
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' dataframes calculated by `simulate_occurrences()`. Otherwise, expand this
+#' sf objects calculated by `simulate_occurrences()`. Otherwise, expand this
 #' list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
@@ -22,7 +22,11 @@
 #' ellipsis argument (`...`), you need to specify any arguments used for this
 #' ellipsis in this list as well.
 #'
-#' @returns ...
+#' @returns In case of `nested = TRUE`, a dataframe identical to the input
+#' dataframe `df`, but with an extra list-column called `occurrences` containing
+#' an sf object with POINT geometry for each row computed by
+#' `simulate_occurrences()`. In case of `nested = FALSE`, this list-column is
+#' expanded into additional rows and columns.
 #'
 #' @export
 #'

@@ -15,7 +15,11 @@
 #' dataframes calculated by `simulate_occurrences()`. Otherwise, expand this
 #' list-column into rows and columns.
 #'
-#' @returns ...
+#' @returns In case of `nested = TRUE`, a dataframe identical to the input
+#' dataframe `df`, but with an extra list-column called `mapped_col` containing
+#' an sf object for each row computed by the function specified in `f`. In case
+#' of `nested = FALSE`, this list-column is expanded into additional rows and
+#' columns.
 #'
 #' @import dplyr
 #' @importFrom purrr pmap
