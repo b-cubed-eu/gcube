@@ -47,15 +47,48 @@ library(dplyr)
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 
-#
+## Example with simple column names
+# Specify dataframe for 3 species with custom function arguments
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(polygon), 3),
+  plgn = rep(list(plgn), 3),
   initial_average_abundance = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random")
+  spatial_autocorr = "random",
+  seed = 123)
+
+sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
+sim_occ_nested
+
+# Unnest output and create sf object again
+sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df,
+                                             nested = FALSE)
+sim_occ_unnested \%>\%
+   st_sf()
+
+
+## Example with simple column names
+# Specify dataframe for 3 species with custom function arguments
+species_dataset_df2 <- species_dataset_df \%>\%
+  rename(polygon = plgn,
+         sd = sd_step)
+
+# Create named list for argument conversion
+arg_conv_list <- list(
+    plgn = "polygon",
+    sd_step = "sd"
+  )
+
+map_simulate_occurrences(
+  df = species_dataset_df2,
+  arg_list = arg_conv_list)
+
+map_simulate_occurrences(
+  df = species_dataset_df2,
+  nested = FALSE,
+  arg_list = arg_conv_list)
 
 }
 \concept{multispecies}
