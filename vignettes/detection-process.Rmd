@@ -2,7 +2,7 @@
 title: "2. Simulating the detection process"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{detection-process}
+  %\VignetteIndexEntry{2. Simulating the detection process}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
