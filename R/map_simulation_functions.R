@@ -6,7 +6,7 @@
 #' columns.
 #'
 #' @param f One of three cube simulation functions: `simulate_occurrences()`,
-#' `sample_observations()` or `grid_designation()`
+#' `sample_observations()` or `grid_designation()`.
 #' @param df A dataframe containing multiple rows. Each row is considered a
 #' different species. The columns are function arguments with values used for
 #' mapping `simulate_occurrences()` for each species. `df` can have columns that
@@ -31,7 +31,10 @@ map_simulation_functions <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if f is a function
-  stopifnot("`f` must be a function" = inherits(f, "function"))
+  function_message <- paste("`f` must be a function. One of",
+                            "`simulate_occurrences()`, `sample_observations()`",
+                            "or `grid_designation()`.")
+  stopifnot(function_message = inherits(f, "function"))
 
   # Check if df is a dataframe
   stopifnot("`df` must be a dataframe." = inherits(df, "data.frame"))
@@ -42,6 +45,11 @@ map_simulation_functions <- function(
 
   # 2. Other checks
   # Function f must be one of three cube simulation functions
+  stopifnot(function_message =
+              identical(f, simulate_occurrences) ||
+              identical(f, sample_observations) ||
+              identical(f, grid_designation)
+            )
 
   ### End checks
 
