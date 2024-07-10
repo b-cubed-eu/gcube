@@ -37,7 +37,22 @@
 #' @family multispecies
 #'
 #' @examples
-#' print("to do")
+#' # Load packages
+#' library(sf)
+#' library(dplyr)
+#'
+#' # Create polygon
+#' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
+#'
+#' #
+#' species_dataset_df <- tibble(
+#'   taxonID = c("species1", "species2", "species3"),
+#'   plgn = rep(list(polygon), 3),
+#'   initial_average_abundance = c(50, 100, 500),
+#'   n_time_points = rep(6, 3),
+#'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
+#'   sd_step = c(1, 1, NA),
+#'   spatial_autocorr = "random")
 #'
 
 map_simulate_occurrences <- function(
