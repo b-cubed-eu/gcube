@@ -67,7 +67,7 @@ We create a random polygon as input.
 
 ``` r
 # Create a polygon to simulate occurrences
-polygon <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
 
 # Visualise
 ggplot() + 
@@ -176,7 +176,7 @@ grid_df <- st_make_grid(
   ) %>%
   st_sf() %>%
   mutate(intersect = as.vector(st_intersects(geometry, polygon,
-                                             sparse = F))) %>%
+                                             sparse = FALSE))) %>%
   dplyr::filter(intersect == TRUE) %>%
   dplyr::select(-"intersect")
 ```
