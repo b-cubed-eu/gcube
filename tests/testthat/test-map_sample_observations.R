@@ -33,7 +33,8 @@ species_dataset_df1 <- tibble(
 # simple polygon. Create named list for argument conversion.
 species_dataset_df2 <- species_dataset_df1 %>%
   rename(polygon = plgn,
-         sd = sd_step)
+         sd = sd_step,
+         det_prob = detection_probability)
 
 arg_conv_list <- list(
     plgn = "polygon",
@@ -42,7 +43,7 @@ arg_conv_list <- list(
   )
 
 # Dataframe with column names equal to arguments for road polygon
-species_dataset_df1 <- tibble(
+species_dataset_df3 <- tibble(
   taxonID = c("species1", "species2", "species3"),
   plgn = rep(list(plgn), 3),
   initial_average_abundance = c(50, 100, 500),
@@ -58,7 +59,7 @@ species_dataset_df1 <- tibble(
 
 
 # Map simulate occurrences
-sim_occ_nested1 <- map_simulate_occurrences(
+sample_obs_nested1 <- map_simulate_occurrences(
   df = species_dataset_df1)
 sim_occ2 <- map_simulate_occurrences(
   df = species_dataset_df2,
@@ -68,3 +69,27 @@ sim_occ3 <- map_simulate_occurrences(
 
 ## Unit tests
 
+test_that("map_sample_observations works with simple column names and plgn", {
+  # Test with nested is TRUE
+  sample_obs_nested <- map_sample_observations(df = sample_obs_nested1)
+
+  # Are previous column names retained and one extra column name created?
+  expect_true("observations_total" %in% colnames(sample_obs_nested))
+  expect_equal(sort(c(colnames(sample_obs_nested1), "observations_total")),
+               sort(colnames(sample_obs_nested)))
+  # Is the new column a list-column?
+  expect_true(inherits(sample_obs_nested$observations_total, "list"))
+  # Is the output of the function an sf object for each species (each row)?
+  expect_true(all(sapply(sample_obs_nested$observations_total, inherits, "sf")))
+
+  # Test with nested is FALSE
+  sample_obs_unnested <- map_simulate_occurrences(df = sample_obs_nested1,
+                                                  nested = FALSE)
+
+  # Is the occurrence column created?
+  expect_false("observations_total" %in% colnames(sample_obs_unnested))
+  # Do we have unnested successfully?
+  expect_true(nrow(sample_obs_unnested) > nrow(sample_obs_nested1))
+  expect_equal(tidyr::unnest(sample_obs_nested, "observations_total"),
+               sample_obs_unnested)
+})
