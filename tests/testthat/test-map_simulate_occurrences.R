@@ -45,7 +45,6 @@ test_that("map_simulate_occurrences works with simple column names", {
   expect_true(nrow(sim_occ_unnested) > nrow(species_dataset_df1))
   expect_equal(tidyr::unnest(sim_occ_nested, "occurrences"),
                sim_occ_unnested)
-
 })
 
 test_that("map_simulate_occurrences works with arg_list for renaming columns", {
