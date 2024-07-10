@@ -19,21 +19,16 @@ species_dataset_df2 <- species_dataset_df1 %>%
   rename(polygon = plgn,
          sd = sd_step)
 
-arg_conv_list2 <- list(
-    plgn = "polygon",
-    sd_step = "sd"
-  )
-
 
 ## Unit tests
 
 test_that("map_simulate_occurrences works with simple column names", {
   # Test with nested is TRUE
-  sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
+  sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df1)
 
   # Are previous column names retained and one extra column name created?
   expect_true("occurrences" %in% colnames(sim_occ_nested))
-  expect_equal(sort(c(colnames(species_dataset_df), "occurrences")),
+  expect_equal(sort(c(colnames(species_dataset_df1), "occurrences")),
                sort(colnames(sim_occ_nested)))
   # Is the new column a list-column?
   expect_true(inherits(sim_occ_nested$occurrences, "list"))
@@ -41,13 +36,13 @@ test_that("map_simulate_occurrences works with simple column names", {
   expect_true(all(sapply(sim_occ_nested$occurrences, inherits, "sf")))
 
   # Test with nested is FALSE
-  sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df,
+  sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df1,
                                                nested = FALSE)
 
   # Is the occurrence column created?
   expect_false("occurrences" %in% colnames(sim_occ_unnested))
   # Do we have unnested successfully?
-  expect_true(nrow(sim_occ_unnested) > nrow(species_dataset_df))
+  expect_true(nrow(sim_occ_unnested) > nrow(species_dataset_df1))
   expect_equal(tidyr::unnest(sim_occ_nested, "occurrences"),
                sim_occ_unnested)
 
@@ -55,16 +50,20 @@ test_that("map_simulate_occurrences works with simple column names", {
 
 test_that("map_simulate_occurrences works with arg_list for renaming columns", {
   # Test with arg_list
-  sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df2, arg_list = arg_conv_list)
+  arg_conv_list <- list(
+    plgn = "polygon",
+    sd_step = "sd"
+  )
+
+  sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df2,
+                                             arg_list = arg_conv_list)
+
+  # Are previous column names retained and one extra column name created?
   expect_true("occurrences" %in% colnames(sim_occ_nested))
+  expect_equal(sort(c(colnames(species_dataset_df1), "occurrences")),
+               sort(colnames(sim_occ_nested)))
+  # Is the new column a list-column?
   expect_true(inherits(sim_occ_nested$occurrences, "list"))
+  # Is the output of the functin an sf object for each species (each row)?
+  expect_true(all(sapply(sim_occ_nested$occurrences, inherits, "sf")))
 })
-
-
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
-
-# Do with and without named list and should be the same
-# keep original column names
-# nest = false same result if you nest afterwards
