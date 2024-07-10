@@ -7,8 +7,13 @@
 #'
 #' @param f One of three cube simulation functions: `simulate_occurrences()`,
 #' `sample_observations()` or `grid_designation()`
-#' @param df ...
-#' @param nested Logical. If `TRUE` (default), ... Otherwise ...
+#' @param df A dataframe containing multiple rows. Each row is considered a
+#' different species. The columns are function arguments with values used for
+#' mapping `simulate_occurrences()` for each species. `df` can have columns that
+#' are not used by this function. They will be retained in the output.
+#' @param nested Logical. If `TRUE` (default), retain list-column containing
+#' dataframes calculated by `simulate_occurrences()`. Otherwise, expand this
+#' list-column into rows and columns.
 #'
 #' @returns ...
 #'
