@@ -18,9 +18,7 @@
 #' be specified as a named list where the names are the argument names of
 #' `simulate_occurrences()` or the function specified in its `temporal_function`
 #' argument, and their associated values a string of the corresponding column
-#' name in `df`. If `temporal_function` is a custom function containing the
-#' ellipsis argument (`...`), you need to specify any arguments used for this
-#' ellipsis in this list as well.
+#' name in `df`.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to the input
 #' dataframe `df`, but with an extra list-column called `occurrences` containing
@@ -131,8 +129,7 @@ map_simulate_occurrences <- function(
   out_df <- map_simulation_functions(
     f = simulate_occurrences,
     df = df,
-    nested = nested,
-    extra_arg_names = names(arg_list))
+    nested = nested)
 
   # Rename nested output column
   if (nested) {

@@ -14,9 +14,6 @@
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
 #' dataframes calculated by `simulate_occurrences()`. Otherwise, expand this
 #' list-column into rows and columns.
-#' @param extra_arg_names A character vector of extra arguments from the custom
-#' temporal_function if it contains and ellipsis (`...`). `NULL` by default
-#' (no extra arguments).
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to the input
 #' dataframe `df`, but with an extra list-column called `mapped_col` containing
@@ -40,8 +37,7 @@
 map_simulation_functions <- function(
     f,
     df,
-    nested = TRUE,
-    extra_arg_names = NULL) {
+    nested = TRUE) {
   ### Start checks
   # 1. Check input type and length
   # Check if f is a function
@@ -70,15 +66,8 @@ map_simulation_functions <- function(
   # Retrieve arguments of function
   col_arg_names <- get_function_arguments(f, df)
 
-  # Account for possible extra arguments from custom temporal_function
-  if (is.null(extra_arg_names)) {
-    col_arg_names_full <- unique(col_arg_names)
-  } else {
-    col_arg_names_full <- unique(extra_arg_names, col_arg_names)
-  }
-
   # Only select names
-  selection_names <- intersect(names(df), col_arg_names_full)
+  selection_names <- intersect(names(df), col_arg_names)
 
   # Select correct data for mapping
   analysis_df <- dplyr::select(df, all_of(selection_names))
