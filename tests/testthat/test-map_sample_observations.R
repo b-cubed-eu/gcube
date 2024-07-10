@@ -59,7 +59,7 @@ species_dataset_df3 <- tibble(
 
 
 # Map simulate occurrences
-sample_obs_nested1 <- map_simulate_occurrences(
+sim_occ1 <- map_simulate_occurrences(
   df = species_dataset_df1)
 sim_occ2 <- map_simulate_occurrences(
   df = species_dataset_df2,
@@ -71,11 +71,11 @@ sim_occ3 <- map_simulate_occurrences(
 
 test_that("map_sample_observations works with simple column names and plgn", {
   # Test with nested is TRUE
-  sample_obs_nested <- map_sample_observations(df = sample_obs_nested1)
+  sample_obs_nested <- map_sample_observations(df = sim_occ1)
 
   # Are previous column names retained and one extra column name created?
   expect_true("observations_total" %in% colnames(sample_obs_nested))
-  expect_equal(sort(c(colnames(sample_obs_nested1), "observations_total")),
+  expect_equal(sort(c(colnames(sim_occ1), "observations_total")),
                sort(colnames(sample_obs_nested)))
   # Is the new column a list-column?
   expect_true(inherits(sample_obs_nested$observations_total, "list"))
@@ -83,13 +83,18 @@ test_that("map_sample_observations works with simple column names and plgn", {
   expect_true(all(sapply(sample_obs_nested$observations_total, inherits, "sf")))
 
   # Test with nested is FALSE
-  sample_obs_unnested <- map_simulate_occurrences(df = sample_obs_nested1,
-                                                  nested = FALSE)
+  sample_obs_unnested <- map_sample_observations(df = sim_occ1, nested = FALSE)
 
   # Is the occurrence column created?
   expect_false("observations_total" %in% colnames(sample_obs_unnested))
   # Do we have unnested successfully?
-  expect_true(nrow(sample_obs_unnested) > nrow(sample_obs_nested1))
-  expect_equal(tidyr::unnest(sample_obs_nested, "observations_total"),
-               sample_obs_unnested)
+  expect_true(nrow(sample_obs_unnested) > nrow(sample_obs_nested))
+  sample_obs_unnested_test <- tidyr::unnest(
+    sample_obs_nested,
+    cols = "observations_total",
+    names_repair = "minimal")
+  sample_obs_unnested_test <- sample_obs_unnested_test[
+      , !duplicated(t(sample_obs_unnested_test))
+    ]
+  expect_equal(sample_obs_unnested_test, sample_obs_unnested)
 })
