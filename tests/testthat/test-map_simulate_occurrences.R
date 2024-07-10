@@ -32,7 +32,7 @@ test_that("map_simulate_occurrences works with simple column names", {
                sort(colnames(sim_occ_nested)))
   # Is the new column a list-column?
   expect_true(inherits(sim_occ_nested$occurrences, "list"))
-  # Is the output of the functin an sf object for each species (each row)?
+  # Is the output of the function an sf object for each species (each row)?
   expect_true(all(sapply(sim_occ_nested$occurrences, inherits, "sf")))
 
   # Test with nested is FALSE
@@ -64,6 +64,23 @@ test_that("map_simulate_occurrences works with arg_list for renaming columns", {
                sort(colnames(sim_occ_nested)))
   # Is the new column a list-column?
   expect_true(inherits(sim_occ_nested$occurrences, "list"))
-  # Is the output of the functin an sf object for each species (each row)?
+  # Is the output of the function an sf object for each species (each row)?
   expect_true(all(sapply(sim_occ_nested$occurrences, inherits, "sf")))
+})
+
+test_that("map_simulate_occurrences handles invalid inputs", {
+  # Invalid dataframe input
+  expect_error(map_simulate_occurrences(df = list(), nested = TRUE))
+
+  # Invalid nested argument
+  expect_error(map_simulate_occurrences(df = species_dataset_df1,
+                                        nested = "TRUE"))
+
+  # Invalid arg_list
+  invalid_arg_list <- list(
+    plgn = "polygon",
+    sd_step = 123
+  )
+  expect_error(map_simulate_occurrences(df = species_dataset_df2,
+                                        arg_list = invalid_arg_list))
 })
