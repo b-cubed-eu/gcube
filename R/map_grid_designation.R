@@ -40,6 +40,13 @@
 #' # Create polygon
 #' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 #'
+#' # Create grid
+#' cube_grid <- st_make_grid(
+#'     st_buffer(plgn, 25),
+#'     n = c(20, 20),
+#'     square = TRUE) %>%
+#'   st_sf()
+#'
 #' ## Example with simple column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df <- tibble(
@@ -53,6 +60,7 @@
 #'   detection_probability = c(0.8, 0.9, 1),
 #'   invert = FALSE,
 #'   coords_uncertainty_meters = c(25, 30, 50),
+#'   grid = rep(list(cube_grid), 3),
 #'   seed = 123)
 #'
 #' # Simulate occurrences
@@ -65,13 +73,19 @@
 #' filter_obs1 <- map_filter_observations(df = samp_obs1)
 #'
 #' # Add coordinate uncertainty
-#' obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
-#' obs_uncertainty_nested
+#' obs_uncertainty1 <- map_add_coordinate_uncertainty(df = filter_obs1)
+#'
+#' # Grid designation
+#' occ_cube_nested <- map_grid_designation(df = obs_uncertainty1)
+#' occ_cube_nested
+#'
+#' # From filtered observations
+#' map_grid_designation(df = filter_obs1)
 #'
 #' # Unnest output and create sf object again
-#' obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
-#'                                                            nested = FALSE)
-#' obs_uncertainty_unnested %>%
+#' occ_cube_unnested <- map_grid_designation(df = obs_uncertainty1,
+#'                                           nested = FALSE)
+#' occ_cube_unnested %>%
 #'    st_sf()
 #'
 #'
@@ -82,7 +96,8 @@
 #'          sd = sd_step,
 #'          det_prob = detection_probability,
 #'          inv = invert,
-#'          coord_uncertainty = coords_uncertainty_meters)
+#'          coord_uncertainty = coords_uncertainty_meters,
+#'          raster = grid)
 #'
 #' # Create named list for argument conversion
 #' arg_conv_list <- list(
@@ -90,7 +105,8 @@
 #'     sd_step = "sd",
 #'     detection_probability = "det_prob",
 #'     invert = "inv",
-#'     coords_uncertainty_meters = "coord_uncertainty"
+#'     coords_uncertainty_meters = "coord_uncertainty",
+#'     grid = "raster"
 #'   )
 #'
 #' # Simulate occurrences
@@ -109,8 +125,13 @@
 #'   arg_list = arg_conv_list)
 #'
 #' # Add coordinate uncertainty
-#' map_add_coordinate_uncertainty(
+#' obs_uncertainty2 <- map_add_coordinate_uncertainty(
 #'   df = filter_obs2,
+#'   arg_list = arg_conv_list)
+#'
+#' # Grid designation
+#' map_grid_designation(
+#'   df = obs_uncertainty2,
 #'   arg_list = arg_conv_list)
 
 map_grid_designation <- function(
