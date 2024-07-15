@@ -71,7 +71,7 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
   }
 
   # Only retain result from mapping
-  df$mapped_col = lapply(df[[mapped_col]], function(val) val$result)
+  df$mapped_col <- lapply(df[[mapped_col]], function(val) val$result)
 
   return(df)
 }
