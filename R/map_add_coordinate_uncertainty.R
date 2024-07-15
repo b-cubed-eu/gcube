@@ -10,7 +10,7 @@
 #' columns that are not used by this function. They will be retained in the
 #' output.
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objectscalculated by `add_coordinate_uncertainty()`. Otherwise, expand
+#' sf objects calculated by `add_coordinate_uncertainty()`. Otherwise, expand
 #' this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
