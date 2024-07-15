@@ -7,11 +7,10 @@
 #' dataframe with `sampling_status` column containing values `"detected"`.
 #' This format is created by `sample_observations()`.
 #' @param invert Logical. If `FALSE` (default), filter `"detected"`
-#' observations. Otherwise, filter `"undetected"` observations.
+#' occurrences. Otherwise, filter all other occurrences.
 #'
 #' @returns A dataframe or an sf object with POINT geometry containing detected
-#' observations (if `invert = FALSE`), or undetected observations (if
-#' `invert = TRUE`).
+#' occurrences (if `invert = FALSE`), or other occurrences (if `invert = TRUE`).
 #'
 #' @export
 #'
