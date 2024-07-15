@@ -9,8 +9,8 @@
 #' mapping `filter_observations()` for each species. `df` can have columns that
 #' are not used by this function. They will be retained in the output.
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects calculated by `filter_observations()`. Otherwise, expand this
-#' list-column into rows and columns.
+#' sf objects/datframes calculated by `filter_observations()`. Otherwise, expand
+#' this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
 #' `filter_observations()`. If column names are not identical, they need to be
@@ -50,33 +50,40 @@
 #'   sd_step = c(1, 1, NA),
 #'   spatial_autocorr = "random",
 #'   detection_probability = c(0.8, 0.9, 1),
+#'   invert = FALSE,
 #'   seed = 123)
 #'
 #' # Simulate occurrences
 #' sim_occ1 <- map_simulate_occurrences(df = species_dataset_df)
 #'
 #' # Sample observations
-#' samp_obs_nested <- map_sample_observations(df = sim_occ1)
-#' samp_obs_nested
+#' samp_obs1 <- map_sample_observations(df = sim_occ1)
+#'
+#' # Filter observations
+#' filter_obs_nested <- map_filter_observations(df = samp_obs1)
+#' filter_obs_nested
 #'
 #' # Unnest output and create sf object again
-#' samp_obs_unnested <- map_sample_observations(df = sim_occ1,
-#'                                              nested = FALSE)
-#' samp_obs_unnested %>%
+#' filter_obs_unnested <- map_filter_observations(df = samp_obs1,
+#'                                                nested = FALSE)
+#' filter_obs_unnested %>%
 #'    st_sf()
+#'
 #'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
 #'   rename(polygon = plgn,
 #'          sd = sd_step,
-#'          det_prob = detection_probability)
+#'          det_prob = detection_probability,
+#'          inv = invert)
 #'
 #' # Create named list for argument conversion
 #' arg_conv_list <- list(
 #'     plgn = "polygon",
 #'     sd_step = "sd",
-#'     detection_probability = "det_prob"
+#'     detection_probability = "det_prob",
+#'     invert = "inv"
 #'   )
 #'
 #' # Simulate occurrences
@@ -85,8 +92,13 @@
 #'   arg_list = arg_conv_list)
 #'
 #' # Sample observations
-#' map_sample_observations(
+#' samp_obs2 <- map_sample_observations(
 #'   df = sim_occ2,
+#'   arg_list = arg_conv_list)
+#'
+#' # Filter observations
+#' map_filter_observations(
+#'   df = samp_obs2,
 #'   arg_list = arg_conv_list)
 
 map_filter_observations <- function(
@@ -133,7 +145,7 @@ map_filter_observations <- function(
 
   # Map function over all rows
   out_df <- map_simulation_functions(
-    f = sample_observations,
+    f = filter_observations,
     df = df,
     nested = nested)
 
