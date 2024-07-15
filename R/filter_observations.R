@@ -1,14 +1,17 @@
-#' Sample observations from a larger occurrence dataset
+#' Filter detected observations
 #'
-#' The function samples observations from occurrences based on detection
-#' probability and sampling bias by implementing a Bernoulli trial.
+#' The function filters (un)detected observations from all observations based on
+#' a `sampling_status` column, e.g. created by `sample_observations()`.
 #'
-#' @param observations_total An sf object with POINT geometry.
-#' @param invert Logical. If `FALSE` (default), return data cube in
-#' aggregated form (grid with number of observations per grid cell). Otherwise
-#' return sampled points in uncertainty circle.
+#' @param observations_total An sf object with POINT geometry or a simple
+#' dataframe with `sampling_status` column containing values `"detected"`.
+#' This format is created by `sample_observations()`.
+#' @param invert Logical. If `FALSE` (default), filter `"detected"`
+#' observations. Otherwise, filter `"undetected"` observations.
 #'
-#' @returns
+#' @returns A dataframe or an sf object with POINT geometry containing detected
+#' observations (if `invert = FALSE`), or undetected observations (if
+#' `invert = TRUE`).
 #'
 #' @export
 #'
