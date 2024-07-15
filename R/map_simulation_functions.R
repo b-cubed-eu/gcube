@@ -86,8 +86,8 @@ map_simulation_functions <- function(
   ## Create output dataframe
   # Iterate function over rows and catch warnings
   mapped_df <- df %>%
-    dplyr::mutate(mapped_col = purrr::pmap(analysis_df,
-                                           purrr::quietly(f),
+    dplyr::mutate(mapped_col = purrr::pmap(.l = analysis_df,
+                                           .f = purrr::quietly(f),
                                            .progress = TRUE))
 
   # Handle potential warnings
