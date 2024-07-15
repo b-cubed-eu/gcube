@@ -2,20 +2,6 @@
 # Create a simple polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 
-# Create a polygon with a road
-polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
-                                 c(200, 100, 700, 1000, 900, 500, 200))))
-road_width <- 50
-road_points <- rbind(c(100, 500), c(1000, 500))
-road_polygon <- st_linestring(road_points) %>%
-  st_buffer(road_width) %>%
-  st_intersection(polygon) %>%
-  st_polygon() %>%
-  st_sfc() %>%
-  st_as_sf() %>%
-  rename(geometry = x)
-
-
 # Specify dataframe for 3 species with custom function arguments
 # Dataframe with column names equal to arguments for simple polygon
 species_dataset_df1 <- tibble(
@@ -38,16 +24,15 @@ species_dataset_df2 <- species_dataset_df1 %>%
          sd = sd_step,
          det_prob = detection_probability,
          inv = invert,
-         coord_uncertainty = coords_uncertainty_meters
-         )
+         coord_uncertainty = coords_uncertainty_meters)
 
 arg_conv_list <- list(
-  plgn = "polygon",
-  sd_step = "sd",
-  detection_probability = "det_prob",
-  invert = "inv",
-  coords_uncertainty_meters = "coord_uncertainty"
-)
+    plgn = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_prob",
+    invert = "inv",
+    coords_uncertainty_meters = "coord_uncertainty"
+  )
 
 # Map simulate occurrences
 sim_occ1 <- map_simulate_occurrences(
@@ -147,10 +132,12 @@ test_that("map_add_coordinate_uncertainty handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-    plgn = "polygon",
-    sd_step = 123,
-    detection_probability = "det_prob"
-  )
+      plgn = "polygon",
+      sd_step = "sd",
+      detection_probability = "det_prob",
+      invert = "inv",
+      coords_uncertainty_meters = 123
+    )
   expect_error(
     map_add_coordinate_uncertainty(df = sim_occ2,
                                    arg_list = invalid_arg_list),
@@ -158,12 +145,12 @@ test_that("map_add_coordinate_uncertainty handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-    plgn = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob",
-    invert = "inv",
-    coords_uncertainty_meters = "coord_uncert"
-  )
+      plgn = "polygon",
+      sd_step = "sd",
+      detection_probability = "det_prob",
+      invert = "inv",
+      coords_uncertainty_meters = "coord_uncert"
+    )
   expect_error(
     map_add_coordinate_uncertainty(df = sim_occ2,
                                    arg_list = invalid_arg_list2),

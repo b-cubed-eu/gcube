@@ -156,10 +156,10 @@ test_that("map_sample_observations handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-    plgn = "polygon",
-    sd_step = 123,
-    detection_probability = "det_prob"
-  )
+      plgn = "polygon",
+      sd_step = "sd",
+      detection_probability = TRUE
+    )
   expect_error(
     map_sample_observations(df = sim_occ2,
                             arg_list = invalid_arg_list),
@@ -167,10 +167,10 @@ test_that("map_sample_observations handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-    plgn = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_probab"
-  )
+      plgn = "polygon",
+      sd_step = "sd",
+      detection_probability = "det_probab"
+    )
   expect_error(
     map_simulate_occurrences(df = sim_occ2,
                              arg_list = invalid_arg_list2),

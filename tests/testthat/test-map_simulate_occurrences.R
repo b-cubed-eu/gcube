@@ -50,9 +50,9 @@ test_that("map_simulate_occurrences works with simple column names", {
 test_that("map_simulate_occurrences works with arg_list for renaming columns", {
   # Test with arg_list
   arg_conv_list <- list(
-    plgn = "polygon",
-    sd_step = "sd"
-  )
+      plgn = "polygon",
+      sd_step = "sd"
+    )
 
   sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df2,
                                              arg_list = arg_conv_list)
@@ -79,9 +79,9 @@ test_that("map_simulate_occurrences handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-    plgn = "polygon",
-    sd_step = 123
-  )
+      plgn = "polygon",
+      sd_step = 123
+    )
   expect_error(
     map_simulate_occurrences(df = species_dataset_df2,
                              arg_list = invalid_arg_list),
@@ -89,10 +89,10 @@ test_that("map_simulate_occurrences handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-    plgn = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob"
-  )
+      plgn = "polygon",
+      sd_step = "sd",
+      detection_probability = "det_prob"
+    )
   expect_error(
     map_simulate_occurrences(df = species_dataset_df2,
                              arg_list = invalid_arg_list2),
