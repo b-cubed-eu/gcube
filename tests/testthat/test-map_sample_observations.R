@@ -130,7 +130,7 @@ test_that("map_sample_observations works with complex arguments", {
   # Test with nested is FALSE
   sample_obs_unnested <- map_sample_observations(df = sim_occ3, nested = FALSE)
 
-  # Is the occurrence column created?
+  # Is the observations_total column removed?
   expect_false("observations_total" %in% colnames(sample_obs_unnested))
   # Do we have unnested successfully?
   expect_true(nrow(sample_obs_unnested) > nrow(sample_obs_nested))

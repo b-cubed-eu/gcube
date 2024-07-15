@@ -39,7 +39,7 @@ test_that("map_simulate_occurrences works with simple column names", {
   sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df1,
                                                nested = FALSE)
 
-  # Is the occurrence column created?
+  # Is the occurrence column removed?
   expect_false("occurrences" %in% colnames(sim_occ_unnested))
   # Do we have unnested successfully?
   expect_true(nrow(sim_occ_unnested) > nrow(species_dataset_df1))

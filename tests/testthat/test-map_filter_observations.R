@@ -78,7 +78,7 @@ test_that("map_filter_observations works with simple column names", {
   # Test with nested is FALSE
   filter_obs_unnested <- map_filter_observations(df = samp_obs1, nested = FALSE)
 
-  # Is the occurrence column created?
+  # Is the observations column removed?
   expect_false("observations" %in% colnames(filter_obs_unnested))
   # Do we have unnested successfully?
   expect_true(nrow(filter_obs_unnested) > nrow(filter_obs_nested))
