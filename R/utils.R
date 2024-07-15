@@ -50,12 +50,12 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
   stopifnot("`mapped_col` not present in provided dataframe." =
               mapped_col %in% colnames(df))
   stopifnot("`mapped_col` must be a list-column." =
-              inherits(df[, mapped_col], "list"))
+              inherits(df[[mapped_col]], "list"))
   ### End checks
 
   # Collect and count warnings in dataframe
   warning_df <- data.frame(
-    table(unlist(sapply(df[, mapped_col], function(warn) warn$warnings)))
+    table(unlist(sapply(df[[mapped_col]], function(warn) warn$warnings)))
   )
 
   # Print warnings
@@ -69,7 +69,7 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
   }
 
   # Only retain result from mapping
-  df$mapped_col = sapply(df[, mapped_col], function(val) val$result)
+  df$mapped_col = sapply(df[[mapped_col]], function(val) val$result)
 
   return(df)
 }
