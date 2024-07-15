@@ -86,7 +86,7 @@ map_simulation_functions <- function(
   ## Create output dataframe
   # Iterate function over rows
   out_df <- df %>%
-    dplyr::mutate(mapped_col = purrr::pmap(analysis_df, f))
+    dplyr::mutate(mapped_col = purrr::pmap(analysis_df, f, .progress = TRUE))
 
   # Unnest if specified
   if (!nested) {
