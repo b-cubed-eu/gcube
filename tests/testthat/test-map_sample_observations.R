@@ -98,3 +98,65 @@ test_that("map_sample_observations works with simple column names and plgn", {
     ]
   expect_equal(sample_obs_unnested_test, sample_obs_unnested)
 })
+
+test_that("map_sample_observations works with arg_list for renaming columns", {
+  # Test with arg_list
+  sample_obs_nested <- map_sample_observations(df = sim_occ2,
+                                               arg_list = arg_conv_list)
+
+  # Are previous column names retained and one extra column name created?
+  expect_true("observations_total" %in% colnames(sample_obs_nested))
+  expect_equal(sort(c(colnames(sim_occ2), "observations_total")),
+               sort(colnames(sample_obs_nested)))
+  # Is the new column a list-column?
+  expect_true(inherits(sample_obs_nested$observations_total, "list"))
+  # Is the output of the function an sf object for each species (each row)?
+  expect_true(all(sapply(sample_obs_nested$observations_total, inherits, "sf")))
+})
+
+test_that("map_sample_observations works with complex arguments", {
+  # Test with nested is TRUE
+  sample_obs_nested <- map_sample_observations(df = sim_occ3)
+
+  # Are previous column names retained and one extra column name created?
+  expect_true("observations_total" %in% colnames(sample_obs_nested))
+  expect_equal(sort(c(colnames(sim_occ3), "observations_total")),
+               sort(colnames(sample_obs_nested)))
+  # Is the new column a list-column?
+  expect_true(inherits(sample_obs_nested$observations_total, "list"))
+  # Is the output of the function an sf object for each species (each row)?
+  expect_true(all(sapply(sample_obs_nested$observations_total, inherits, "sf")))
+
+  # Test with nested is FALSE
+  sample_obs_unnested <- map_sample_observations(df = sim_occ3, nested = FALSE)
+
+  # Is the occurrence column created?
+  expect_false("observations_total" %in% colnames(sample_obs_unnested))
+  # Do we have unnested successfully?
+  expect_true(nrow(sample_obs_unnested) > nrow(sample_obs_nested))
+  sample_obs_unnested_test <- tidyr::unnest(
+    sample_obs_nested,
+    cols = "observations_total",
+    names_repair = "minimal")
+  sample_obs_unnested_test <- sample_obs_unnested_test[
+    , !duplicated(t(sample_obs_unnested_test))
+  ]
+  expect_equal(sample_obs_unnested_test, sample_obs_unnested)
+})
+
+test_that("map_sample_observations handles invalid inputs", {
+  # Invalid dataframe input
+  expect_error(map_sample_observations(df = list(), nested = TRUE))
+
+  # Invalid nested argument
+  expect_error(map_sample_observations(df = sim_occ1,
+                                       nested = "TRUE"))
+
+  # Invalid arg_list
+  invalid_arg_list <- list(
+    plgn = "polygon",
+    sd_step = 123
+  )
+  expect_error(map_sample_observations(df = sim_occ2,
+                                       arg_list = invalid_arg_list))
+})
