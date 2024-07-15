@@ -13,12 +13,9 @@
 #' list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
-#' `sample_observations()` and the function specified in its
-#' `temporal_function` argument. If column names are not identical, they need to
-#' be specified as a named list where the names are the argument names of
-#' `sample_observations()` or the function specified in its `temporal_function`
-#' argument, and their associated values a string of the corresponding column
-#' name in `df`.
+#' `sample_observations()`. If column names are not identical, they need to be
+#' specified as a named list where the names are the argument names of
+#' `sample_observations()`.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to the input
 #' dataframe `df`, but with an extra list-column called `occurrences` containing
