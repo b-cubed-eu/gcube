@@ -166,7 +166,7 @@ map_add_coordinate_uncertainty <- function(
 
   if (nested) {
     out_df <- out_df %>%
-      dplyr::select(-observations) %>%
+      dplyr::select(-!!sym("observations")) %>%
       dplyr::rename("observations" = "mapped_col")
   }
 
