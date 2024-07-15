@@ -69,17 +69,33 @@ test_that("map_simulate_occurrences works with arg_list for renaming columns", {
 
 test_that("map_simulate_occurrences handles invalid inputs", {
   # Invalid dataframe input
-  expect_error(map_simulate_occurrences(df = list(), nested = TRUE))
+  expect_error(map_simulate_occurrences(df = list(), nested = TRUE),
+               "`df` must be a dataframe.")
 
   # Invalid nested argument
   expect_error(map_simulate_occurrences(df = species_dataset_df1,
-                                        nested = "TRUE"))
+                                        nested = "TRUE"),
+               "`nested` must be a logical vector of length 1.")
 
   # Invalid arg_list
   invalid_arg_list <- list(
     plgn = "polygon",
     sd_step = 123
   )
-  expect_error(map_simulate_occurrences(df = species_dataset_df2,
-                                        arg_list = invalid_arg_list))
+  expect_error(
+    map_simulate_occurrences(df = species_dataset_df2,
+                             arg_list = invalid_arg_list),
+    "`arg_list` must be named list containing one string for each value."
+  )
+
+  invalid_arg_list2 <- list(
+    plgn = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_prob"
+  )
+  expect_error(
+    map_simulate_occurrences(df = species_dataset_df2,
+                             arg_list = invalid_arg_list2),
+    "You have provided column names in `arg_list` that are not present in `df`."
+  )
 })

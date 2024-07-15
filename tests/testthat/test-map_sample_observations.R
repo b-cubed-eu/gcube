@@ -146,17 +146,34 @@ test_that("map_sample_observations works with complex arguments", {
 
 test_that("map_sample_observations handles invalid inputs", {
   # Invalid dataframe input
-  expect_error(map_sample_observations(df = list(), nested = TRUE))
+  expect_error(map_sample_observations(df = list(), nested = TRUE),
+               "`df` must be a dataframe.")
 
   # Invalid nested argument
   expect_error(map_sample_observations(df = sim_occ1,
-                                       nested = "TRUE"))
+                                       nested = "TRUE"),
+               "`nested` must be a logical vector of length 1.")
 
   # Invalid arg_list
   invalid_arg_list <- list(
     plgn = "polygon",
-    sd_step = 123
+    sd_step = 123,
+    detection_probability = "det_prob"
   )
-  expect_error(map_sample_observations(df = sim_occ2,
-                                       arg_list = invalid_arg_list))
+  expect_error(
+    map_sample_observations(df = sim_occ2,
+                            arg_list = invalid_arg_list),
+    "`arg_list` must be named list containing one string for each value."
+  )
+
+  invalid_arg_list2 <- list(
+    plgn = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_probab"
+  )
+  expect_error(
+    map_simulate_occurrences(df = sim_occ2,
+                             arg_list = invalid_arg_list2),
+    "You have provided column names in `arg_list` that are not present in `df`."
+  )
 })
