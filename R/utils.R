@@ -60,16 +60,18 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
 
   # Print warnings
   if (nrow(warning_df) > 0) {
-    message(paste(sum(warning_df$Freq), "warnings during mapping:"))
+    warning(paste(sum(warning_df$Freq), "warnings during mapping:"),
+            call. = FALSE)
     for (i in seq_len(nrow(warning_df))) {
       message <- warning_df[i, "Var1"]
       count <- warning_df[i, "Freq"]
-      warning(paste0(message, " [", count, " times]"))
+      warning(paste0(message, " [", count, " times]"),
+              call. = FALSE)
     }
   }
 
   # Only retain result from mapping
-  df$mapped_col = sapply(df[[mapped_col]], function(val) val$result)
+  df$mapped_col = lapply(df[[mapped_col]], function(val) val$result)
 
   return(df)
 }
