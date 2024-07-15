@@ -7,17 +7,18 @@
 map_simulation_functions(f, df, nested = TRUE)
 }
 \arguments{
-\item{f}{One of three cube simulation functions: \code{simulate_occurrences()},
-\code{sample_observations()} or \code{grid_designation()}.}
+\item{f}{One of five cube simulation functions: \code{simulate_occurrences()},
+\code{sample_observations()}, \code{filter_observations()},
+\code{add_coordinate_uncertainty()}, or \code{grid_designation()}.}
 
 \item{df}{A dataframe containing multiple rows. Each row is considered a
 different species. The columns are function arguments with values used for
-mapping \code{simulate_occurrences()} for each species. \code{df} can have columns that
-are not used by this function. They will be retained in the output.}
+mapping \code{f} for each species. \code{df} can have columns that are not used by this
+function. They will be retained in the output.}
 
 \item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
-dataframes calculated by \code{simulate_occurrences()}. Otherwise, expand this
-list-column into rows and columns.}
+dataframes calculated by \code{f}. Otherwise, expand this list-column into rows
+and columns.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to the input
@@ -28,9 +29,10 @@ columns.
 }
 \description{
 The function executes a cube simulation function (\code{simulate_occurrences()},
-\code{sample_observations()} or \code{grid_designation()}) over multiple rows of a
-dataframe containing potentially different function arguments over multiple
-columns.
+\code{sample_observations()}, \code{filter_observations()},
+\code{add_coordinate_uncertainty()}, or \code{grid_designation()}) over multiple rows
+of a dataframe containing potentially different function arguments over
+multiple columns.
 }
 \examples{
 print("to do")
