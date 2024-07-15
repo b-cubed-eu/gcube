@@ -93,6 +93,10 @@ map_simulation_functions <- function(
   # Handle potential warnings
   out_df <- handle_mapped_warnings(mapped_df)
 
+  # Handle potential messages
+  messages <- sapply(mapped_df$mapped_col, function(i) i$output)
+  if (length(messages[nzchar(messages)]) > 0) print(messages, quote = FALSE)
+
   # Unnest if specified
   if (!nested) {
     out_df <- out_df %>%
