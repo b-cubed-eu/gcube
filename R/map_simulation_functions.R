@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @import dplyr
-#' @importFrom purrr pmap
+#' @importFrom purrr pmap quietly
 #' @importFrom tidyr unnest
 #' @importFrom stats setNames
 #'
