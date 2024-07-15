@@ -236,10 +236,25 @@ ggplot() +
 
 To mimic real life data collection, we can finally add coordinate uncertainty to our observations.
 We only keep the detected occurrences of the previous example.
+We can filter with `dplyr::filter()`.
 
 ```{r}
-detections_df <- detections_df_raw %>%
+detections_df1 <- detections_df_raw %>%
   dplyr::filter(sampling_status == "detected")
+```
+
+Or we can use the function `filter_observations()`.
+
+```{r, eval=FALSE}
+?filter_observations
+```
+
+```{r}
+detections_df2 <- filter_observations(
+  observations_total = detections_df_raw)
+
+# Do we get the same result?
+all(detections_df1 == detections_df2)
 ```
 
 We add coordinate uncertainty to the observations using the `add_coordinate_uncertainty()` function.
@@ -253,7 +268,7 @@ Lets add 25 meters of uncertainty to each observation.
 
 ```{r}
 observations_df <- add_coordinate_uncertainty(
-  observations = detections_df,
+  observations = detections_df2,
   coords_uncertainty_meters = 25)
 ```
 
