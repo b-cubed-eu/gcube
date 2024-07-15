@@ -9,8 +9,8 @@
 #' mapping `filter_observations()` for each species. `df` can have columns that
 #' are not used by this function. They will be retained in the output.
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects/datframes calculated by `filter_observations()`. Otherwise, expand
-#' this list-column into rows and columns.
+#' sf objects/dataframes calculated by `filter_observations()`. Otherwise,
+#' expand this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
 #' `filter_observations()`. If column names are not identical, they need to be

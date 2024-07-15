@@ -1,7 +1,7 @@
 #' Filter detected observations
 #'
-#' The function filters (un)detected observations from all observations based on
-#' a `sampling_status` column, e.g. created by `sample_observations()`.
+#' The function filters observations from all observations based on a
+#' `sampling_status` column, e.g. created by `sample_observations()`.
 #'
 #' @param observations_total An sf object with POINT geometry or a simple
 #' dataframe with `sampling_status` column containing values `"detected"`.
