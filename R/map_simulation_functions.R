@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @import dplyr
-#' @importFrom purrr pmap
+#' @importFrom purrr pmap quietly
 #' @importFrom tidyr unnest
 #' @importFrom stats setNames
 #'
@@ -84,9 +84,18 @@ map_simulation_functions <- function(
   analysis_df <- dplyr::select(df, all_of(selection_names))
 
   ## Create output dataframe
-  # Iterate function over rows
-  out_df <- df %>%
-    dplyr::mutate(mapped_col = purrr::pmap(analysis_df, f, .progress = TRUE))
+  # Iterate function over rows and catch warnings
+  mapped_df <- df %>%
+    dplyr::mutate(mapped_col = purrr::pmap(.l = analysis_df,
+                                           .f = purrr::quietly(f),
+                                           .progress = TRUE))
+
+  # Handle potential warnings
+  out_df <- handle_mapped_warnings(mapped_df)
+
+  # Handle potential messages
+  messages <- sapply(mapped_df$mapped_col, function(i) i$output)
+  if (length(messages[nzchar(messages)]) > 0) print(messages, quote = FALSE)
 
   # Unnest if specified
   if (!nested) {
