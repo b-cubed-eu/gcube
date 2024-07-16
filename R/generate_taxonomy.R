@@ -23,12 +23,6 @@
 #' @param seed The seed for random number generation to make results
 #' reproducible. If `NA` (the default), no seed is used.
 #'
-#' @details The function works by randomly assigning species to genera, genera
-#' to families, families to orders, orders to classes, classes to phyla, and
-#' phyla to kingdoms. Sampling is done with replacement, meaning that multiple
-#' lower-level taxa (e.g., species) can be assigned to the same higher-level
-#' taxon (e.g., genus).
-#'
 #' @return A data frame with the taxonomic classification of each species. If
 #' `num_species` is a dataframe, the taxonomic classification is added to this
 #' input dataframe. The input dataframe may have multiple columns unrelated to

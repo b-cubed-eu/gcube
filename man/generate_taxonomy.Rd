@@ -53,12 +53,6 @@ families, families to orders, orders to classes, classes to phyla, and phyla
 to kingdoms. Sampling is done with replacement, meaning that multiple
 lower-level taxa (e.g., species) can be assigned to the same higher-level
 taxon (e.g., genus).
-
-The function works by randomly assigning species to genera, genera
-to families, families to orders, orders to classes, classes to phyla, and
-phyla to kingdoms. Sampling is done with replacement, meaning that multiple
-lower-level taxa (e.g., species) can be assigned to the same higher-level
-taxon (e.g., genus).
 }
 \examples{
 # Create simple taxonomic hierarchy
