@@ -40,7 +40,7 @@
 #' generate_taxonomy(
 #'   num_species = 5,
 #'   num_genera = 3,
-#'   num_families = 2
+#'   num_families = 2,
 #'   seed = 123)
 
 generate_taxonomy <- function(
@@ -54,11 +54,26 @@ generate_taxonomy <- function(
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
+  # Check if numbers are single counts
+  stopifnot("`num_species` should be a single integer." =
+              assertthat::is.count(num_species))
+  stopifnot("`num_genera` should be a single integer." =
+              assertthat::is.count(num_genera))
+  stopifnot("`num_families` should be a single integer." =
+              assertthat::is.count(num_families))
+  stopifnot("`num_orders` should be a single integer." =
+              assertthat::is.count(num_orders))
+  stopifnot("`num_phyla` should be a single integer." =
+              assertthat::is.count(num_phyla))
+  stopifnot("`num_kingdoms` should be a single integer." =
+              assertthat::is.count(num_kingdoms))
 
-  # 2. Other checks
-
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              assertthat::is.number(seed) || is.na(seed))
   ### End checks
 
+  # Set seed if provided
   if (!is.na(seed)) {
     withr::local_seed(seed)
   }
