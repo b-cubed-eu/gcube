@@ -139,6 +139,7 @@ map_grid_designation(
 }
 \seealso{
 Other multispecies: 
+\code{\link{generate_taxonomy}()},
 \code{\link{map_add_coordinate_uncertainty}()},
 \code{\link{map_filter_observations}()},
 \code{\link{map_sample_observations}()},

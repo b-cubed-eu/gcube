@@ -118,6 +118,7 @@ map_add_coordinate_uncertainty(
 }
 \seealso{
 Other multispecies: 
+\code{\link{generate_taxonomy}()},
 \code{\link{map_filter_observations}()},
 \code{\link{map_grid_designation}()},
 \code{\link{map_sample_observations}()},
