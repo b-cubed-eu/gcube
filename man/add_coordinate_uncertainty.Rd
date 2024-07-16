@@ -50,6 +50,7 @@ add_coordinate_uncertainty(
 }
 \seealso{
 Other main: 
+\code{\link{filter_observations}()},
 \code{\link{grid_designation}()},
 \code{\link{sample_observations}()},
 \code{\link{simulate_occurrences}()}

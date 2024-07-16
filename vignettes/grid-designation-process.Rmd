@@ -2,7 +2,7 @@
 title: "3. Specifying the grid designation process"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{grid-designation-process}
+  %\VignetteIndexEntry{3. Specifying the grid designation process}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -135,8 +135,8 @@ We only keep the detected occurrences and add 25 meters of uncertainty to each o
 
 ```{r}
 # Keep detected occurrences
-detections_df <- detections_df_raw %>%
-  dplyr::filter(sampling_status == "detected")
+detections_df <- filter_observations(
+  observations_total = detections_df_raw)
 
 # Add 25 m coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(

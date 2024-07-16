@@ -1,30 +1,28 @@
-#' Map `simulate_occurrences()` function over multiple species
+#' Map `add_coordinate_uncertainty()` function over multiple species
 #'
-#' The function executes `simulate_occurrences()` over multiple rows of a
+#' The function executes `add_coordinate_uncertainty()` over multiple rows of a
 #' dataframe, representing multiple different species, containing potentially
 #' different function arguments over multiple columns.
 #'
 #' @param df A dataframe containing multiple rows. Each row is considered a
 #' different species. The columns are function arguments with values used for
-#' mapping `simulate_occurrences()` for each species. `df` can have columns that
-#' are not used by this function. They will be retained in the output.
+#' mapping `add_coordinate_uncertainty()` for each species. `df` can have
+#' columns that are not used by this function. They will be retained in the
+#' output.
 #' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects calculated by `simulate_occurrences()`. Otherwise, expand this
-#' list-column into rows and columns.
+#' sf objects calculated by `add_coordinate_uncertainty()`. Otherwise, expand
+#' this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
-#' `simulate_occurrences()` and the function specified in its
-#' `temporal_function` argument. If column names are not identical, they need to
-#' be specified as a named list where the names are the argument names of
-#' `simulate_occurrences()` or the function specified in its `temporal_function`
-#' argument, and their associated values a string of the corresponding column
-#' name in `df`.
+#' `add_coordinate_uncertainty()`. If column names are not identical, they need
+#' to be specified as a named list where the names are the argument names of
+#' `add_coordinate_uncertainty()`.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to the input
-#' dataframe `df`, but with an extra list-column called `occurrences` containing
-#' an sf object with POINT geometry for each row computed by
-#' `simulate_occurrences()`. In case of `nested = FALSE`, this list-column is
-#' expanded into additional rows and columns.
+#' dataframe `df`, but each sf object with POINT geometry in the list-column
+#' `observations` now has an additional column `coordinateUncertaintyInMeters`
+#' added by `add_coordinate_uncertainty()`. In case of `nested = FALSE`, this
+#' list-column is expanded into additional rows and columns.
 #'
 #' @export
 #'
@@ -52,16 +50,28 @@
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
 #'   spatial_autocorr = "random",
+#'   detection_probability = c(0.8, 0.9, 1),
+#'   invert = FALSE,
+#'   coords_uncertainty_meters = c(25, 30, 50),
 #'   seed = 123)
 #'
 #' # Simulate occurrences
-#' sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
-#' sim_occ_nested
+#' sim_occ1 <- map_simulate_occurrences(df = species_dataset_df)
+#'
+#' # Sample observations
+#' samp_obs1 <- map_sample_observations(df = sim_occ1)
+#'
+#' # Filter observations
+#' filter_obs1 <- map_filter_observations(df = samp_obs1)
+#'
+#' # Add coordinate uncertainty
+#' obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
+#' obs_uncertainty_nested
 #'
 #' # Unnest output and create sf object again
-#' sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df,
-#'                                              nested = FALSE)
-#' sim_occ_unnested %>%
+#' obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
+#'                                                            nested = FALSE)
+#' obs_uncertainty_unnested %>%
 #'    st_sf()
 #'
 #'
@@ -69,25 +79,41 @@
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
 #'   rename(polygon = plgn,
-#'          sd = sd_step)
+#'          sd = sd_step,
+#'          det_prob = detection_probability,
+#'          inv = invert,
+#'          coord_uncertainty = coords_uncertainty_meters)
 #'
 #' # Create named list for argument conversion
 #' arg_conv_list <- list(
 #'     plgn = "polygon",
-#'     sd_step = "sd"
+#'     sd_step = "sd",
+#'     detection_probability = "det_prob",
+#'     invert = "inv",
+#'     coords_uncertainty_meters = "coord_uncertainty"
 #'   )
 #'
 #' # Simulate occurrences
-#' map_simulate_occurrences(
+#' sim_occ2 <- map_simulate_occurrences(
 #'   df = species_dataset_df2,
 #'   arg_list = arg_conv_list)
 #'
-#' map_simulate_occurrences(
-#'   df = species_dataset_df2,
-#'   nested = FALSE,
+#' # Sample observations
+#' samp_obs2 <- map_sample_observations(
+#'   df = sim_occ2,
+#'   arg_list = arg_conv_list)
+#'
+#' # Filter observations
+#' filter_obs2 <- map_filter_observations(
+#'   df = samp_obs2,
+#'   arg_list = arg_conv_list)
+#'
+#' # Add coordinate uncertainty
+#' map_add_coordinate_uncertainty(
+#'   df = filter_obs2,
 #'   arg_list = arg_conv_list)
 
-map_simulate_occurrences <- function(
+map_add_coordinate_uncertainty <- function(
     df,
     nested = TRUE,
     arg_list = NA) {
@@ -105,11 +131,11 @@ map_simulate_occurrences <- function(
   if (assertthat::noNA(arg_list)) {
     # Check if arg_list is a named list with single strings
     stopifnot(
-        "`arg_list` must be named list containing one string for each value." =
+      "`arg_list` must be named list containing one string for each value." =
         is.list(arg_list) &&
         !is.null(names(arg_list)) &&
         all(sapply(arg_list, assertthat::is.string))
-      )
+    )
 
     # Check if arg_list is a named list with single strings
     arg_list_message <- paste("You have provided column names in `arg_list`",
@@ -131,7 +157,7 @@ map_simulate_occurrences <- function(
 
   # Map function over all rows
   out_df <- map_simulation_functions(
-    f = simulate_occurrences,
+    f = add_coordinate_uncertainty,
     df = df,
     nested = nested)
 
@@ -140,7 +166,8 @@ map_simulate_occurrences <- function(
 
   if (nested) {
     out_df <- out_df %>%
-      dplyr::rename("occurrences" = "mapped_col")
+      dplyr::select(-!!sym("observations")) %>%
+      dplyr::rename("observations" = "mapped_col")
   }
 
   return(out_df)

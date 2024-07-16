@@ -2,7 +2,7 @@
 title: "1. Simulating the occurrence process"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{occurrence-process}
+  %\VignetteIndexEntry{1. Simulating the occurrence process}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
