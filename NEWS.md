@@ -1,7 +1,7 @@
 # gcube 0.1.0
 
-* Generate species taxonomy
-* Create data cube for multiple species
+* Create data cube for multiple species using `purrr::pmap()`.
+* Generate species taxonomy.
 
 # gcube 0.0.1
 
