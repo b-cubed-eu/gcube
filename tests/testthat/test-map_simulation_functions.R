@@ -79,6 +79,9 @@ test_that("map_simulation_functions works with map_simulate_occurrences", {
     nested = FALSE)
 
   expect_equal(sim_occ1_unnested, sim_occ1_unnested_test)
+
+  # Do we have unnested successfully?
+  expect_true(nrow(sim_occ1_unnested_test) > nrow(sim_occ1_test))
 })
 
 test_that("map_simulation_functions works with map_sample_observations", {
@@ -97,6 +100,9 @@ test_that("map_simulation_functions works with map_sample_observations", {
     nested = FALSE)
 
   expect_equal(samp_obs1_unnested, samp_obs1_unnested_test)
+
+  # Do we have unnested successfully?
+  expect_true(nrow(samp_obs1_unnested_test) > nrow(samp_obs1_test))
 })
 
 test_that("map_simulation_functions works with map_filter_observations", {
@@ -115,9 +121,13 @@ test_that("map_simulation_functions works with map_filter_observations", {
     nested = FALSE)
 
   expect_equal(filter_obs1_unnested, filter_obs1_unnested_test)
+
+  # Do we have unnested successfully?
+  expect_true(nrow(filter_obs1_unnested_test) > nrow(filter_obs1_test))
 })
 
-test_that("map_simulation_functions works with map_add_coordinate_uncertainty", {
+test_that("map_simulation_functions works with map_add_coordinate_uncertainty",
+          {
   # Test with nested is TRUE
   filter_obs1_test <- map_simulation_functions(
     f = add_coordinate_uncertainty,
@@ -135,6 +145,9 @@ test_that("map_simulation_functions works with map_add_coordinate_uncertainty", 
     nested = FALSE)
   expect_equal(filter_obs1_unnested,
                subset(filter_obs1_unnested_test, select = -observations))
+
+  # Do we have unnested successfully?
+  expect_true(nrow(filter_obs1_unnested_test) > nrow(filter_obs1_test))
 })
 
 test_that("map_simulation_functions works with map_grid_designation", {
@@ -153,6 +166,9 @@ test_that("map_simulation_functions works with map_grid_designation", {
     nested = FALSE)
 
   expect_equal(occ_cube1_unnested, occ_cube1_unnested_test)
+
+  # Do we have unnested successfully?
+  expect_true(nrow(occ_cube1_unnested_test) > nrow(occ_cube1_test))
 })
 
 test_that("map_simulation_functions handles invalid inputs", {
