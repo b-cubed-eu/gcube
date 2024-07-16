@@ -94,6 +94,7 @@ generate_taxonomy <- function(
               assertthat::is.number(seed) || is.na(seed))
 
   # 2. Other checks
+  # Validate dataframe input
   if (inherits(num_species, "data.frame")) {
     # Check whether species column is present
     stopifnot("`species` column not present in `num_species` dataframe." =
@@ -102,20 +103,39 @@ generate_taxonomy <- function(
     # Check whether species column contains unique species names
     stopifnot("`species` column must contain unique species names." =
                 length(unique(num_species$species)) == nrow(num_species))
+
+    species_df <- num_species
+    num_species <- nrow(species_df)
+  } else {
+    # Generate species names if not provided
+    species_df <- data.frame(species = paste0("species", seq_len(num_species)))
   }
+
+  # Check if number of species is smaller than number of genera is smaller than
+  # number of families ...
+  stopifnot(
+    "Number of genera should be smaller or equal to number of species." =
+      num_species >= num_genera)
+  stopifnot(
+    "Number of families should be smaller or equal to number of genera." =
+      num_genera >= num_families)
+  stopifnot(
+    "Number of orders should be smaller or equal to number of families." =
+      num_families >= num_orders)
+  stopifnot(
+    "Number of classes should be smaller or equal to number of orders." =
+      num_orders >= num_classes)
+  stopifnot(
+    "Number of phyla should be smaller or equal to number of classes." =
+      num_classes >= num_phyla)
+  stopifnot(
+    "Number of kingdoms should be smaller or equal to number of phyla." =
+      num_phyla >= num_kingdoms)
   ### End checks
 
   # Set seed if provided
   if (!is.na(seed)) {
     withr::local_seed(seed)
-  }
-
-  # Generate species names if not provided
-  if (inherits(num_species, "data.frame")) {
-    species_df <- num_species
-    num_species <- nrow(species_df)
-  } else {
-    species_df <- data.frame(species = paste0("species", seq_len(num_species)))
   }
 
   # Assign species to genera
