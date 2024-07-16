@@ -3,21 +3,21 @@ n_spec1 <- 7
 
 # Existing dataframe
 existing_df <- data.frame(
-  species = paste0("species", seq_len(n_spec)),
+  species = paste0("species", seq_len(n_spec1)),
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
   )
 
 # Existing dataframe with wrong column name
 existing_df2 <- data.frame(
-  spec = paste0("species", seq_len(n_spec)),
+  spec = paste0("species", seq_len(n_spec1)),
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
 )
 
 # Existing dataframe without unique species names
 existing_df3 <- data.frame(
-  species = paste0("species", c(seq_len(n_spec - 1), 6)),
+  species = paste0("species", c(seq_len(n_spec1 - 1), 6)),
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
 )
