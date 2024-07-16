@@ -9,7 +9,6 @@ cube_grid <- st_make_grid(
     square = TRUE) %>%
   st_sf()
 
-
 # Specify dataframe for 3 species with custom function arguments
 # Dataframe with column names equal to arguments for simple polygon
 species_dataset_df1 <- tibble(
