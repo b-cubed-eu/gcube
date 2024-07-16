@@ -1,34 +1,56 @@
-#' Generate a Taxonomic Hierarchy
+#' Generate a taxonomic hierarchy
 #'
-#' This function generates a random taxonomic hierarchy with specified numbers of species,
-#' genera, families, orders, classes, phyla, and kingdoms. The output is a data frame with the
-#' hierarchical classification for each species.
+#' This function generates a random taxonomic hierarchy for a specified numbers
+#' of species, genera, families, orders, classes, phyla, and kingdoms. The
+#' output is a data frame with the hierarchical classification for each species.
 #'
-#' The function works by randomly assigning species to genera, genera to families, families to
-#' orders, orders to classes, classes to phyla, and phyla to kingdoms. Sampling is done with
-#' replacement, meaning that multiple lower-level taxa (e.g., species) can be assigned to the
-#' same higher-level taxon (e.g., genus).
+#' The function works by randomly assigning species to genera, genera to
+#' families, families to orders, orders to classes, classes to phyla, and phyla
+#' to kingdoms. Sampling is done with replacement, meaning that multiple
+#' lower-level taxa (e.g., species) can be assigned to the same higher-level
+#' taxon (e.g., genus).
 #'
 #' @param num_species Number of species to generate.
 #' @param num_genera Number of genera to generate.
 #' @param num_families Number of families to generate.
-#' @param num_orders Number of orders to generate.
-#' @param num_classes Number of classes to generate.
-#' @param num_phyla Number of phyla to generate.
-#' @param num_kingdoms Number of kingdoms to generate.
-#' @param seed Optional. A seed for reproducibility.
+#' @param num_orders Number of orders to generate. Defaults to 1.
+#' @param num_classes Number of classes to generate. Defaults to 1.
+#' @param num_phyla Number of phyla to generate. Defaults to 1.
+#' @param num_kingdoms Number of kingdoms to generate. Defaults to 1.
+#' @param seed The seed for random number generation to make results
+#' reproducible. If `NA` (the default), no seed is used.
+#'
+#' @details The function works by randomly assigning species to genera, genera
+#' to families, families to orders, orders to classes, classes to phyla, and
+#' phyla to kingdoms. Sampling is done with replacement, meaning that multiple
+#' lower-level taxa (e.g., species) can be assigned to the same higher-level
+#' taxon (e.g., genus).
+#'
 #' @return A data frame with the taxonomic classification of each species.
+#'
+#' @export
+#'
+#' @import dplyr
+#'
+#' @family multispecies
+#'
 #' @examples
+#' # Create simple taxonomic hierarchy
 #' generate_taxonomy(
 #'   num_species = 5,
 #'   num_genera = 3,
-#'   num_families = 2,
-#'   num_orders = 1,
-#'   num_classes = 1,
-#'   num_phyla = 1,
-#'   num_kingdoms = 1)
+#'   num_families = 2
+#'   seed = 123)
 
-generate_taxonomy <- function(num_species, num_genera, num_families, num_orders, num_classes, num_phyla, num_kingdoms, seed = NULL) {
+generate_taxonomy <- function(
+    num_species,
+    num_genera,
+    num_families,
+    num_orders = 1,
+    num_classes = 1,
+    num_phyla = 1,
+    num_kingdoms = 1,
+    seed = NA) {
   if (!is.null(seed)) {
     set.seed(seed)
   }
