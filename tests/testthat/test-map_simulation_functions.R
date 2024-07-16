@@ -70,7 +70,7 @@ test_that("map_simulation_functions works with map_simulate_occurrences", {
     df = species_dataset_df1)
 
   expect_equal(sim_occ1,
-               sim_occ1_test %>% rename(occurrences = mapped_col))
+               sim_occ1_test %>% rename("occurrences" = "mapped_col"))
 
   # Test with nested is FALSE
   sim_occ1_unnested_test <- map_simulation_functions(
@@ -88,7 +88,7 @@ test_that("map_simulation_functions works with map_sample_observations", {
     df = sim_occ1)
 
   expect_equal(samp_obs1,
-               samp_obs1_test %>% rename(observations_total = mapped_col))
+               samp_obs1_test %>% rename("observations_total" = "mapped_col"))
 
   # Test with nested is FALSE
   samp_obs1_unnested_test <- map_simulation_functions(
@@ -106,7 +106,7 @@ test_that("map_simulation_functions works with map_filter_observations", {
     df = samp_obs1)
 
   expect_equal(filter_obs1,
-               filter_obs1_test %>% rename(observations = mapped_col))
+               filter_obs1_test %>% rename("observations" = "mapped_col"))
 
   # Test with nested is FALSE
   filter_obs1_unnested_test <- map_simulation_functions(
@@ -117,13 +117,74 @@ test_that("map_simulation_functions works with map_filter_observations", {
   expect_equal(filter_obs1_unnested, filter_obs1_unnested_test)
 })
 
+test_that("map_simulation_functions works with map_add_coordinate_uncertainty", {
+  # Test with nested is TRUE
+  filter_obs1_test <- map_simulation_functions(
+    f = add_coordinate_uncertainty,
+    df = filter_obs1)
+
+  # Extra column?
+  expect_equal(sort(c(colnames(filter_obs1$observations[[1]]),
+                      "coordinateUncertaintyInMeters")),
+               sort(colnames(filter_obs1_test$mapped_col[[1]])))
+
+  # Test with nested is FALSE
+  filter_obs1_unnested_test <- map_simulation_functions(
+    f = add_coordinate_uncertainty,
+    df = filter_obs1,
+    nested = FALSE)
+  expect_equal(filter_obs1_unnested,
+               subset(filter_obs1_unnested_test, select = -observations))
+})
+
+test_that("map_simulation_functions works with map_grid_designation", {
+  # Test with nested is TRUE
+  occ_cube1_test <- map_simulation_functions(
+    f = grid_designation,
+    df = obs_uncertainty1)
+
+  expect_equal(occ_cube1,
+               occ_cube1_test %>% rename("occurrence_cube_df" = "mapped_col"))
+
+  # Test with nested is FALSE
+  occ_cube1_unnested_test <- map_simulation_functions(
+    f = grid_designation,
+    df = obs_uncertainty1,
+    nested = FALSE)
+
+  expect_equal(occ_cube1_unnested, occ_cube1_unnested_test)
+})
+
 test_that("map_simulation_functions handles invalid inputs", {
+  # Invalid function input
+  expect_error(
+    map_simulation_functions(
+      f = 123,
+      df = species_dataset_df1,
+      nested = TRUE),
+    "`f` must be a function.\nOne of.+, or `grid_designation()")
+
+  # Invalid function
+  expect_error(
+    map_simulation_functions(
+      f = mean,
+      df = species_dataset_df1,
+      nested = TRUE),
+    "`f` must be a function.\nOne of.+, or `grid_designation()")
+
   # Invalid dataframe input
-  #expect_error(map_simulation_functions(df = list(), nested = TRUE),
-  #             "`df` must be a dataframe.")
+  expect_error(
+    map_simulation_functions(
+      f = simulate_occurrences,
+      df = list(),
+      nested = TRUE),
+    "`df` must be a dataframe.")
 
   # Invalid nested argument
-  #expect_error(map_simulation_functions(df = sim_occ1,
-  #                                      nested = "TRUE"),
-  #             "`nested` must be a logical vector of length 1.")
+  expect_error(
+    map_simulation_functions(
+      f = simulate_occurrences,
+      df = species_dataset_df1,
+      nested = "TRUE"),
+    "`nested` must be a logical vector of length 1.")
 })
