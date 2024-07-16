@@ -122,6 +122,60 @@ test_that("map_grid_designation works with arg_list for renaming columns", {
   expect_true(all(sapply(occ_cube_nested$occurrence_cube_df, inherits, "sf")))
 })
 
+test_that("map_grid_designation without coordinate uncertainty", {
+  # Test with nested is TRUE
+  suppressWarnings({
+    occ_cube_nested <- map_grid_designation(df = filter_obs1)
+  })
+
+  # Test warning handling
+  w <- testthat::capture_warnings(map_grid_designation(df = filter_obs1))
+  expect_match(w[1], "3 warnings during mapping:", all = FALSE)
+  expect_match(
+    w[2],
+    "No column `coordinateUncertaintyInMeters` present!.+\\[3 times\\]",
+    all = FALSE)
+
+
+  # Are previous column names retained and one extra column name created?
+  expect_true("occurrence_cube_df" %in% colnames(occ_cube_nested))
+  expect_equal(sort(c(colnames(filter_obs1), "occurrence_cube_df")),
+               sort(colnames(occ_cube_nested)))
+  # Is the new column a list-column?
+  expect_true(inherits(occ_cube_nested$occurrence_cube_df, "list"))
+  # Is the output of the function an sf object for each species (each row)?
+  expect_true(all(sapply(occ_cube_nested$occurrence_cube_df, inherits, "sf")))
+
+  # Test with nested is FALSE
+  suppressWarnings({
+  occ_cube_unnested <- map_grid_designation(df = filter_obs1,
+                                            nested = FALSE)
+  })
+
+  # Test warning handling
+  w_unnested <- testthat::capture_warnings(
+    map_grid_designation(df = filter_obs1,
+                         nested = FALSE))
+  expect_match(w_unnested[1], "3 warnings during mapping:", all = FALSE)
+  expect_match(
+      w_unnested[2],
+      "No column `coordinateUncertaintyInMeters` present!.+\\[3 times\\]",
+      all = FALSE)
+
+  # Is the occurrence_cube_df column removed?
+  expect_false("occurrence_cube_df" %in% colnames(occ_cube_unnested))
+  # Do we have unnested successfully?
+  expect_true(nrow(occ_cube_unnested) > nrow(occ_cube_nested))
+  occ_cube_unnested_test <- tidyr::unnest(
+    occ_cube_nested,
+    cols = "occurrence_cube_df",
+    names_repair = "minimal")
+  occ_cube_unnested_test <- occ_cube_unnested_test[
+    , !duplicated(t(occ_cube_unnested_test))
+  ]
+  expect_equal(occ_cube_unnested_test, occ_cube_unnested)
+})
+
 test_that("map_grid_designation handles invalid inputs", {
   # Invalid dataframe input
   expect_error(map_grid_designation(df = list(), nested = TRUE),
