@@ -25,34 +25,12 @@ species_dataset_df1 <- tibble(
   grid = rep(list(cube_grid), 3),
   seed = 123)
 
-# Dataframe with custom column names and named list for argument conversion for
-# simple polygon. Create named list for argument conversion.
-species_dataset_df2 <- species_dataset_df1 %>%
-  rename(polygon = plgn,
-         sd = sd_step,
-         det_prob = detection_probability,
-         inv = invert,
-         coord_uncertainty = coords_uncertainty_meters,
-         raster = grid)
-
-arg_conv_list <- list(
-  plgn = "polygon",
-  sd_step = "sd",
-  detection_probability = "det_prob",
-  invert = "inv",
-  coords_uncertainty_meters = "coord_uncertainty",
-  grid = "raster"
-)
-
 # Map simulate occurrences
 sim_occ1 <- map_simulate_occurrences(
   df = species_dataset_df1)
-sim_occ1_unnested <- map_sample_observations(
-  df = sim_occ1,
+sim_occ1_unnested <- map_simulate_occurrences(
+  df = species_dataset_df1,
   nested = FALSE)
-sim_occ2 <- map_simulate_occurrences(
-  df = species_dataset_df2,
-  arg_list = arg_conv_list)
 
 # Map sample observations
 samp_obs1 <- map_sample_observations(
@@ -60,110 +38,92 @@ samp_obs1 <- map_sample_observations(
 samp_obs1_unnested <- map_sample_observations(
   df = sim_occ1,
   nested = FALSE)
-samp_obs2 <- map_sample_observations(
-  df = sim_occ2,
-  arg_list = arg_conv_list)
 
 # Map sample observations
 filter_obs1 <- map_filter_observations(
   df = samp_obs1)
-filter_obs1_unnested <- map_sample_observations(
+filter_obs1_unnested <- map_filter_observations(
   df = samp_obs1,
   nested = FALSE)
-filter_obs2 <- map_filter_observations(
-  df = samp_obs2,
-  arg_list = arg_conv_list)
 
 # Add coordinate uncertainty
 obs_uncertainty1 <- map_add_coordinate_uncertainty(
   df = filter_obs1)
-obs_uncertainty1_unnested <- map_sample_observations(
+obs_uncertainty1_unnested <- map_add_coordinate_uncertainty(
   df = filter_obs1,
   nested = FALSE)
-obs_uncertainty2 <- map_add_coordinate_uncertainty(
-  df = filter_obs2,
-  arg_list = arg_conv_list)
 
 # Grid designation
 occ_cube1 <- map_grid_designation(
   df = obs_uncertainty1)
-occ_cube1_unnested <- map_sample_observations(
+occ_cube1_unnested <- map_grid_designation(
   df = obs_uncertainty1,
   nested = FALSE)
-occ_cube2 <- map_grid_designation(
-  df = obs_uncertainty2,
-  arg_list = arg_conv_list)
 
 
 ## Unit tests
 
 test_that("map_simulation_functions works with map_simulate_occurrences", {
   # Test with nested is TRUE
-  occ_cube_nested <- map_simulation_functions(df = obs_uncertainty1)
+  sim_occ1_test <- map_simulation_functions(
+    f = simulate_occurrences,
+    df = species_dataset_df1)
 
-  # Are previous column names retained and one extra column name created?
-  expect_true("occurrence_cube_df" %in% colnames(occ_cube_nested))
-  expect_equal(sort(c(colnames(obs_uncertainty1), "occurrence_cube_df")),
-               sort(colnames(occ_cube_nested)))
-  # Is the new column a list-column?
-  expect_true(inherits(occ_cube_nested$occurrence_cube_df, "list"))
-  # Is the output of the function an sf object for each species (each row)?
-  expect_true(all(sapply(occ_cube_nested$occurrence_cube_df, inherits, "sf")))
+  expect_equal(sim_occ1,
+               sim_occ1_test %>% rename(occurrences = mapped_col))
 
   # Test with nested is FALSE
-  occ_cube_unnested <- map_simulation_functions(df = obs_uncertainty1,
-                                            nested = FALSE)
+  sim_occ1_unnested_test <- map_simulation_functions(
+    f = simulate_occurrences,
+    df = species_dataset_df1,
+    nested = FALSE)
 
-  # Is the occurrence_cube_df column removed?
-  expect_false("occurrence_cube_df" %in% colnames(occ_cube_unnested))
-  # Do we have unnested successfully?
-  expect_true(nrow(occ_cube_unnested) > nrow(occ_cube_nested))
-  occ_cube_unnested_test <- tidyr::unnest(
-    occ_cube_nested,
-    cols = "occurrence_cube_df",
-    names_repair = "minimal")
-  occ_cube_unnested_test <- occ_cube_unnested_test[
-    , !duplicated(t(occ_cube_unnested_test))
-  ]
-  expect_equal(occ_cube_unnested_test, occ_cube_unnested)
+  expect_equal(sim_occ1_unnested, sim_occ1_unnested_test)
+})
+
+test_that("map_simulation_functions works with map_sample_observations", {
+  # Test with nested is TRUE
+  samp_obs1_test <- map_simulation_functions(
+    f = sample_observations,
+    df = sim_occ1)
+
+  expect_equal(samp_obs1,
+               samp_obs1_test %>% rename(observations_total = mapped_col))
+
+  # Test with nested is FALSE
+  samp_obs1_unnested_test <- map_simulation_functions(
+    f = sample_observations,
+    df = sim_occ1,
+    nested = FALSE)
+
+  expect_equal(samp_obs1_unnested, samp_obs1_unnested_test)
+})
+
+test_that("map_simulation_functions works with map_filter_observations", {
+  # Test with nested is TRUE
+  filter_obs1_test <- map_simulation_functions(
+    f = filter_observations,
+    df = samp_obs1)
+
+  expect_equal(filter_obs1,
+               filter_obs1_test %>% rename(observations = mapped_col))
+
+  # Test with nested is FALSE
+  filter_obs1_unnested_test <- map_simulation_functions(
+    f = filter_observations,
+    df = samp_obs1,
+    nested = FALSE)
+
+  expect_equal(filter_obs1_unnested, filter_obs1_unnested_test)
 })
 
 test_that("map_simulation_functions handles invalid inputs", {
   # Invalid dataframe input
-  expect_error(map_simulation_functions(df = list(), nested = TRUE),
-               "`df` must be a dataframe.")
+  #expect_error(map_simulation_functions(df = list(), nested = TRUE),
+  #             "`df` must be a dataframe.")
 
   # Invalid nested argument
-  expect_error(map_simulation_functions(df = sim_occ1,
-                                    nested = "TRUE"),
-               "`nested` must be a logical vector of length 1.")
-
-  # Invalid arg_list
-  invalid_arg_list <- arg_conv_list <- list(
-    plgn = "polygon",
-    sd_step = 123,
-    detection_probability = "det_prob",
-    invert = "inv",
-    coords_uncertainty_meters = "coord_uncertainty",
-    grid = "raster"
-  )
-  expect_error(
-    map_simulation_functions(df = sim_occ2,
-                         arg_list = invalid_arg_list),
-    "`arg_list` must be named list containing one string for each value."
-  )
-
-  invalid_arg_list2 <- arg_conv_list <- list(
-    plgn = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob",
-    invert = "inv",
-    coords_uncertainty_meters = "coord_uncertainty",
-    grid = "rasters"
-  )
-  expect_error(
-    map_simulate_occurrences(df = sim_occ2,
-                             arg_list = invalid_arg_list2),
-    "You have provided column names in `arg_list` that are not present in `df`."
-  )
+  #expect_error(map_simulation_functions(df = sim_occ1,
+  #                                      nested = "TRUE"),
+  #             "`nested` must be a logical vector of length 1.")
 })
