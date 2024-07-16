@@ -115,12 +115,12 @@ ggplot() +
 ```
 
 We select the detected occurrences and add an uncertainty to these observations.
-This can be done using the `add_coordinate_uncertainty()` function.
+This can be done using the `filter_observations()` and `add_coordinate_uncertainty()` functions, respectively.
 
 ```{r uncertainty-occurrences}
 # Select detected occurrences only
-detections_df <- detections_df_raw %>%
-  dplyr::filter(sampling_status == "detected")
+detections_df <- filter_observations(
+  observations_total = detections_df_raw)
 
 # Add coordinate uncertainty
 set.seed(123)
