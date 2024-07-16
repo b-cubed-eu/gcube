@@ -10,7 +10,10 @@
 #' lower-level taxa (e.g., species) can be assigned to the same higher-level
 #' taxon (e.g., genus).
 #'
-#' @param num_species Number of species to generate.
+#' @param num_species Number of species to generate or a dataframe with a
+#' `"species"` column containing unique species names. This dataframe may have
+#' multiple columns unrelated to this function that will be retained in the
+#' output.
 #' @param num_genera Number of genera to generate.
 #' @param num_families Number of families to generate.
 #' @param num_orders Number of orders to generate. Defaults to 1.
@@ -26,7 +29,10 @@
 #' lower-level taxa (e.g., species) can be assigned to the same higher-level
 #' taxon (e.g., genus).
 #'
-#' @return A data frame with the taxonomic classification of each species.
+#' @return A data frame with the taxonomic classification of each species. If
+#' `num_species` is a dataframe, the taxonomic classification is added to this
+#' input dataframe. The input dataframe may have multiple columns unrelated to
+#' this function and will be retained in the output.
 #'
 #' @export
 #'
@@ -42,6 +48,20 @@
 #'   num_genera = 3,
 #'   num_families = 2,
 #'   seed = 123)
+#'
+#' # Add taxonomic hierarchy to a dataframe
+#' n_spec <- 7
+#' existing_df <- data.frame(
+#'   species = paste0("species", seq_len(n_spec)),
+#'   count = c(1, 2, 5, 4, 8, 9, 3),
+#'   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
+#'   )
+#'
+#' generate_taxonomy(
+#'   num_species = existing_df,
+#'   num_genera = 4,
+#'   num_families = 2,
+#'   seed = 125)
 
 generate_taxonomy <- function(
     num_species,
@@ -54,9 +74,10 @@ generate_taxonomy <- function(
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
-  # Check if numbers are single counts
+  # Check if numbers are single counts (or dataframe)
   stopifnot("`num_species` should be a single integer." =
-              assertthat::is.count(num_species))
+              assertthat::is.count(num_species) ||
+              inherits(num_species, "data.frame"))
   stopifnot("`num_genera` should be a single integer." =
               assertthat::is.count(num_genera))
   stopifnot("`num_families` should be a single integer." =
@@ -71,6 +92,12 @@ generate_taxonomy <- function(
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
               assertthat::is.number(seed) || is.na(seed))
+
+  # 2. Other checks
+  # Check whether species column is present
+
+  # Check whether species column contains unique species names
+
   ### End checks
 
   # Set seed if provided
@@ -78,8 +105,13 @@ generate_taxonomy <- function(
     withr::local_seed(seed)
   }
 
-  # Generate species names
-  species <- paste0("species", seq_len(num_species))
+  # Generate species names if not provided
+  if (inherits(num_species, "data.frame")) {
+    species_df <- num_species
+    num_species <- nrow(species_df)
+  } else {
+    species_df <- data.frame(species = paste0("species", seq_len(num_species)))
+  }
 
   # Assign species to genera
   genera <- paste0("genus", seq_len(num_genera))
@@ -116,12 +148,15 @@ generate_taxonomy <- function(
     kingdom = sample(kingdoms, num_phyla, replace = TRUE))
 
   # Create a data frame to store the taxonomy
-  taxonomy <- data.frame(species = species, genus = species_to_genera) %>%
+  taxonomy <- species_df %>%
+    dplyr::mutate(genus = species_to_genera) %>%
     dplyr::left_join(genera_to_families, by = "genus") %>%
     dplyr::left_join(families_to_orders, by = "family") %>%
     dplyr::left_join(orders_to_classes, by = "order") %>%
     dplyr::left_join(classes_to_phyla, by = "class") %>%
-    dplyr::left_join(phyla_to_kingdoms, by = "phylum")
+    dplyr::left_join(phyla_to_kingdoms, by = "phylum") %>%
+    dplyr::select("species", "genus", "family", "order", "class", "phylum",
+                  "kingdom", everything())
 
   return(taxonomy)
 }
