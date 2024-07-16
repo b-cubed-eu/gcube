@@ -94,10 +94,15 @@ generate_taxonomy <- function(
               assertthat::is.number(seed) || is.na(seed))
 
   # 2. Other checks
-  # Check whether species column is present
+  if (inherits(num_species, "data.frame")) {
+    # Check whether species column is present
+    stopifnot("`species` column not present in `num_species` dataframe." =
+                "species" %in% colnames(num_species))
 
-  # Check whether species column contains unique species names
-
+    # Check whether species column contains unique species names
+    stopifnot("`species` column must contain unique species names." =
+                length(unique(num_species$species)) == nrow(num_species))
+  }
   ### End checks
 
   # Set seed if provided
