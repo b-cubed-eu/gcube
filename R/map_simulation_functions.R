@@ -33,8 +33,39 @@
 #' @family multispecies_low
 #'
 #' @examples
-#' print("to do")
+#' # Load packages
+#' library(sf)
+#' library(dplyr)
 #'
+#' # Create polygon
+#' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
+#'
+#' ## Example with simple column names
+#' # Specify dataframe for 3 species with custom function arguments
+#' species_dataset_df <- tibble(
+#'   taxonID = c("species1", "species2", "species3"),
+#'   plgn = rep(list(plgn), 3),
+#'   initial_average_abundance = c(50, 100, 500),
+#'   n_time_points = rep(6, 3),
+#'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
+#'   sd_step = c(1, 1, NA),
+#'   spatial_autocorr = "random",
+#'   seed = 123)
+#'
+#' # Simulate occurrences
+#' sim_occ_raw <- map_simulation_functions(
+#'   f = simulate_occurrences,
+#'   df = species_dataset_df)
+#' sim_occ_raw
+#'
+#' # Unnest output and create sf object
+#' sim_occ_raw_unnested <- map_simulation_functions(
+#'   f = simulate_occurrences,
+#'   df = species_dataset_df,
+#'   nested = FALSE)
+#'
+#' sim_occ_raw_unnested %>%
+#'    st_sf()
 
 map_simulation_functions <- function(
     f,
