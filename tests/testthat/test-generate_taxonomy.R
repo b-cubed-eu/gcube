@@ -89,4 +89,3 @@ test_that("generate_taxonomy handles invalid inputs", {
     generate_taxonomy(5, 3, 2, 3),
     "Number of orders should be smaller or equal to number of families.")
 })
-
