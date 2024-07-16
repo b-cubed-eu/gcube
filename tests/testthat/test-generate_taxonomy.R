@@ -17,7 +17,7 @@ existing_df2 <- data.frame(
 
 # Existing dataframe without unique species names
 existing_df3 <- data.frame(
-  spec = paste0("species", c(seq_len(n_spec - 1), 6)),
+  species = paste0("species", c(seq_len(n_spec - 1), 6)),
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
 )
@@ -67,14 +67,26 @@ test_that("generate_taxonomy function works correctly", {
 test_that("generate_taxonomy handles invalid inputs", {
   # Validating single integer counts
   expect_error(generate_taxonomy("not_an_integer", 3, 2),
-               "num_species should be a single integer.")
+               "`num_species` should be a single integer.")
+  expect_error(generate_taxonomy(5, 3, 2, "not_an_integer"),
+               "`num_orders` should be a single integer.")
 
   # Validating dataframe input
-  expect_error(generate_taxonomy(data.frame(species = c("A", "B", "C"))),
-               "num_genera should be a single integer.")
+  expect_error(generate_taxonomy(existing_df2, 3, 2),
+               "`species` column not present in `num_species` dataframe.")
+  expect_error(generate_taxonomy(existing_df3, 3, 2),
+               "`species` column must contain unique species names.")
 
   # Validating seed input
   expect_error(generate_taxonomy(5, 3, 2, seed = "not_a_number"),
-               "seed must be a numeric vector of length 1 or NA.")
+               "`seed` must be a numeric vector of length 1 or NA.")
+
+  # Validating number logic
+  expect_error(
+    generate_taxonomy(10, 50, 4, 2),
+    "Number of genera should be smaller or equal to number of species.")
+  expect_error(
+    generate_taxonomy(5, 3, 2, 3),
+    "Number of orders should be smaller or equal to number of families.")
 })
 
