@@ -75,7 +75,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-polygon-1.png" width="80%" />
+<img src="man/figures/readme-polygon-1.png" alt="Spatial extend in which we will simulate species occurrences." width="80%" />
 
 ### Occurrence process
 
@@ -100,7 +100,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-simulate-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-simulate-occurrences-1.png" alt="Spatial distribution of occurrences within the polygon." width="80%" />
 
 ### Detection process
 
@@ -124,7 +124,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-detect-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-detect-occurrences-1.png" alt="Spatial distribution of occurrences with indication of sampling status." width="80%" />
 
 We select the detected occurrences and add an uncertainty to these
 observations. This can be done using the `filter_observations()` and
@@ -156,7 +156,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-uncertainty-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-uncertainty-occurrences-1.png" alt="Spatial distribution of detected occurrences with coordinate uncertainty." width="80%" />
 
 ### Grid designation process
 
@@ -208,7 +208,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-grid-designation-1.png" width="80%" />
+<img src="man/figures/readme-grid-designation-1.png" alt="Distribution of random samples within uncertainty circle." width="80%" />
 
 The output gives the number of observations per grid cell and minimal
 coordinate uncertainty per grid cell.
@@ -224,4 +224,4 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-visualise-designation-1.png" width="80%" />
+<img src="man/figures/readme-visualise-designation-1.png" alt="Distribution of minimal coordinate uncertainty." width="80%" />

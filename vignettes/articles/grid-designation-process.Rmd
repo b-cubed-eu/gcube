@@ -43,6 +43,8 @@ polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
 The polygon looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
@@ -70,6 +72,8 @@ road_polygon <- st_linestring(road_points) %>%
 The result looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend with road in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -92,6 +96,8 @@ occurrences_df <- simulate_occurrences(
 This is the spatial distribution of the occurrences for each time point
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences within the polygon for each time point.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrences_df) +
@@ -115,6 +121,9 @@ detections_df_raw <- sample_observations(
 This is the spatial distribution of the occurrences for each time point
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -142,6 +151,9 @@ observations_df <- add_coordinate_uncertainty(
 The final observations with uncertainty circles look like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of detected occurrences with coordinate uncertainty
+#|   for each time point.
 # Create sf object with uncertainty circles
 buffered_observations <- st_buffer(
   observations_df,
@@ -182,6 +194,8 @@ cube_grid <- st_make_grid(
 The grid looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = cube_grid, alpha = 0) +
@@ -284,6 +298,9 @@ scatter_normal <- ggplot() +
 In the case of uniform randomisation, we see samples everywhere and evenly spread within the uncertainty circle.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle using uniform
+#|   randomisation.
 ggExtra::ggMarginal(scatter_uniform, type = "histogram")
 ```
 
@@ -292,6 +309,9 @@ This should be 0.05 (=1 - `p_norm`) %.
 We also see more samples closer to the central point.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle using normal
+#|   randomisation.
 ggExtra::ggMarginal(scatter_normal, type = "histogram")
 ```
 
@@ -330,6 +350,8 @@ sampled_points <- grid_designation(
 Lets visualise were the samples were taken for time point 1.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle for time point 1.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point == 1),
@@ -348,6 +370,8 @@ ggplot() +
 Visualise minimal coordinate uncertainty for time points 1 and 2.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of minimal coordinate uncertainty for time points 1 and 2.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point %in% 1:2),

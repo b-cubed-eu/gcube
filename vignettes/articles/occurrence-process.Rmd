@@ -45,6 +45,8 @@ polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
 The polygon looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
@@ -89,6 +91,9 @@ We see that the average is close to 100 over time as expected.
 Using a different seed will result in different numbers but the average will be (close to) 100 over time.
 
 ```{r}
+#| fig.alt: >
+#|   Simulated number of occurrences over time with unspecified temporal
+#|   function.
 tibble(
   n_occurrences = n_occurrences_indep,
   time_point = seq_along(n_occurrences_indep)
@@ -119,6 +124,8 @@ We plot the simulated number of occurrences over time which follow a random walk
 Using a different seed will result in a different random pattern.
 
 ```{r}
+#| fig.alt: >
+#|   Simulated number of occurrences over time using a random walk over time.
 tibble(
   n_occurrences = n_occurrences_walk,
   time_point = seq_along(n_occurrences_walk)
@@ -172,6 +179,8 @@ We see that the average slope is indeed close to 1.
 Using a different seed will result in different numbers but the average slope will be (close to) 1.
 
 ```{r}
+#| fig.alt: >
+#|   Simulated number of occurrences over time using a custom linear function.
 tibble(
   n_occurrences = n_occurrences_linear,
   time_point = seq_along(n_occurrences_linear)
@@ -207,6 +216,8 @@ rs_pattern_random <- create_spatial_pattern(
 We see values of high sampling probability randomly distributed.
 
 ```{r}
+#| fig.alt: >
+#|   Random spatial pattern to sample occurrences.
 ggplot() +
   geom_spatraster(data = rs_pattern_random) +
   scale_fill_continuous(type = "viridis") +
@@ -228,6 +239,8 @@ rs_pattern_clustered <- create_spatial_pattern(
 We see values of high sampling probability clustered together.
 
 ```{r}
+#| fig.alt: >
+#|   Clustered spatial pattern to sample occurrences.
 ggplot() +
   geom_spatraster(data = rs_pattern_clustered) +
   scale_fill_continuous(type = "viridis") +
@@ -251,6 +264,8 @@ rs_pattern_clustered2 <- create_spatial_pattern(
 We see values of high sampling probability in multiple, smaller clusters.
 
 ```{r}
+#| fig.alt: >
+#|   Clustered spatial pattern to sample occurrences.
 ggplot() +
   geom_spatraster(data = rs_pattern_clustered2) +
   scale_fill_continuous(type = "viridis") +
@@ -270,6 +285,8 @@ rs_pattern_clustered3 <- create_spatial_pattern(
 We see values of high sampling probability in fewer, larger clusters.
 
 ```{r}
+#| fig.alt: >
+#|   Highly clustered spatial pattern to sample occurrences.
 ggplot() +
   geom_spatraster(data = rs_pattern_clustered3) +
   scale_fill_continuous(type = "viridis") +
@@ -284,7 +301,9 @@ The patterns generated above are then used for sampling using a different helper
 
 If we for example sample 500 occurrences from the last raster, we see the sampling is according to the expected pattern.
 
-```{r}
+```{r named}
+#| fig.alt: >
+#|   500 sampled occurrences from highly clustered spatial pattern.
 pts_occ_clustered3 <- sample_occurrences_from_raster(
   rs = rs_pattern_clustered3,
   ts = 500,
@@ -316,6 +335,8 @@ occurrences_df <- simulate_occurrences(
 This is the number of occurrences we have for each time point.
 
 ```{r}
+#| fig.alt: >
+#|   Number of occurrences over time.
 occurrences_df %>%
   st_drop_geometry() %>%
   count(time_point) %>%
@@ -327,6 +348,8 @@ occurrences_df %>%
 This is the spatial distribution of the occurrences for each time point.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences within the polygon for each time point.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrences_df) +
