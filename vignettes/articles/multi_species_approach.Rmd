@@ -76,6 +76,28 @@ ggplot() +
   theme_minimal()
 ```
 
+We also need a grid.
+Each observation will be designated to a grid cell.
+
+```{r}
+cube_grid <- st_make_grid(
+  st_buffer(polygon, 25),
+  n = c(20, 20),
+  square = TRUE) %>%
+  st_sf()
+```
+
+The grid looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = cube_grid, alpha = 0) +
+  theme_minimal()
+```
+
 # Input dataframe
 
 To generate cubes for multiple species efficiently, we create a dataframe where each row represents a different species and where we specify all arguments to be used by the main cube simulation functions, viz `simulate_occurrences()`, `sample_observations()`, `filter_observations()`, `add_coordinate_uncertainty()`, and `grid_designation()`, in separate columns.
@@ -139,7 +161,7 @@ multi_species_dataset1 <- cbind.data.frame(taxonomy, multi_species_args)
 glimpse(multi_species_dataset1)
 ```
 
-Or we can give the dataframe directly as input to `generate_taxonomy()` and it will create a species with taxonomic hierarchy for each row.
+Or we can give the dataframe directly as input to `generate_taxonomy()`, which will create a species with taxonomic hierarchy for each row.
 
 ```{r}
 # Use dataframe as input to generate taxonomic hierarchy
