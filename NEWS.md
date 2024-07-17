@@ -1,3 +1,12 @@
+# gcube 0.1.0
+
+* Create data cube for multiple species using `purrr::pmap()`.
+* Generate species taxonomy.
+* Change vignettes into articles.
+* Create article for multi-species approach.
+* Add name rationale to README.
+* Clarify pkgdown website page names.
+
 # gcube 0.0.1
 
 * Add [`checklist`](https://inbo.github.io/checklist/) infrastructure.

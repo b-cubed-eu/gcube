@@ -1,10 +1,5 @@
 ---
 title: "3. Specifying the grid designation process"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{grid-designation-process}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -22,7 +17,7 @@ The workflow for simulating a biodiversity data cube used in gcube can be divide
 2. Detection process
 3. Grid designation process
 
-This vignette documents the third part of the gcube simulation workflow, viz. the grid designation process.
+This tutorial documents the third part of the gcube simulation workflow, viz. the grid designation process.
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages
@@ -48,6 +43,8 @@ polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
 The polygon looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
@@ -75,13 +72,15 @@ road_polygon <- st_linestring(road_points) %>%
 The result looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend with road in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   theme_minimal()
 ```
 
-We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see `vignette("occurrence-process")`).
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see tutorial 1 about simulating the occurrence process).
 
 ```{r}
 occurrences_df <- simulate_occurrences(
@@ -97,6 +96,8 @@ occurrences_df <- simulate_occurrences(
 This is the spatial distribution of the occurrences for each time point
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences within the polygon for each time point.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrences_df) +
@@ -105,7 +106,7 @@ ggplot() +
   theme_minimal()
 ```
 
-We detect occurrences using a 0.9 detection probability and a bias of 0.1 to detect occurrences on the road (see `vignette("detection-process")`).
+We detect occurrences using a 0.9 detection probability and a bias of 0.1 to detect occurrences on the road (see tutorial 2 about simulating the detection process).
 
 ```{r}
 detections_df_raw <- sample_observations(
@@ -120,6 +121,9 @@ detections_df_raw <- sample_observations(
 This is the spatial distribution of the occurrences for each time point
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -131,12 +135,12 @@ ggplot() +
   theme_minimal()
 ```
 
-We only keep the detected occurrences and add 25 meters of uncertainty to each observation (see `vignette("detection-process")`).
+We only keep the detected occurrences and add 25 meters of uncertainty to each observation (see tutorial 2 about simulating the detection process).
 
 ```{r}
 # Keep detected occurrences
-detections_df <- detections_df_raw %>%
-  dplyr::filter(sampling_status == "detected")
+detections_df <- filter_observations(
+  observations_total = detections_df_raw)
 
 # Add 25 m coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(
@@ -147,6 +151,9 @@ observations_df <- add_coordinate_uncertainty(
 The final observations with uncertainty circles look like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of detected occurrences with coordinate uncertainty
+#|   for each time point.
 # Create sf object with uncertainty circles
 buffered_observations <- st_buffer(
   observations_df,
@@ -187,6 +194,8 @@ cube_grid <- st_make_grid(
 The grid looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = cube_grid, alpha = 0) +
@@ -289,6 +298,9 @@ scatter_normal <- ggplot() +
 In the case of uniform randomisation, we see samples everywhere and evenly spread within the uncertainty circle.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle using uniform
+#|   randomisation.
 ggExtra::ggMarginal(scatter_uniform, type = "histogram")
 ```
 
@@ -297,6 +309,9 @@ This should be 0.05 (=1 - `p_norm`) %.
 We also see more samples closer to the central point.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle using normal
+#|   randomisation.
 ggExtra::ggMarginal(scatter_normal, type = "histogram")
 ```
 
@@ -335,6 +350,8 @@ sampled_points <- grid_designation(
 Lets visualise were the samples were taken for time point 1.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle for time point 1.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point == 1),
@@ -353,6 +370,8 @@ ggplot() +
 Visualise minimal coordinate uncertainty for time points 1 and 2.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of minimal coordinate uncertainty for time points 1 and 2.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point %in% 1:2),

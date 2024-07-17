@@ -8,7 +8,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
 [![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
-[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml)
 [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo
 status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
@@ -41,6 +41,11 @@ You can install the development version from
 remotes::install_github("b-cubed-eu/gcube")
 ```
 
+## Package name rationale
+
+The name **gcube** stands for ‘generate cube’ since it can be used to
+generate biodiversity data cubes from minimal input.
+
 ## Example
 
 This is a basic example which shows you the workflow for simulating a
@@ -67,7 +72,7 @@ We create a random polygon as input.
 
 ``` r
 # Create a polygon to simulate occurrences
-polygon <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
 
 # Visualise
 ggplot() + 
@@ -75,7 +80,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-polygon-1.png" width="80%" />
+<img src="man/figures/readme-polygon-1.png" alt="Spatial extend in which we will simulate species occurrences." width="80%" />
 
 ### Occurrence process
 
@@ -92,9 +97,6 @@ occurrences_df <- simulate_occurrences(
   plgn = polygon,
   seed = 123)
 #> [using unconditional Gaussian simulation]
-```
-
-``` r
 
 # Visualise
 ggplot() + 
@@ -103,7 +105,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-simulate-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-simulate-occurrences-1.png" alt="Spatial distribution of occurrences within the polygon." width="80%" />
 
 ### Detection process
 
@@ -127,16 +129,16 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-detect-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-detect-occurrences-1.png" alt="Spatial distribution of occurrences with indication of sampling status." width="80%" />
 
 We select the detected occurrences and add an uncertainty to these
-observations. This can be done using the `add_coordinate_uncertainty()`
-function.
+observations. This can be done using the `filter_observations()` and
+`add_coordinate_uncertainty()` functions, respectively.
 
 ``` r
 # Select detected occurrences only
-detections_df <- detections_df_raw %>%
-  dplyr::filter(sampling_status == "detected")
+detections_df <- filter_observations(
+  observations_total = detections_df_raw)
 
 # Add coordinate uncertainty
 set.seed(123)
@@ -159,7 +161,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-uncertainty-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-uncertainty-occurrences-1.png" alt="Spatial distribution of detected occurrences with coordinate uncertainty." width="80%" />
 
 ### Grid designation process
 
@@ -176,7 +178,7 @@ grid_df <- st_make_grid(
   ) %>%
   st_sf() %>%
   mutate(intersect = as.vector(st_intersects(geometry, polygon,
-                                             sparse = F))) %>%
+                                             sparse = FALSE))) %>%
   dplyr::filter(intersect == TRUE) %>%
   dplyr::select(-"intersect")
 ```
@@ -211,7 +213,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-grid-designation-1.png" width="80%" />
+<img src="man/figures/readme-grid-designation-1.png" alt="Distribution of random samples within uncertainty circle." width="80%" />
 
 The output gives the number of observations per grid cell and minimal
 coordinate uncertainty per grid cell.
@@ -227,4 +229,4 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-visualise-designation-1.png" width="80%" />
+<img src="man/figures/readme-visualise-designation-1.png" alt="Distribution of minimal coordinate uncertainty." width="80%" />

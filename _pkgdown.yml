@@ -11,6 +11,15 @@ template:
 navbar:
   bg: primary
   type: dark
+  left:
+  - text: Tutorials
+    href: articles/index.html
+  - text: Functions
+    href: reference/index.html
+  - text: News
+    href: news/index.html
+  - text: Contributing
+    href: CONTRIBUTING.html
   structure:
     right: [search, mainsite, github]
   components:
@@ -20,17 +29,22 @@ navbar:
       aria-label: B-Cubed website
 
 articles:
-  - title: "Vignettes"
-    navbar: ~
+  - title: "gcube simulation workflow"
     contents:
-    - occurrence-process
-    - detection-process
-    - grid-designation-process
+    - articles/occurrence-process
+    - articles/detection-process
+    - articles/grid-designation-process
+  - title: "Multi-species approach"
+    contents:
+    - articles/multi_species_approach
 
 reference:
   - title: "Core gcube workflow functions"
     contents:
       - has_concept("main")
+  - title: "Mapping core gcube workflow functions"
+    contents:
+      - has_concept("multispecies")
   - title: "Occurrence process helper functions"
     contents:
       - has_concept("occurrence")
@@ -40,3 +54,6 @@ reference:
   - title: "Grid designation process helper functions"
     contents:
       - has_concept("designation")
+  - title: "Mapping functions helper function"
+    contents:
+      - has_concept("multispecies_low")
