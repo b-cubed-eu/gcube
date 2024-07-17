@@ -60,8 +60,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tidyterra
-VignetteBuilder: 
-    knitr
 Config/checklist/communities: b3; inbo
 Config/checklist/keywords: simulation; data cubes; B-Cubed; biodiversity;
     Monte-Carlo
