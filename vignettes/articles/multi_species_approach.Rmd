@@ -250,4 +250,49 @@ map_occ_cube_df_unnested <- map_grid_designation(
 glimpse(map_occ_cube_df_unnested)
 ```
 
+Finally, the mapping functions allow column names that deviate from the argument names of their single-species companions.
+A names list should then be provided to the mapping functions to know which columns match which arguments.
+The mapping functions will retain the original column names in the output.
 
+We rename for example three column names such that they do not longer match the argument names of the single-species functions:
+
+- plgn $\rightarrow$ polygon (argument of `simulate_occurrences()`)
+- detection_probability $\rightarrow$ det_prob (argument of `sample_observations()`)
+- grid $\rightarrow$ raster (argument of `grid_designation()`)
+
+```{r}
+# Create dataframe with custom column names
+multi_species_dataset2_renamed <- multi_species_dataset2 %>%
+  rename("polygon" = "plgn",
+         "det_prob" = "detection_probability",
+         "raster" = "grid")
+```
+
+We need to create a named list to match the new column names with the argument names.
+The names are the argument names of the single-species functions and the values are the deviating column names.
+
+```{r}
+# Create named list for argument conversion
+arg_conv_list <- list(
+    plgn = "polygon",
+    detection_probability = "det_prob",
+    grid = "raster"
+  )
+
+arg_conv_list
+```
+
+We perform the same workflow as before and use the `arg_list` argument convert the names.
+We can see that the workflow works as expected and the column names are the original (changed) names of the input dataframe.
+
+```{r}
+map_occ_cube_df3 <- multi_species_dataset2_renamed %>%
+  map_simulate_occurrences(arg_list = arg_conv_list) %>%
+  map_sample_observations(arg_list = arg_conv_list) %>%
+  map_filter_observations() %>% # Argument names match
+  map_add_coordinate_uncertainty() %>% # Argument names match
+  map_grid_designation(arg_list = arg_conv_list)
+
+# How does the dataset look like?
+glimpse(map_occ_cube_df3)
+```
