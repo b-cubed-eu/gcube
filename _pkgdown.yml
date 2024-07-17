@@ -16,7 +16,7 @@ navbar:
     href: articles/index.html
   - text: Functions
     href: reference/index.html
-  - text: NEWS
+  - text: News
     href: news/index.html
   - text: Contributing
     href: CONTRIBUTING.html
