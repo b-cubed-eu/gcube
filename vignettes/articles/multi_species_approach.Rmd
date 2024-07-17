@@ -296,3 +296,61 @@ map_occ_cube_df3 <- multi_species_dataset2_renamed %>%
 # How does the dataset look like?
 glimpse(map_occ_cube_df3)
 ```
+
+# Visualise examples
+
+Let's visualise the output for two of the six species.
+
+Species 1 has a low initial number of occurrences with a random walk over time and is simulated using a random spatial pattern.
+It has a detection probability of 0.8 and will be undersampled on the road.
+
+```{r}
+# Simulate detection process and unnest
+detections_df_raw <- map_sample_observations(df = map_sim_occ_df,
+                                             nested = FALSE)
+# Select species 1 and create sf object
+detections_df_raw1 <- detections_df_raw %>%
+  filter(species == "species1") %>%
+  st_sf()
+```
+
+We confirm this by visualising the spatial distribution of the occurrences with their sampling status.
+
+```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw1,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
+
+We do the same for species 6.
+Species 6 has a high initial number of occurrences with no trend over time and is simulated using a clustered spatial pattern.
+It has a detection probability of 1 and there is no sampling bias.
+
+```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
+# Select species 6 and create sf object
+detections_df_raw6 <- detections_df_raw %>%
+  filter(species == "species6") %>%
+  st_sf()
+
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw6,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
