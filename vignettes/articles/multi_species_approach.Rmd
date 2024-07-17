@@ -175,3 +175,79 @@ multi_species_dataset2 <- generate_taxonomy(
 # Do we get the same result?
 identical(multi_species_dataset1, multi_species_dataset2)
 ```
+
+# Mapping the simulation process over each row/species
+
+Each cube simulation function has a mapping companion.
+These mapping functions apply the single-species operations for each row using the `purrr::pmap()` strategy.
+
+```{r, echo=FALSE}
+data.frame(
+    single_species = c("simulate_occurrences()",
+                       "sample_observations()",
+                       "filter_observations()",
+                       "add_coordinate_uncertainty()",
+                       "grid_designation()"),
+    multi_species  = c("map_simulate_occurrences()",
+                       "map_sample_observations()",
+                       "map_filter_observations()",
+                       "map_add_coordinate_uncertainty()",
+                       "map_grid_designation()")
+  ) %>% knitr::kable()
+```
+
+The output of the mapping functions is stored as a list-column by default to ensure efficient transition between simulation functions.
+
+```{r}
+# Creates occurrences list-column with simulated occurrences
+map_sim_occ_df <- map_simulate_occurrences(df = multi_species_dataset2)
+
+# Creates observations_total list-column with sampled observations
+map_samp_obs_df <- map_sample_observations(df = map_sim_occ_df)
+
+# Creates observations list-column with detected observations
+map_filter_obs_df <- map_filter_observations(df = map_samp_obs_df)
+
+# Add coordinateUncertaintyInMeters column to observations list-column
+map_obs_uncertainty_df <- map_add_coordinate_uncertainty(df = map_filter_obs_df)
+
+# Creates occurrence_cube_df list-column with final data cubes
+map_occ_cube_df1 <- map_grid_designation(df = map_obs_uncertainty_df)
+
+# How does the final dataframe look like?
+glimpse(map_occ_cube_df1)
+```
+
+We can also pipe over the functions.
+
+```{r}
+map_occ_cube_df2 <- multi_species_dataset2 %>%
+  map_simulate_occurrences() %>%
+  map_sample_observations() %>%
+  map_filter_observations() %>%
+  map_add_coordinate_uncertainty() %>%
+  map_grid_designation()
+
+# Is the output the same as before?
+identical(map_occ_cube_df1, map_occ_cube_df2)
+```
+
+Each mapping function also has an argument `nested`.
+If `nested = TRUE` (default), they retain the list-column containing calculated sf objects calculated by simulate_occurrences().
+If `nested = TRUE`, this list-column is expanded into rows and columns.
+
+If we do this for example for `map_grid_designation()`, we can recognise the columns produced by `grid_designation()`.
+Nested list-columns are useful for calculation in the simulation workflow as shown above.
+Calculation and visualisation of the output is more easily performed on unnested list-columns.
+
+```{r}
+# Unnest list-column
+map_occ_cube_df_unnested <- map_grid_designation(
+  df = map_obs_uncertainty_df,
+  nested = FALSE)
+
+# How does the dataset look like?
+glimpse(map_occ_cube_df_unnested)
+```
+
+
