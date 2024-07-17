@@ -17,7 +17,7 @@ The workflow for simulating a biodiversity data cube used in gcube can be divide
 2. Detection process
 3. Grid designation process
 
-This vignette documents the first part of the gcube simulation workflow, viz. the occurrence process.
+This tutorial documents the first part of the gcube simulation workflow, viz. the occurrence process.
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages

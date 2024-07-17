@@ -17,7 +17,7 @@ The workflow for simulating a biodiversity data cube used in gcube can be divide
 2. Detection process
 3. Grid designation process
 
-This vignette documents the second part of the gcube simulation workflow, viz. the detection process.
+This tutorial documents the second part of the gcube simulation workflow, viz. the detection process.
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages
@@ -47,7 +47,7 @@ ggplot() +
   theme_minimal()
 ```
 
-We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see `vignette("occurrence-process")`).
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see see tutorial 1 about simulating the occurrence process).
 
 ```{r}
 occurrences_df <- simulate_occurrences(
