@@ -33,7 +33,7 @@ library(tidyterra) # visualisation spatraster objects
 
 The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
 The user can change these arguments to allow for more flexibility.
-In this vignette we will demonstrate the different options.
+In this tutorial we will demonstrate the different options.
 
 As input, we create a polygon in which we want to simulate occurrences.
 
