@@ -92,9 +92,6 @@ occurrences_df <- simulate_occurrences(
   plgn = polygon,
   seed = 123)
 #> [using unconditional Gaussian simulation]
-```
-
-``` r
 
 # Visualise
 ggplot() + 
