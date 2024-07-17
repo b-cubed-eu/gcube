@@ -1,0 +1,16 @@
+---
+title: "4. Creating cubes for multiple species"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gcube)
+```
