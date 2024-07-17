@@ -11,6 +11,15 @@ template:
 navbar:
   bg: primary
   type: dark
+  left:
+  - text: Tutorials
+    href: articles/index.html
+  - text: Functions
+    href: reference/index.html
+  - text: NEWS
+    href: news/index.html
+  - text: Contributing
+    href: CONTRIBUTING.html
   structure:
     right: [search, mainsite, github]
   components:
