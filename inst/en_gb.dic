@@ -2,8 +2,12 @@ CMD
 SpatRaster
 codecov
 cube’
+det
 etc
+plgn
+prob
 spatiotemporal
 timeseries
 undersampled
+unnested
 viz
