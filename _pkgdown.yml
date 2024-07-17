@@ -29,12 +29,15 @@ navbar:
       aria-label: B-Cubed website
 
 articles:
-  - title: "Tutorials"
-    navbar: ~
+  text: Tutorials
+  menu:
+  - text: "gcube simulation workflow"
     contents:
     - articles/occurrence-process
     - articles/detection-process
     - articles/grid-designation-process
+  - text: "Multi-species approach"
+    contents:
     - articles/multi_species_approach
 
 reference:
