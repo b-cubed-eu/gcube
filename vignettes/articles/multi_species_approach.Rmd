@@ -76,3 +76,28 @@ ggplot() +
   theme_minimal()
 ```
 
+# Input dataframe
+
+To generate cubes for multiple species efficiently, we create a dataframe where each row represents a different species and where we specify all arguments to be used by the main cube simulation functions, viz `simulate_occurrences()`, `sample_observations()`, `filter_observations()`, `add_coordinate_uncertainty()`, and `grid_designation()`, in separate columns.
+The values within these columns can change between species.
+
+```{r}
+multi_species_dataset <- tibble(
+  plgn = rep(list(polygon), 6),
+  initial_average_abundance = rep(c(50, 100, 500), 2),
+  n_time_points = rep(6, 6),
+  temporal_function = c(simulate_random_walk, simulate_random_walk, rep(NA, 4)),
+  sd_step = c(1, 1, rep(NA, 4)),
+  spatial_autocorr = c(rep("random", 3), rep("clustered", 3)),
+  detection_probability = rep(c(0.8, 0.9, 1), 2),
+  sampling_bias = c(rep("polygon", 3), rep("no_bias", 3)),
+  bias_area = c(rep(list(road_polygon), 3), rep(NA, 3)),
+  bias_strength = c(c(0.1, 0.2, 0.3), rep(1, 3)),
+  coords_uncertainty_meters = rep(c(25, 30, 50), 2),
+  grid = rep(list(cube_grid), 6),
+  seed = 123
+)
+
+glimpse(multi_species_dataset)
+```
+
