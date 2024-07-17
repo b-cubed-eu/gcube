@@ -27,4 +27,52 @@ library(dplyr)     # data wrangling
 library(ggplot2)   # data visualisation
 ```
 
+# Spatial extend
+
+As input, we create a polygon in which we simulate occurrences.
+
+```{r}
+polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
+                                 c(200, 100, 700, 1000, 900, 500, 200))))
+```
+
+The polygon looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
+ggplot() +
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+Also consider a road across our polygon.
+
+```{r}
+# Define the road width
+road_width <- 50
+
+# Create road points
+road_points <- rbind(c(100, 500), c(1000, 500))
+
+# Create road-like polygon within the given polygon
+road_polygon <- st_linestring(road_points) %>%
+  st_buffer(road_width) %>%
+  st_intersection(polygon) %>%
+  st_polygon() %>%
+  st_sfc() %>%
+  st_as_sf() %>%
+  rename(geometry = x)
+```
+
+The result looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Spatial extend with road in which we will simulate species occurrences.
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  theme_minimal()
+```
 
