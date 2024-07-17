@@ -81,7 +81,7 @@ Each observation will be designated to a grid cell.
 
 ```{r}
 cube_grid <- st_make_grid(
-  st_buffer(polygon, 25),
+  st_buffer(polygon, 50),
   n = c(20, 20),
   square = TRUE) %>%
   st_sf()
@@ -155,7 +155,8 @@ We can add this taxonomic hierarchy to our dataframe with function arguments to 
 
 ```{r}
 # Combine dataframes
-multi_species_dataset1 <- cbind.data.frame(taxonomy, multi_species_args)
+multi_species_dataset1 <- cbind(taxonomy, multi_species_args) %>%
+  as_tibble() # To compare with dataset2, see next chunk
 
 # How does the dataset look like?
 glimpse(multi_species_dataset1)
