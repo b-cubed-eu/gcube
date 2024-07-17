@@ -20,12 +20,13 @@ navbar:
       aria-label: B-Cubed website
 
 articles:
-  - title: "Vignettes"
+  - title: "Tutorials"
     navbar: ~
     contents:
-    - occurrence-process
-    - detection-process
-    - grid-designation-process
+    - articles/occurrence-process
+    - articles/detection-process
+    - articles/grid-designation-process
+    - articles/multi_species_approach
 
 reference:
   - title: "Core gcube workflow functions"

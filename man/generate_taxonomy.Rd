@@ -16,9 +16,9 @@ generate_taxonomy(
 )
 }
 \arguments{
-\item{num_species}{Number of species to generate or a dataframe with a
-\code{"species"} column containing unique species names. This dataframe may have
-multiple columns unrelated to this function that will be retained in the
+\item{num_species}{Number of species to generate, or a dataframe. With a
+dataframe, the function will create a species with taxonomic hierarchy for
+each row. The original columns of the dataframe will be retained in the
 output.}
 
 \item{num_genera}{Number of genera to generate.}
@@ -39,8 +39,8 @@ reproducible. If \code{NA} (the default), no seed is used.}
 \value{
 A data frame with the taxonomic classification of each species. If
 \code{num_species} is a dataframe, the taxonomic classification is added to this
-input dataframe. The input dataframe may have multiple columns unrelated to
-this function and will be retained in the output.
+input dataframe. The original columns of the dataframe will be retained in
+the output.
 }
 \description{
 This function generates a random taxonomic hierarchy for a specified numbers
@@ -63,9 +63,7 @@ generate_taxonomy(
   seed = 123)
 
 # Add taxonomic hierarchy to a dataframe
-n_spec <- 7
 existing_df <- data.frame(
-  species = paste0("species", seq_len(n_spec)),
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
   )

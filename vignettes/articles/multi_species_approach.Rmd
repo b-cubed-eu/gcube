@@ -1,0 +1,356 @@
+---
+title: "4. Creating cubes for multiple species"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The workflow for simulating a biodiversity data cubes is provided in tutorials 1-3.
+However, this workflow only describes a data cube for a single species.
+As such, it is not really a cube since it is not three-dimensional.
+Furthermore, many biodiversity indicators are calculated over multiple species.
+
+This tutorial describes the functions provided to simulate biodiversity data cubes for multiple species directly.
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
+library(gcube)
+
+library(sf)        # work with spatial objects
+library(dplyr)     # data wrangling
+library(ggplot2)   # data visualisation
+```
+
+# Spatial extend
+
+As input, we create a polygon in which we simulate occurrences.
+
+```{r}
+polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
+                                 c(200, 100, 700, 1000, 900, 500, 200))))
+```
+
+The polygon looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
+ggplot() +
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+Also consider a road across our polygon.
+
+```{r}
+# Define the road width
+road_width <- 50
+
+# Create road points
+road_points <- rbind(c(100, 500), c(1000, 500))
+
+# Create road-like polygon within the given polygon
+road_polygon <- st_linestring(road_points) %>%
+  st_buffer(road_width) %>%
+  st_intersection(polygon) %>%
+  st_polygon() %>%
+  st_sfc() %>%
+  st_as_sf() %>%
+  rename(geometry = x)
+```
+
+The result looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Spatial extend with road in which we will simulate species occurrences.
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  theme_minimal()
+```
+
+We also need a grid.
+Each observation will be designated to a grid cell.
+
+```{r}
+cube_grid <- st_make_grid(
+  st_buffer(polygon, 50),
+  n = c(20, 20),
+  square = TRUE) %>%
+  st_sf()
+```
+
+The grid looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = cube_grid, alpha = 0) +
+  theme_minimal()
+```
+
+# Input dataframe
+
+To generate cubes for multiple species efficiently, we create a dataframe where each row represents a different species and where we specify all arguments to be used by the main cube simulation functions, viz `simulate_occurrences()`, `sample_observations()`, `filter_observations()`, `add_coordinate_uncertainty()`, and `grid_designation()`, in separate columns.
+The values within these columns can change between species.
+
+```{r}
+# Create dataframe with simulation function arguments
+multi_species_args <- tibble(
+  plgn = rep(list(polygon), 6),
+  initial_average_abundance = rep(c(50, 100, 500), 2),
+  n_time_points = rep(6, 6),
+  temporal_function = c(simulate_random_walk, simulate_random_walk, rep(NA, 4)),
+  sd_step = c(1, 1, rep(NA, 4)),
+  spatial_autocorr = c(rep("random", 3), rep("clustered", 3)),
+  detection_probability = rep(c(0.8, 0.9, 1), 2),
+  sampling_bias = c(rep("polygon", 3), rep("no_bias", 3)),
+  bias_area = c(rep(list(road_polygon), 3), rep(NA, 3)),
+  bias_strength = c(c(0.1, 0.2, 0.3), rep(1, 3)),
+  coords_uncertainty_meters = rep(c(25, 30, 50), 2),
+  grid = rep(list(cube_grid), 6),
+  seed = 123
+)
+
+# How does this dataframe look like?
+glimpse(multi_species_args)
+```
+
+Before we move on, we add a taxonomic hierarchy to this dataframe.
+This might be used to calculate phylogenetic indicators upstream or just to have a more complete and comprehensible dataset for cube generation.
+We generate a taxonomic hierarchy using the `generate_taxonomy()` function.
+
+```{r, eval=FALSE}
+?generate_taxonomy
+```
+
+We need to specify at least the number of species, genera and families.
+Higher taxonomic levels are default on 1.
+
+```{r}
+# Define number of species
+n_specs <- nrow(multi_species_args)
+
+# Generate taxonomic hierarchy
+taxonomy <- generate_taxonomy(
+  num_species = n_specs,
+  num_genera = 4,
+  num_families = 2,
+  seed = 123)
+
+# How does the taxonomic hierarchy look like?
+taxonomy
+```
+
+We can add this taxonomic hierarchy to our dataframe with function arguments to get a complete dataset.
+
+```{r}
+# Combine dataframes
+multi_species_dataset1 <- cbind(taxonomy, multi_species_args) %>%
+  as_tibble() # To compare with dataset2, see next chunk
+
+# How does the dataset look like?
+glimpse(multi_species_dataset1)
+```
+
+Or we can give the dataframe directly as input to `generate_taxonomy()`, which will create a species with taxonomic hierarchy for each row.
+
+```{r}
+# Use dataframe as input to generate taxonomic hierarchy
+multi_species_dataset2 <- generate_taxonomy(
+  num_species = multi_species_args,
+  num_genera = 4,
+  num_families = 2,
+  seed = 123)
+
+# Do we get the same result?
+identical(multi_species_dataset1, multi_species_dataset2)
+```
+
+# Mapping the simulation process over each row/species
+
+Each cube simulation function has a mapping companion.
+These mapping functions apply the single-species operations for each row using the `purrr::pmap()` strategy.
+
+```{r, echo=FALSE}
+data.frame(
+    single_species = c("simulate_occurrences()",
+                       "sample_observations()",
+                       "filter_observations()",
+                       "add_coordinate_uncertainty()",
+                       "grid_designation()"),
+    multi_species  = c("map_simulate_occurrences()",
+                       "map_sample_observations()",
+                       "map_filter_observations()",
+                       "map_add_coordinate_uncertainty()",
+                       "map_grid_designation()")
+  ) %>% knitr::kable()
+```
+
+The output of the mapping functions is stored as a list-column by default to ensure efficient transition between simulation functions.
+
+```{r}
+# Creates occurrences list-column with simulated occurrences
+map_sim_occ_df <- map_simulate_occurrences(df = multi_species_dataset2)
+
+# Creates observations_total list-column with sampled observations
+map_samp_obs_df <- map_sample_observations(df = map_sim_occ_df)
+
+# Creates observations list-column with detected observations
+map_filter_obs_df <- map_filter_observations(df = map_samp_obs_df)
+
+# Add coordinateUncertaintyInMeters column to observations list-column
+map_obs_uncertainty_df <- map_add_coordinate_uncertainty(df = map_filter_obs_df)
+
+# Creates occurrence_cube_df list-column with final data cubes
+map_occ_cube_df1 <- map_grid_designation(df = map_obs_uncertainty_df)
+
+# How does the final dataframe look like?
+glimpse(map_occ_cube_df1)
+```
+
+We can also pipe over the functions.
+
+```{r}
+map_occ_cube_df2 <- multi_species_dataset2 %>%
+  map_simulate_occurrences() %>%
+  map_sample_observations() %>%
+  map_filter_observations() %>%
+  map_add_coordinate_uncertainty() %>%
+  map_grid_designation()
+
+# Is the output the same as before?
+identical(map_occ_cube_df1, map_occ_cube_df2)
+```
+
+Each mapping function also has an argument `nested`.
+If `nested = TRUE` (default), they retain the list-column containing calculated sf objects calculated by simulate_occurrences().
+If `nested = TRUE`, this list-column is expanded into rows and columns.
+
+If we do this for example for `map_grid_designation()`, we can recognise the columns produced by `grid_designation()`.
+Nested list-columns are useful for calculation in the simulation workflow as shown above.
+Calculation and visualisation of the output is more easily performed on unnested list-columns.
+
+```{r}
+# Unnest list-column
+map_occ_cube_df_unnested <- map_grid_designation(
+  df = map_obs_uncertainty_df,
+  nested = FALSE)
+
+# How does the dataset look like?
+glimpse(map_occ_cube_df_unnested)
+```
+
+Finally, the mapping functions allow column names that deviate from the argument names of their single-species companions.
+A names list should then be provided to the mapping functions to know which columns match which arguments.
+The mapping functions will retain the original column names in the output.
+
+We rename for example three column names such that they do not longer match the argument names of the single-species functions:
+
+- plgn $\rightarrow$ polygon (argument of `simulate_occurrences()`)
+- detection_probability $\rightarrow$ det_prob (argument of `sample_observations()`)
+- grid $\rightarrow$ raster (argument of `grid_designation()`)
+
+```{r}
+# Create dataframe with custom column names
+multi_species_dataset2_renamed <- multi_species_dataset2 %>%
+  rename("polygon" = "plgn",
+         "det_prob" = "detection_probability",
+         "raster" = "grid")
+```
+
+We need to create a named list to match the new column names with the argument names.
+The names are the argument names of the single-species functions and the values are the deviating column names.
+
+```{r}
+# Create named list for argument conversion
+arg_conv_list <- list(
+    plgn = "polygon",
+    detection_probability = "det_prob",
+    grid = "raster"
+  )
+
+arg_conv_list
+```
+
+We perform the same workflow as before and use the `arg_list` argument convert the names.
+We can see that the workflow works as expected and the column names are the original (changed) names of the input dataframe.
+
+```{r}
+map_occ_cube_df3 <- multi_species_dataset2_renamed %>%
+  map_simulate_occurrences(arg_list = arg_conv_list) %>%
+  map_sample_observations(arg_list = arg_conv_list) %>%
+  map_filter_observations() %>% # Argument names match
+  map_add_coordinate_uncertainty() %>% # Argument names match
+  map_grid_designation(arg_list = arg_conv_list)
+
+# How does the dataset look like?
+glimpse(map_occ_cube_df3)
+```
+
+# Visualise examples
+
+Let's visualise the output for two of the six species.
+
+Species 1 has a low initial number of occurrences with a random walk over time and is simulated using a random spatial pattern.
+It has a detection probability of 0.8 and will be undersampled on the road.
+
+```{r}
+# Simulate detection process and unnest
+detections_df_raw <- map_sample_observations(df = map_sim_occ_df,
+                                             nested = FALSE)
+# Select species 1 and create sf object
+detections_df_raw1 <- detections_df_raw %>%
+  filter(species == "species1") %>%
+  st_sf()
+```
+
+We confirm this by visualising the spatial distribution of the occurrences with their sampling status.
+
+```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw1,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
+
+We do the same for species 6.
+Species 6 has a high initial number of occurrences with no trend over time and is simulated using a clustered spatial pattern.
+It has a detection probability of 1 and there is no sampling bias.
+
+```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
+# Select species 6 and create sf object
+detections_df_raw6 <- detections_df_raw %>%
+  filter(species == "species6") %>%
+  st_sf()
+
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw6,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```

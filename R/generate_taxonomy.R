@@ -10,9 +10,9 @@
 #' lower-level taxa (e.g., species) can be assigned to the same higher-level
 #' taxon (e.g., genus).
 #'
-#' @param num_species Number of species to generate or a dataframe with a
-#' `"species"` column containing unique species names. This dataframe may have
-#' multiple columns unrelated to this function that will be retained in the
+#' @param num_species Number of species to generate, or a dataframe. With a
+#' dataframe, the function will create a species with taxonomic hierarchy for
+#' each row. The original columns of the dataframe will be retained in the
 #' output.
 #' @param num_genera Number of genera to generate.
 #' @param num_families Number of families to generate.
@@ -25,8 +25,8 @@
 #'
 #' @return A data frame with the taxonomic classification of each species. If
 #' `num_species` is a dataframe, the taxonomic classification is added to this
-#' input dataframe. The input dataframe may have multiple columns unrelated to
-#' this function and will be retained in the output.
+#' input dataframe. The original columns of the dataframe will be retained in
+#' the output.
 #'
 #' @export
 #'
@@ -44,9 +44,7 @@
 #'   seed = 123)
 #'
 #' # Add taxonomic hierarchy to a dataframe
-#' n_spec <- 7
 #' existing_df <- data.frame(
-#'   species = paste0("species", seq_len(n_spec)),
 #'   count = c(1, 2, 5, 4, 8, 9, 3),
 #'   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
 #'   )
@@ -69,7 +67,7 @@ generate_taxonomy <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if numbers are single counts (or dataframe)
-  stopifnot("`num_species` should be a single integer." =
+  stopifnot("`num_species` should be a single integer or a dataframe." =
               assertthat::is.count(num_species) ||
               inherits(num_species, "data.frame"))
   stopifnot("`num_genera` should be a single integer." =
@@ -90,18 +88,14 @@ generate_taxonomy <- function(
   # 2. Other checks
   # Validate dataframe input
   if (inherits(num_species, "data.frame")) {
-    # Check whether species column is present
-    stopifnot("`species` column not present in `num_species` dataframe." =
-                "species" %in% colnames(num_species))
-
-    # Check whether species column contains unique species names
-    stopifnot("`species` column must contain unique species names." =
-                length(unique(num_species$species)) == nrow(num_species))
-
+    # Define dataframe and number of species correctly
     species_df <- num_species
     num_species <- nrow(species_df)
+
+    # Generate species names
+    species_df$species <- paste0("species", seq_len(num_species))
   } else {
-    # Generate species names if not provided
+    # Generate species names
     species_df <- data.frame(species = paste0("species", seq_len(num_species)))
   }
 

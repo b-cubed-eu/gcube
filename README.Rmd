@@ -40,6 +40,10 @@ You can install the development version from [GitHub](https://github.com/) with:
 remotes::install_github("b-cubed-eu/gcube")
 ```
 
+## Package name rationale
+
+The name **gcube** stands for 'generate cube' since it can be used to generate biodiversity data cubes from minimal input.
+
 ## Example
 
 This is a basic example which shows you the workflow for simulating a biodiversity data cube.
@@ -65,6 +69,8 @@ library(ggplot2) # visualisation with ggplot
 We create a random polygon as input.
 
 ```{r polygon}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
 # Create a polygon to simulate occurrences
 polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
 
@@ -81,6 +87,8 @@ These are the "real" occurrences of the species, whether we have observed them o
 In the `simulate_occurrences()` function, the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
 ```{r simulate-occurrences}
+#| fig.alt: >
+#|   Spatial distribution of occurrences within the polygon.
 # Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
   plgn = polygon,
@@ -100,6 +108,8 @@ This is done using the `sample_observations()` function.
 The default sampling bias is `"no_bias"`, but bias can also be inserted using a polygon or a grid.
 
 ```{r detect-occurrences}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status.
 # Detect occurrences
 detections_df_raw <- sample_observations(
   occurrences = occurrences_df,
@@ -118,6 +128,8 @@ We select the detected occurrences and add an uncertainty to these observations.
 This can be done using the `filter_observations()` and `add_coordinate_uncertainty()` functions, respectively.
 
 ```{r uncertainty-occurrences}
+#| fig.alt: >
+#|   Spatial distribution of detected occurrences with coordinate uncertainty.
 # Select detected occurrences only
 detections_df <- filter_observations(
   observations_total = detections_df_raw)
@@ -166,6 +178,8 @@ To create an occurrence cube, `grid_designation()` will randomly take a point wi
 These points can be extracted by setting the argument `aggregate = FALSE`.
 
 ```{r grid-designation}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle.
 # Create occurrence cube
 occurrence_cube_df <- grid_designation(
   observations = observations_df,
@@ -194,6 +208,8 @@ ggplot() +
 The output gives the number of observations per grid cell and minimal coordinate uncertainty per grid cell.
 
 ```{r visualise-designation}
+#| fig.alt: >
+#|   Distribution of minimal coordinate uncertainty.
 # Visualise minimal coordinate uncertainty
 ggplot() +
   geom_sf(data = occurrence_cube_df, aes(fill = min_coord_uncertainty),

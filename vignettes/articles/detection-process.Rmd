@@ -1,10 +1,5 @@
 ---
 title: "2. Simulating the detection process"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{2. Simulating the detection process}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -22,7 +17,7 @@ The workflow for simulating a biodiversity data cube used in gcube can be divide
 2. Detection process
 3. Grid designation process
 
-This vignette documents the second part of the gcube simulation workflow, viz. the detection process.
+This tutorial documents the second part of the gcube simulation workflow, viz. the detection process.
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages
@@ -47,12 +42,14 @@ polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
 The polygon looks like this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
 ```
 
-We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see `vignette("occurrence-process")`).
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see see tutorial 1 about simulating the occurrence process).
 
 ```{r}
 occurrences_df <- simulate_occurrences(
@@ -68,6 +65,8 @@ occurrences_df <- simulate_occurrences(
 This is the spatial distribution of the occurrences for each time point
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences within the polygon for each time point.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = occurrences_df) +
@@ -126,6 +125,8 @@ road_polygon <- st_linestring(road_points) %>%
 Plot the result.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial extend with road in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -144,6 +145,9 @@ occurrence_bias_df1 <- apply_polygon_sampling_bias(
 We see that occurrences on the road have twice the bias weights as the other occurrences.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of bias weights using a
+#|   road polygon for each time point.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -176,6 +180,8 @@ grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
 Plot the grid.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial grid with manual bias weights.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = grid, alpha = 0) +
@@ -194,6 +200,9 @@ occurrence_bias_df2 <- apply_manual_sampling_bias(
 We indeed see higher bias weights for occurrences where with higher values in the grid cells.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of bias weights using a
+#|   manual grid for each time point.
 ggplot() +
   geom_sf(data = polygon) +
   geom_sf(data = grid, alpha = 0) +
@@ -221,6 +230,9 @@ detections_df_raw <- sample_observations(
 We see that a lot of occurrences are detected due to the high detection probability, but this is not the case on the road where few are detected.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of occurrences with indication of sampling status for
+#|   each time point.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
@@ -254,7 +266,7 @@ detections_df2 <- filter_observations(
   observations_total = detections_df_raw)
 
 # Do we get the same result?
-all(detections_df1 == detections_df2)
+identical(detections_df1, detections_df2)
 ```
 
 We add coordinate uncertainty to the observations using the `add_coordinate_uncertainty()` function.
@@ -275,6 +287,9 @@ observations_df <- add_coordinate_uncertainty(
 Created and sf object with uncertainty circles to visualise this.
 
 ```{r}
+#| fig.alt: >
+#|   Spatial distribution of detected occurrences with coordinate uncertainty
+#|   for each time point.
 buffered_observations <- st_buffer(
   observations_df,
   observations_df$coordinateUncertaintyInMeters)
