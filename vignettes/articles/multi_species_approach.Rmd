@@ -11,6 +11,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+The workflow for simulating a biodiversity data cubes is provided in tutorials 1-3.
+However, this workflow only describes a data cube for a single species.
+As such, it is not really a cube since it is not three-dimensional.
+Furthermore, many biodiversity indicators are calculated over multiple species.
+
+This tutorial describes the functions provided to simulate biodiversity data cubes for multiple species directly.
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
 library(gcube)
+
+library(sf)        # work with spatial objects
+library(dplyr)     # data wrangling
+library(ggplot2)   # data visualisation
 ```
+
+
