@@ -5,6 +5,7 @@
 * Change vignettes into articles.
 * Create article for multi-species approach.
 * Add name rationale to README.
+* Clarify pkgdown website page names.
 
 # gcube 0.0.1
 
