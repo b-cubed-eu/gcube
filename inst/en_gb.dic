@@ -1,6 +1,7 @@
 CMD
 SpatRaster
 codecov
+cube’
 etc
 spatiotemporal
 timeseries
