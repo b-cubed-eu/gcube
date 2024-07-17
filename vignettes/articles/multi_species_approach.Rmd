@@ -82,7 +82,8 @@ To generate cubes for multiple species efficiently, we create a dataframe where 
 The values within these columns can change between species.
 
 ```{r}
-multi_species_dataset <- tibble(
+# Create dataframe with simulation function arguments
+multi_species_args <- tibble(
   plgn = rep(list(polygon), 6),
   initial_average_abundance = rep(c(50, 100, 500), 2),
   n_time_points = rep(6, 6),
@@ -98,6 +99,56 @@ multi_species_dataset <- tibble(
   seed = 123
 )
 
-glimpse(multi_species_dataset)
+# How does this dataframe look like?
+glimpse(multi_species_args)
 ```
 
+Before we move on, we add a taxonomic hierarchy to this dataframe.
+This might be used to calculate phylogenetic indicators upstream or just to have a more complete and comprehensible dataset for cube generation.
+We generate a taxonomic hierarchy using the `generate_taxonomy()` function.
+
+```{r, eval=FALSE}
+?generate_taxonomy
+```
+
+We need to specify at least the number of species, genera and families.
+Higher taxonomic levels are default on 1.
+
+```{r}
+# Define number of species
+n_specs <- nrow(multi_species_args)
+
+# Generate taxonomic hierarchy
+taxonomy <- generate_taxonomy(
+  num_species = n_specs,
+  num_genera = 4,
+  num_families = 2,
+  seed = 123)
+
+# How does the taxonomic hierarchy look like?
+taxonomy
+```
+
+We can add this taxonomic hierarchy to our dataframe with function arguments to get a complete dataset.
+
+```{r}
+# Combine dataframes
+multi_species_dataset1 <- cbind.data.frame(taxonomy, multi_species_args)
+
+# How does the dataset look like?
+glimpse(multi_species_dataset1)
+```
+
+Or we can give the dataframe directly as input to `generate_taxonomy()` and it will create a species with taxonomic hierarchy for each row.
+
+```{r}
+# Use dataframe as input to generate taxonomic hierarchy
+multi_species_dataset2 <- generate_taxonomy(
+  num_species = multi_species_args,
+  num_genera = 4,
+  num_families = 2,
+  seed = 123)
+
+# Do we get the same result?
+identical(multi_species_dataset1, multi_species_dataset2)
+```
