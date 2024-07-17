@@ -1,10 +1,5 @@
 ---
 title: "3. Specifying the grid designation process"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{3. Specifying the grid designation process}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
