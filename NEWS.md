@@ -1,6 +1,6 @@
 # gcube 0.2.0
 
-*	Improve function checks with `stopifnot()` and the [`assertthat`](https://cran.r-project.org/web/packages/assertthat/index.html) package.
+*	Improve function checks with `stopifnot()` and the [assertthat](https://cran.r-project.org/web/packages/assertthat/index.html) package.
 *	Add missing unit tests.
 *	Set repo status to active.
 
@@ -15,7 +15,7 @@
 
 # gcube 0.0.1
 
-* Add [`checklist`](https://inbo.github.io/checklist/) infrastructure.
+* Add [checklist](https://inbo.github.io/checklist/) infrastructure.
 
 # gcube 0.0.0
 
