@@ -92,7 +92,7 @@ The combination of detection probability and bias weight results in a sampling p
 For bias there are 3 options: `"no_bias"`, `"polygon"` or `"manual"`.
 
 1. With `"no_bias"`, only the detection probability value will decide whether an occurrence is observed or not.
-2. With `"polygon"`, bias weights depend on their location inside or outside a given polygon with a certain bias strength. We can visualise this using the helper function `apply_polygon_sampling_bias()`.
+2. With `"polygon"`, bias weights depend on their location inside or outside a given polygon with a certain bias strength. We can visualise this using the supporting function `apply_polygon_sampling_bias()`.
 
 ```{r, eval=FALSE}
 ?apply_polygon_sampling_bias
@@ -159,7 +159,7 @@ ggplot() +
   theme_minimal()
 ```
 
-3. With `"manual"`, bias weights depend on their location inside grid cells of a given grid where each cell has its own value. We can visualise this using the helper function `apply_manual_sampling_bias()`.
+3. With `"manual"`, bias weights depend on their location inside grid cells of a given grid where each cell has its own value. We can visualise this using the supporting function `apply_manual_sampling_bias()`.
 
 ```{r, eval=FALSE}
 ?apply_manual_sampling_bias
@@ -189,7 +189,7 @@ ggplot() +
   theme_minimal()
 ```
 
-We use the helper function. We only use time point 1.
+We use the supporting function. We only use time point 1.
 
 ```{r}
 occurrence_bias_df2 <- apply_manual_sampling_bias(
@@ -214,7 +214,7 @@ ggplot() +
 
 # Example
 
-Now that we know how the helper functions work, we can simulate the detection process using the `sample_observations()` function.
+Now that we know how the supporting functions work, we can simulate the detection process using the `sample_observations()` function.
 We can for example state that our species has a 0.9 detection probability and this time we say there is a very small chance to detect it on the road.
 
 ```{r}
