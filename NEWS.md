@@ -1,3 +1,9 @@
+# gcube 0.2.0
+
+*	Improve function checks with `stopifnot()` and the [`assertthat`](https://cran.r-project.org/web/packages/assertthat/index.html) package.
+*	Add missing unit tests.
+*	Set repo status to active.
+
 # gcube 0.1.0
 
 * Create data cube for multiple species using `purrr::pmap()`.
