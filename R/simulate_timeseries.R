@@ -2,7 +2,7 @@
 #'
 #' The function simulates a timeseries for the abundance of a species.
 #'
-#' @param initial_average_occurrences A positive integer value indicating the
+#' @param initial_average_occurrences A positive numeric value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at the first time point. This value will be used as mean of a Poisson
 #' distribution (lambda parameter).
@@ -159,33 +159,33 @@ simulate_timeseries <- function(
     temporal_function = NA,
     ...,
     seed = NA) {
-  # Checks
-  # Check if initial_average_occurrences is a positive integer
-  stopifnot("`initial_average_occurrences` must be a positive integer." =
-              assertthat::is.count(initial_average_occurrences))
+  ### Start checks
+  # 1. Check input type and length
+  # Check if initial_average_occurrences is a positive number
+  stopifnot(
+    "`initial_average_occurrences` must be a single positive number." =
+      assertthat::is.number(initial_average_occurrences) &
+      initial_average_occurrences >= 0)
 
   # Check if n_time_points is a positive integer
-  stopifnot("`n_time_points` must be a positive integer." =
-              assertthat::is.count(n_time_points))
+  stopifnot(
+    "`n_time_points` must be a single positive integer." =
+      assertthat::is.count(n_time_points))
 
   # Check if temporal_function is NA or a function
   stopifnot("`temporal_function` must be `NA` or a function." =
-              is.function(temporal_function) || is.na(temporal_function))
+              (is.function(temporal_function) | is.na(temporal_function)) &
+              length(temporal_function) == 1)
+
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
+  ### End checks
 
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      withr::local_seed(seed)
-    } else {
-      cli::cli_abort(
-        c(
-          "{.var seed} must be an numeric vector of length 1.",
-          "x" = "You've supplied a {.cls {class(seed)}}
-          vector of length {length(seed)}."
-        ),
-        class = "gcube_error_wrong_argument_type"
-      )
-    }
+    withr::local_seed(seed)
   }
 
   # Check type of temporal_function

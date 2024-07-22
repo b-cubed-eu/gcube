@@ -112,23 +112,21 @@ grid_designation <- function(
   stopifnot("`id_col` must be a character vector of length 1." =
               assertthat::is.string(id_col))
 
-
   # Check if aggregate is a logical vector of length 1
   stopifnot("`aggregate` must be a logical vector of length 1." =
-              assertthat::is.flag(aggregate) && assertthat::noNA(aggregate))
+              assertthat::is.flag(aggregate) & assertthat::noNA(aggregate))
 
   # Check if randomisation is uniform or normal
   randomisation <- tryCatch({
     match.arg(randomisation, c("uniform", "normal"))
     }, error = function(e) {
-      stop(paste("`randomisation` must be one of", paste(c("uniform", "normal"),
-                                                         collapse = ", ")),
+      stop("`randomisation` must be one of 'uniform', 'normal'.",
            call. = FALSE)
   })
 
   # 2. Other checks
   # CRS of sf objects
-  stopifnot("CRS of `observations` must have the same CRS as `grid`." =
+  stopifnot("`grid` must have the same CRS as `observations`." =
               sf::st_crs(observations) == sf::st_crs(grid))
 
   # Unique ids if id column is provided

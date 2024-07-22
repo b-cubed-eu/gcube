@@ -2,7 +2,7 @@
 #'
 #' The function simulates occurrences of a species in a temporal extent.
 #'
-#' @param initial_average_occurrences A positive integer value indicating the
+#' @param initial_average_occurrences A positive numeric value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at time point 1. This value will be used as mean of a Poisson distribution
 #' (lambda parameter).
@@ -13,12 +13,14 @@
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
-#' @returns A vector of integers of length n_time_points with the average number
-#' of occurrences.
+#' @returns A vector of integers of length `n_time_points` with the average
+#' number of occurrences.
 #'
 #' @export
 #'
+#' @import assertthat
 #' @importFrom stats rnorm
+#' @importFrom withr local_seed
 #'
 #' @family occurrence
 #'
@@ -36,20 +38,33 @@ simulate_random_walk <- function(
     n_time_points = 10,
     sd_step = 0.05,
     seed = NA) {
-  # Checks
+  ### Start checks
+  # 1. Check input type and length
+  # Check if initial_average_occurrences is a positive number
+  stopifnot(
+    "`initial_average_occurrences` must be a single positive number." =
+      assertthat::is.number(initial_average_occurrences) &
+      initial_average_occurrences >= 0)
+
+  # Check if n_time_points is a positive integer
+  stopifnot(
+    "`n_time_points` must be a single positive integer." =
+      assertthat::is.count(n_time_points))
+
+  # Check if sd_step is a positive number
+  stopifnot(
+    "`sd_step` must be a single positive number." =
+      assertthat::is.number(sd_step) & sd_step >= 0)
+
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
+  ### End checks
+
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      set.seed(seed)
-    } else {
-      cli::cli_abort(c(
-        "{.var seed} must be an numeric vector of length 1.",
-        "x" = paste(
-          "You've supplied a {.cls {class(seed)}} vector",
-          "of length {length(seed)}."
-        )
-      ))
-    }
+    withr::local_seed(seed)
   }
 
   # Initialize an empty vector to store average abundance values

@@ -5,7 +5,7 @@
 #'
 #' @param plgn An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences.
-#' @param initial_average_abundance A positive integer value indicating the
+#' @param initial_average_abundance A positive numeric value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at time point 1. This value will be used as mean of a Poisson distribution
 #' (lambda parameter).
@@ -32,6 +32,7 @@
 #'
 #' @export
 #'
+#' @import assertthat
 #' @import sf
 #'
 #' @family main
@@ -88,9 +89,45 @@ simulate_occurrences <- function(
     temporal_function = NA,
     ...,
     seed = NA) {
+  ### Start checks
+  # 1. Check input type and length
+  # Check if plgn is an sf object
+  stopifnot("`plgn` must be an sf object with POLYGON geometry." =
+              inherits(plgn, "POLYGON") | inherits(plgn, "sfc_POLYGON") |
+              (inherits(plgn, "sf") && st_geometry_type(plgn) == "POLYGON"))
 
-  # Do some tests
-  # to be done check plgn is a sf polygon
+  # Check if initial_average_occurrences is a positive number
+  stopifnot(
+    "`initial_average_abundance` must be a single positive number." =
+      assertthat::is.number(initial_average_abundance) &
+      initial_average_abundance >= 0)
+
+  if (!(assertthat::is.number(spatial_autocorr) && spatial_autocorr >= 1)) {
+    # Check if spatial_autocorr is random or clustered
+    spatial_autocorr <- tryCatch({
+      match.arg(spatial_autocorr, c("random", "clustered"))
+    }, error = function(e) {
+      stop(paste0("`spatial_autocorr` must be one of 'random', 'clustered',",
+                  " or a single number larger or equal to 1."),
+           call. = FALSE)
+    })
+  }
+
+  # Check if n_time_points is a positive integer
+  stopifnot(
+    "`n_time_points` must be a single positive integer." =
+      assertthat::is.count(n_time_points))
+
+  # Check if temporal_function is NA or a function
+  stopifnot("`temporal_function` must be `NA` or a function." =
+              (is.function(temporal_function) | is.na(temporal_function)) &
+              length(temporal_function) == 1)
+
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
+  ### End checks
 
   # Simulate the timeseries
   ts <- simulate_timeseries(
