@@ -31,6 +31,7 @@
 #' @export
 #'
 #' @import dplyr
+#' @import assertthat
 #' @importFrom withr local_seed
 #'
 #' @family multispecies

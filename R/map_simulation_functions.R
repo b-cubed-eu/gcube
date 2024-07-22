@@ -26,6 +26,7 @@
 #' @export
 #'
 #' @import dplyr
+#' @import assertthat
 #' @importFrom purrr pmap quietly
 #' @importFrom tidyr unnest
 #' @importFrom stats setNames
