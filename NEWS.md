@@ -3,6 +3,7 @@
 *	Improve function checks with `stopifnot()` and the [assertthat](https://CRAN.R-project.org/package=assertthat) package.
 *	Add missing unit tests.
 *	Set repo status to active.
+* Use tidy contributing and code of conduct.
 
 # gcube 0.1.0
 
