@@ -38,13 +38,13 @@ test_that("sample_occurrences_from_raster() fails on invalid input argument", {
 
   expect_error(
     sample_occurrences_from_raster(data.frame(5:9)),
-    regexp = "`rs` is not a SpatRaster.",
+    regexp = "`rs` must be a SpatRaster object.",
     fixed = TRUE
   )
 
   expect_error(
     sample_occurrences_from_raster(test_raster, "not a numeric"),
-    regexp = "`ts` must be an numeric vector",
+    regexp = "`ts` must be a positive numeric vector.",
     fixed = TRUE
   )
 })
