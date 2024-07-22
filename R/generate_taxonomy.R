@@ -83,7 +83,8 @@ generate_taxonomy <- function(
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
-              assertthat::is.number(seed) | is.na(seed))
+              (is.numeric(seed) | is.na(seed)) &
+              length(seed) == 1)
 
   # 2. Other checks
   # Validate dataframe input

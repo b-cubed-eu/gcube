@@ -120,7 +120,7 @@ simulate_occurrences <- function(
 
   # Check if temporal_function is NA or a function
   stopifnot("`temporal_function` must be `NA` or a function." =
-              (is.function(temporal_function) | is.na(temporal_function)) &
+              (is.function(temporal_function) || is.na(temporal_function)) &
               length(temporal_function) == 1)
 
   # Check if seed is NA or a number
