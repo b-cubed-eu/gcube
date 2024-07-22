@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @import sf
-#' @importFrom cli cli_abort
+#' @importFrom stats setNames
 #'
 #' @family main
 #'
@@ -49,52 +49,30 @@
 add_coordinate_uncertainty <- function(
     observations,
     coords_uncertainty_meters = 25) {
+  ### Start checks
+  # 1. Check input type and length
+  # Check if observations is an sf object
+  stopifnot("`observations` must be an sf object with POINT geometry." =
+              inherits(observations, "sf") &&
+              sf::st_geometry_type(observations,
+                                   by_geometry = FALSE) == "POINT")
 
-  ## checks
-  ## is it sf object
-  if (!inherits(observations, "sf")) {
-    cli::cli_abort(c(
-      "{.var observations}  must be an object of class 'sf'",
-      "x" = paste(
-        "You've supplied an object of class {.cls {class(observations)}}"
-      )
-    ))
-  }
-  ## check if coords_uncertainty_meters is numeric
-  if (!is.numeric(coords_uncertainty_meters)) {
-    cli::cli_abort(
-      "{.var coords_uncertainty_meters must be a numeric value}"
-    )
-  }
+  # Check if coords_uncertainty_meters is numeric
+  stopifnot("`coords_uncertainty_meters` must be  numeric vector." =
+              is.numeric(coords_uncertainty_meters))
 
-  ## is geometry type POINT?
-  is_point <- sf::st_geometry_type(observations, by_geometry = FALSE) == "POINT"
-  if (!is_point) {
-    cli::cli_abort(c(
-      "{.var observations} must be a 'sf' object with POINT geometry",
-      paste("x" = "You've supplied an 'sf' object of geometry type {.cls",
-            "{sf::st_geometry_type(observations, by_geometry = FALSE)}}")
-      )
-    )
-   }
-
-  ## number of points in sf object and the coords_uncertainty_meters must be the
-  ## same when coords_uncertainty_meters is larger than 1
-  if (length(coords_uncertainty_meters) != 1) {
+  # 2. Other checks
+  # Number of observations and values in coords_uncertainty_meters must be the
+  # same when number of values is larger than 1
+  if (length(coords_uncertainty_meters) > 1) {
     size_match <- length(coords_uncertainty_meters) == nrow(observations)
-
-    if (!size_match) {
-      cli::cli_abort(
-        c(
-          paste("{.var coords_uncertainty_meters} has diferent length than the",
-                "number of rows in {.var observations}"),
-          "x" = paste("You've supplied {.var coords_uncertainty_meters} of",
-                      "length {length(coords_uncertainty_meters)}",
-                      "but {.var observations} has {nrow(observations)} rows.")
-        )
-     )
-    }
+    error_message = paste(
+      "Number of values in `coords_uncertainty_meters` differs from the number",
+      "of observations."
+    )
+    do.call(stopifnot, stats::setNames(list(size_match), error_message))
   }
+  ### End checks
 
   observations$coordinateUncertaintyInMeters <- coords_uncertainty_meters
 
