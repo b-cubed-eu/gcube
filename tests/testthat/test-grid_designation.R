@@ -177,29 +177,29 @@ test_that("correct column names present", {
 })
 
 test_that("no minimal coordinate uncertainty for empty grid cells", {
+  suppressWarnings({
   grid_designation_df1 <- grid_designation(observations_sf1, grid = grid_df1)
   grid_designation_df2 <- grid_designation(observations_sf2, grid = grid_df1)
   grid_designation_df3 <- grid_designation(observations_sf1, grid = grid_df1,
                                            randomisation = "normal")
   grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
                                            randomisation = "normal")
+  })
 
   # randomisation is "uniform"
-  suppressWarnings({
-    expect_equal(sum(grid_designation_df1$n == 0),
-                 sum(is.na(grid_designation_df1$min_coord_uncertainty))
-                 )
-  })
+  expect_equal(sum(grid_designation_df1$n == 0),
+               sum(is.na(grid_designation_df1$min_coord_uncertainty))
+               )
+
   expect_equal(sum(grid_designation_df2$n == 0),
     sum(is.na(grid_designation_df2$min_coord_uncertainty))
   )
 
   # randomisation is "normal"
-  suppressWarnings({
-    expect_equal(sum(grid_designation_df3$n == 0),
-      sum(is.na(grid_designation_df3$min_coord_uncertainty))
-    )
-  })
+  expect_equal(sum(grid_designation_df3$n == 0),
+    sum(is.na(grid_designation_df3$min_coord_uncertainty))
+  )
+
   expect_equal(sum(grid_designation_df4$n == 0),
     sum(is.na(grid_designation_df4$min_coord_uncertainty))
   )
