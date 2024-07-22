@@ -7,7 +7,7 @@
 sample_occurrences_from_raster(rs, ts, seed = NA)
 }
 \arguments{
-\item{rs}{A raster object (terra).}
+\item{rs}{A SpatRaster object (terra).}
 
 \item{ts}{A vector with the number of occurrences per time point.}
 
