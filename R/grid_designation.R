@@ -47,7 +47,6 @@
 #' @import sf
 #' @import assertthat
 #' @importFrom rlang .data
-#' @importFrom cli cli_abort cli_warn
 #'
 #' @family main
 #'
