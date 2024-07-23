@@ -13,7 +13,7 @@ create_spatial_pattern(
 )
 }
 \arguments{
-\item{polygon}{An sf object of geometry type POLYGON}
+\item{polygon}{An sf object with POLYGON geometry.}
 
 \item{resolution}{A numeric value defining the resolution of the raster cell}
 

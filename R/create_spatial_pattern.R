@@ -2,7 +2,7 @@
 #'
 #' It creates a raster with a spatial pattern for the area of a polygon.
 #'
-#' @param polygon An sf object of geometry type POLYGON
+#' @param polygon An sf object with POLYGON geometry.
 #' @param resolution A numeric value defining the resolution of the raster cell
 #' @param spatial_pattern Define the spatial pattern. It could be a character
 #'   string `"random"` or `"clustered"`, in which `"random"` is the default.
@@ -30,10 +30,10 @@
 #'
 #' @import sf
 #' @import dplyr
+#' @import assertthat
 #' @importFrom stats predict
 #' @importFrom terra vect rast rasterize
 #' @importFrom gstat vgm gstat
-#' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom vegan decostand
 #'
@@ -120,17 +120,40 @@ create_spatial_pattern <- function(
     n_sim = 1
   ) {
   ### Start checks
-  if (length(seed) != 1) {
-    cli::cli_abort(c(
-      "{.var seed} must be a numeric vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(seed)}} vector",
-        "of length {length(seed)}."
-      )
-    ))
+  # 1. Check input type and length
+  # Check if polygon is an sf object
+  stopifnot("`polygon` must be an sf object with POLYGON geometry." =
+              inherits(polygon, "POLYGON") | inherits(polygon, "sfc_POLYGON") |
+              (inherits(polygon, "sf") &&
+                 sf::st_geometry_type(polygon) == "POLYGON"))
+
+  if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
+    # Check if spatial_pattern is random or clustered
+    spatial_pattern <- tryCatch({
+      match.arg(spatial_pattern, c("random", "clustered"))
+    }, error = function(e) {
+      stop(paste0("`spatial_pattern` must be one of 'random', 'clustered',",
+                  " or a single number larger or equal to 1."),
+           call. = FALSE)
+    })
   }
 
-  # create a reference raster with same extent as the polygon and user defined
+  # Check if resolution is a positive number
+  stopifnot("`resolution` must be a single positive number." =
+              assertthat::is.number(resolution) & resolution >= 0)
+
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
+
+  # Check if n_sim is a positive integer
+  stopifnot(
+    "`n_sim` must be a single positive integer." =
+      assertthat::is.count(n_sim))
+  ### End checks
+
+  # Create a reference raster with same extent as the polygon and user defined
   # resolution
   poly_vect <- terra::vect(polygon)
   templ <- terra::rast(poly_vect, res = resolution)
@@ -138,62 +161,26 @@ create_spatial_pattern <- function(
 
   dfxy <- as.data.frame(poly_raster, xy = TRUE)
 
-  # define the spatial pattern ----
+  # Define the spatial pattern ----
   if (is.character(spatial_pattern)) {
-    if (spatial_pattern[1] == "random") {
+    if (spatial_pattern == "random") {
       multiplier <- 1
     }
-    if (spatial_pattern[1] == "clustered") {
+    if (spatial_pattern == "clustered") {
       multiplier <- 10
     }
-
-    if (!any(spatial_pattern[1] %in% c("random", "clustered"))) {
-      cli::cli_abort(
-        c(paste(
-          "When class of {.var spatial_pattern} is",
-          "{.cls {class(spatial_pattern)}} you should provide 'random' or
-          'clustered' as string"),
-          "x" = "You've provided the string '{spatial_pattern}' in
-          {.var spatial_pattern}"
-        )
-      )
-    }
-
-    ## should have a stopper when is not one of the options
-
+  } else {
+    multiplier <- spatial_pattern
   }
-
-  #
-  if (is.numeric(spatial_pattern)) {
-    # value should be equal or larger than 1
-    if (spatial_pattern >= 1) {
-      multiplier <- spatial_pattern
-    } else {
-      cli::cli_abort("")
-    }
-  }
-  ### End checks
-
-  range_size <- resolution * multiplier
-
-  ## generate the pattern
 
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      withr::local_seed(seed)
-    } else {
-      cli::cli_abort(c(
-        "{.var seed} must be a numeric vector of length 1.",
-        "x" = paste(
-          "You've supplied a {.cls {class(seed)}} vector",
-          "of length {length(seed)}."
-        )
-      ))
-    }
+    withr::local_seed(seed)
   }
 
   # Use gstat object with vgm model to create spatial pattern
+  range_size <- resolution * multiplier
+
   gstat_model <- gstat::gstat(
     formula = z ~ 1,
     locations = ~ x + y,

@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @import sf
-#' @importFrom cli cli_abort
+#' @importFrom stats setNames
 #'
 #' @family detection
 #'
@@ -67,91 +67,54 @@
 
 apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   ### Start checks
-  # 1. check input classes
-  if (!("sf" %in% class(occurrences_sf))) {
-    cli::cli_abort(
-      c(
-        "{.var occurrences_sf} must be an sf object.",
-        "x" = "You've supplied a {.cls {class(occurrences_sf)}} object."
-      ),
-      class = "gcube_error_class_occurrences_sf"
-    )
-  }
-  if (!"sf" %in% class(bias_weights)) {
-    cli::cli_abort(
-      c(
-        "{.var bias_weights} must be an sf object.",
-        "x" = "You've supplied a {.cls {class(bias_weights)}} object."
-      ),
-      class = "gcube_error_class_bias_weights"
-    )
-  }
+  # 1. Check input type and length
+  # Check if occurrences_sf is an sf object with point geometry
+  stopifnot("`occurrences_sf` must be an sf object." =
+              inherits(occurrences_sf, "sf") &&
+              sf::st_geometry_type(occurrences_sf,
+                                   by_geometry = FALSE) == "POINT")
+
+  # Check if bias_weights is an sf object with POLYGON geometry
+  stopifnot("`bias_weights` must be an sf object." =
+              inherits(bias_weights, "sf") &&
+              sf::st_geometry_type(bias_weights,
+                                   by_geometry = FALSE) == "POLYGON")
+
 
   # 2. Other checks
   # Check if bias_weights has a column named bias_weight
-  if (!("bias_weight" %in% names(bias_weights))) {
-    cli::cli_abort(
-      c(
-        "{.var bias_weights} must have a column named `bias_weight`.",
-        "x" = "You've supplied a grid {.var bias_weights} that has column names
-        {names(bias_weights)}."
-      ),
-      class = "gcube_error_column_names"
-    )
+  stopifnot("`bias_weights` must have a column named `bias_weight`." =
+              "bias_weight" %in% colnames(bias_weights))
+
+  # Check if the values of bias_weights$bias_weight are positive values
+  error_message <- paste("The column `bias_weight` must consist of numeric",
+                         "values between 0 and 1, or positive integers.")
+  do.call(stopifnot,
+          stats::setNames(
+            list(is.numeric(bias_weights$bias_weight),
+                 all(bias_weights$bias_weight >= 0)
+                 ),
+                 rep(error_message, 2)
+            )
+          )
+
+  # Check if the values of bias_weights$bias_weight are positive integers
+  if (max(bias_weights$bias_weight) > 1) {
+    do.call(stopifnot,
+            stats::setNames(
+              list(all(bias_weights$bias_weight %% 1 == 0)), error_message
+              )
+            )
   }
 
-  # Check if crs is the same
-  if (sf::st_crs(occurrences_sf) != sf::st_crs(bias_weights)) {
-    cli::cli_abort(
-      "sf::st_crs(observations) == sf::st_crs(grid) is not TRUE"
-    )
-  }
+  # CRS of sf objects
+  stopifnot("`bias_weights` must have the same CRS as `occurrences_sf`." =
+              sf::st_crs(occurrences_sf) == sf::st_crs(bias_weights))
 
   # Check if all occurrences (points) are in the grid
   points_in_grid <- sf::st_filter(occurrences_sf, bias_weights)
-  if (!identical(points_in_grid, occurrences_sf)) {
-    cli::cli_abort(
-      c(
-        "{.var bias_weights} must be a grid that encompasses all occurrences.",
-        "x" = "You've supplied a grid that does not encompass all occurrences."
-      ),
-      class = "gcube_error_grid_overlap"
-    )
-  }
-
-  # Check if the values of bias_weights$bias_weight are positive
-  if (!is.numeric(bias_weights$bias_weight)) {
-    cli::cli_abort(
-      c(
-        "The column {.field bias_weight} must consist of numeric values between
-         0 and 1 OR positive integers.",
-        "x" = "The column {.field bias_weight} does not contain numeric values."
-      ),
-      class = "gcube_error_bias_weight"
-    )
-  }
-  if (!(all(bias_weights$bias_weight >= 0))) {
-    cli::cli_abort(
-      c(
-        "The column {.field bias_weight} must consist of numeric values between
-         0 and 1 OR positive integers.",
-        "x" = "The column {.field bias_weight} has negative values."
-      ),
-      class = "gcube_error_bias_weight"
-    )
-  }
-  if (max(bias_weights$bias_weight) > 1) {
-  if (!all(bias_weights$bias_weight %% 1 == 0)) {
-    cli::cli_abort(
-      c(
-        "The column {.field bias_weight} must consist of numeric values between
-         0 and 1 OR positive integers.",
-        "x" = "The column {.field bias_weight} has negative values."
-      ),
-      class = "gcube_error_bias_weight"
-    )
-  }
-}
+  stopifnot("`bias_weights` must be a grid that encompasses all occurrences." =
+              identical(points_in_grid, occurrences_sf))
   ### End checks
 
   # Rescale bias_weight if needed

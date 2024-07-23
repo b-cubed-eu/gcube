@@ -40,7 +40,6 @@ URL: https://github.com/b-cubed-eu/gcube,
 BugReports: https://github.com/b-cubed-eu/gcube/issues
 Imports:
     assertthat,
-    cli,
     dplyr,
     gstat,
     methods,

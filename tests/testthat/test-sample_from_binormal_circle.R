@@ -38,24 +38,24 @@ test_that("arguments are of the right class", {
 
   # pnorm is numeric between 0 and 1
   expect_error(sample_from_binormal_circle(observations_sf1, p_norm = "0.95"),
-               regexp = "`p_norm` must be a numeric vector of length 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf2, p_norm = "0.95"),
-               regexp = "`p_norm` must be a numeric vector of length 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf1, p_norm = -0.5),
-               regexp = "`p_norm` must be a single value between 0 and 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf2, p_norm = -0.5),
-               regexp = "`p_norm` must be a single value between 0 and 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
 
   # seed is numeric
   expect_error(sample_from_binormal_circle(observations_sf1, seed = "123"),
-               regexp = "`seed` must be a numeric vector of length 1.",
+               regexp = "`seed` must be a numeric vector of length 1 or NA.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf2, seed = "123"),
-               regexp = "`seed` must be a numeric vector of length 1.",
+               regexp = "`seed` must be a numeric vector of length 1 or NA.",
                fixed = TRUE)
 })
 
@@ -63,27 +63,32 @@ test_that("arguments are of the right length", {
   # pnorm is length 1
   expect_error(sample_from_binormal_circle(observations_sf1,
                                            p_norm = seq(0.1, 0.3, 0.1)),
-               regexp = "`p_norm` must be a vector of length 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf2,
                                            p_norm = seq(0.1, 0.3, 0.1)),
-               regexp = "`p_norm` must be a vector of length 1.",
+               regexp = "`pnorm` must be a numeric value between 0 and 1.",
                fixed = TRUE)
 
   # seed has length 1
   expect_error(sample_from_binormal_circle(observations_sf1, seed = 1:3),
-               regexp = "`seed` must be a numeric vector of length 1.",
+               regexp = "`seed` must be a numeric vector of length 1 or NA.",
                fixed = TRUE)
   expect_error(sample_from_binormal_circle(observations_sf2, seed = 1:3),
-               regexp = "`seed` must be a numeric vector of length 1.",
+               regexp = "`seed` must be a numeric vector of length 1 or NA.",
                fixed = TRUE)
 })
 
 ## expect warnings
 test_that("warning if coordinateUncertaintyInMeters column is not present", {
-  expect_warning(sample_from_binormal_circle(observations_sf1),
-                 regexp = "No column `coordinateUncertaintyInMeters` present!",
-                 fixed = TRUE)
+  expect_warning(
+    sample_from_binormal_circle(observations_sf1),
+    regexp = paste(
+      "No column `coordinateUncertaintyInMeters` present!",
+      "Assuming no uncertainty around observations.",
+      sep = "\n"
+    ),
+    fixed = TRUE)
 })
 
 ## expected outputs

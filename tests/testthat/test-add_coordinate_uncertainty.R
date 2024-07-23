@@ -75,18 +75,11 @@ test_that(paste("add_coordinate_uncertainty() returns error on wrong length of",
       observations_sf,
       coords_uncertainty_meters = rep(1234, n_observations + 1)
     ),
-    regexp = paste("`coords_uncertainty_meters` has diferent length than the",
-                   "number of rows in `observations`"),
-    fixed = TRUE
-  )
-
-  expect_error(
-    add_coordinate_uncertainty(
-      observations_sf,
-      coords_uncertainty_meters = rep(1234, n_observations + 1)
+    regexp = paste(
+      "Number of values in `coords_uncertainty_meters` differs from the number",
+      "of observations."
     ),
-    regexp = paste("You've supplied `coords_uncertainty_meters` of length 8",
-                   "but `observations` has 7 rows.")
+    fixed = TRUE
   )
 })
 
@@ -97,12 +90,7 @@ test_that(paste("add_coordinate_uncertainty() returns error on non sf",
   # Use an expectation per line of the error.
   expect_error(
     add_coordinate_uncertainty(not_an_sf_object),
-    regexp = "`observations` must be an object of class 'sf'",
-    fixed = TRUE
-  )
-  expect_error(
-    add_coordinate_uncertainty(not_an_sf_object),
-    regexp = "You've supplied an object of class <data.frame>",
+    regexp = "`observations` must be an sf object with POINT geometry.",
     fixed = TRUE
   )
 })
@@ -128,7 +116,7 @@ test_that(paste("add_coordinate_uncertainty() returns error when coordinate",
       observations_sf,
       coords_uncertainty_meters = "not a number"
     ),
-    regexp = "coords_uncertainty_meters must be a numeric value",
+    regexp = "`coords_uncertainty_meters` must be  numeric vector.",
     fixed = TRUE
   )
 })

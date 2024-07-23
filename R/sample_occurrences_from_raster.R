@@ -2,7 +2,7 @@
 #'
 #' Draws occurrences (points) from a spatial random field (raster)
 #'
-#' @param rs A raster object (terra).
+#' @param rs A SpatRaster object (terra).
 #' @param ts A vector with the number of occurrences per time point.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @import sf
+#' @import assertthat
 #' @importFrom terra spatSample global
 #'
 #' @family occurrence
@@ -72,27 +73,21 @@ sample_occurrences_from_raster <- function(
     rs,
     ts,
     seed = NA) {
-  # checks
-  # check if rs is a terra raster
-  if (!"SpatRaster" %in% class(rs)) {
-    cli::cli_abort(c("{.var rs} is not a SpatRaster."))
-  }
+  ### Start checks
+  # 1. Check input type and length
+  # Check if rs is a SpatRaster object
+  stopifnot("`rs` must be a SpatRaster object." =
+              inherits(rs, "SpatRaster"))
 
-  # check if ts is a numeric vector
-  if (!is.numeric(ts)) {
-    cli::cli_abort(c("{.var ts} must be an numeric vector"))
-  }
+  # Check if ts is a numeric vector
+  stopifnot("`ts` must be a positive numeric vector." = is.numeric(ts))
+  stopifnot("`ts` must be a positive numeric vector." = all(ts >= 0))
 
-  # check if seed is a single value
-  if (length(seed) != 1) {
-    cli::cli_abort(c(
-      "{.var seed} must be a numeric vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(seed)}} vector",
-        "of length {length(seed)}."
-      )
-    ))
-  }
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
+  ### End checks
 
   # centre the values of the raster (mean = 0)
   rs_mean <- terra::global(rs, "mean", na.rm = TRUE)[, 1]
@@ -109,17 +104,7 @@ sample_occurrences_from_raster <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      withr::local_seed(seed)
-    } else {
-      cli::cli_abort(c(
-        "{.var seed} must be a numeric vector of length 1.",
-        "x" = paste(
-          "You've supplied a {.cls {class(seed)}} vector",
-          "of length {length(seed)}."
-        )
-      ))
-    }
+    withr::local_seed(seed)
   }
 
   for (t in seq_along(ts)) {
