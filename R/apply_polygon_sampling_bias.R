@@ -64,9 +64,10 @@
 #'     geom_sf(aes(colour = bias_weight_f)) +
 #'     ggtitle("Sampling Bias via Polygon")
 
-apply_polygon_sampling_bias <- function(occurrences_sf,
-                                      bias_area,
-                                      bias_strength = 1) {
+apply_polygon_sampling_bias <- function(
+    occurrences_sf,
+    bias_area,
+    bias_strength = 1) {
   ### Start checks
   # 1. check input classes
   if (!"sf" %in% class(occurrences_sf)) {
