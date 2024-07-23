@@ -125,7 +125,7 @@ create_spatial_pattern <- function(
   stopifnot("`polygon` must be an sf object with POLYGON geometry." =
               inherits(polygon, "POLYGON") | inherits(polygon, "sfc_POLYGON") |
               (inherits(polygon, "sf") &&
-                 st_geometry_type(polygon) == "POLYGON"))
+                 sf::st_geometry_type(polygon) == "POLYGON"))
 
   if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
     # Check if spatial_pattern is random or clustered

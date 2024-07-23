@@ -94,7 +94,7 @@ simulate_occurrences <- function(
   # Check if plgn is an sf object
   stopifnot("`plgn` must be an sf object with POLYGON geometry." =
               inherits(plgn, "POLYGON") | inherits(plgn, "sfc_POLYGON") |
-              (inherits(plgn, "sf") && st_geometry_type(plgn) == "POLYGON"))
+              (inherits(plgn, "sf") && sf::st_geometry_type(plgn) == "POLYGON"))
 
   # Check if initial_average_occurrences is a positive number
   stopifnot(

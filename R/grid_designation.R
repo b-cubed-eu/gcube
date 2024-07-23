@@ -101,7 +101,9 @@ grid_designation <- function(
   # 1. Check input type and length
   # Check if observations is an sf object
   stopifnot("`observations` must be an sf object." =
-              inherits(observations, "sf"))
+              inherits(observations, "sf") &&
+              sf::st_geometry_type(observations,
+                                   by_geometry = FALSE) == "POINT")
 
   # Check if grid is an sf object
   stopifnot("`grid` must be an sf object." =
