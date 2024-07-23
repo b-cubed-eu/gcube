@@ -50,21 +50,21 @@ test_that("arguments are of the right class", {
       occurrences_sf = occurrences,
       bias_weights = bias_weights01_sf
     ),
-    class = "gcube_error_class_occurrences_sf"
+    "`occurrences_sf` must be an sf object."
   )
   expect_error(
     apply_manual_sampling_bias(
       occurrences_sf = points_sf2,
       bias_weights = bias_weights01_sf
     ),
-    class = "gcube_error_class_occurrences_sf"
+    "`occurrences_sf` must be an sf object."
   )
   expect_error(
     apply_manual_sampling_bias(
       occurrences_sf = "string",
       bias_weights = bias_weights01_sf
     ),
-    class = "gcube_error_class_occurrences_sf"
+    "`occurrences_sf` must be an sf object."
   )
 
   # bias_weights is an sf object
@@ -73,14 +73,14 @@ test_that("arguments are of the right class", {
       occurrences_sf = points_sf1,
       bias_weights = bias_weights_df
     ),
-    class = "gcube_error_class_bias_weights"
+    "`bias_weights` must be an sf object."
   )
   expect_error(
     apply_manual_sampling_bias(
       occurrences_sf = points_sf1,
       bias_weights = bias_weights_nogeom
     ),
-    class = "gcube_error_class_bias_weights"
+    "`bias_weights` must be an sf object."
   )
 
   # bias_weights has a column named bias_weight
@@ -89,7 +89,7 @@ test_that("arguments are of the right class", {
       occurrences_sf = points_sf1,
       bias_weights = grid_sf_withoutweights
     ),
-    class = "gcube_error_column_names"
+    "`bias_weights` must have a column named `bias_weight`."
   )
   }
 )

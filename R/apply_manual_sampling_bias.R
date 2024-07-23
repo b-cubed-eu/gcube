@@ -71,7 +71,7 @@ apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   # Check if occurrences_sf is an sf object with point geometry
   stopifnot("`occurrences_sf` must be an sf object." =
               inherits(occurrences_sf, "sf") &&
-              sf::st_geometry_type(observations,
+              sf::st_geometry_type(occurrences_sf,
                                    by_geometry = FALSE) == "POINT")
 
   # Check if bias_weights is an sf object with POLYGON geometry
@@ -108,8 +108,8 @@ apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   }
 
   # CRS of sf objects
-  stopifnot("`bias_weights` must have the same CRS as `observations`." =
-              sf::st_crs(observations) == sf::st_crs(bias_weights))
+  stopifnot("`bias_weights` must have the same CRS as `occurrences_sf`." =
+              sf::st_crs(occurrences_sf) == sf::st_crs(bias_weights))
 
   # Check if all occurrences (points) are in the grid
   points_in_grid <- sf::st_filter(occurrences_sf, bias_weights)
