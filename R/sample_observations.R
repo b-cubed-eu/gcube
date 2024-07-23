@@ -41,8 +41,8 @@
 #' @export
 #'
 #' @import dplyr
+#' @import assertthat
 #' @importFrom stats rbinom
-#' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'
@@ -113,62 +113,39 @@ sample_observations <- function(
     bias_strength = 1,
     bias_weights = NA,
     seed = NA) {
-  # Default sampling_bias is first element in vector
-  sampling_bias <- sampling_bias[1]
-
   ### Start checks
-  # 1. check input classes
-  if (!("sf" %in% class(occurrences))) {
-    cli::cli_abort(c(
-      "{.var occurrences} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(occurrences)}} object."
-    ))
-  }
-  if (!is.numeric(detection_probability)) {
-    cli::cli_abort(c(
-      "{.var detection_probability} must be a numeric value between 0 and 1.",
-      "x" = "You've supplied a {.cls {class(detection_probability)}} object."
-    ))
-  }
-  if (!is.character(sampling_bias)) {
-    cli::cli_abort(c(
-      "{.var sampling_bias} must be a character vector of length 1.",
-      "x" = "You've supplied a {.cls {class(sampling_bias)}} vector."
-    ))
-  }
+  # 1. Check input type and length
+  # Check if occurrences is an sf object
+  stopifnot("`occurrences` must be an sf object." =
+              inherits(occurrences, "sf") &&
+              sf::st_geometry_type(occurrences,
+                                   by_geometry = FALSE) == "POINT")
+
+  # detection_probability should be numeric between 0 and 1
+  stopifnot(
+    "`detection_probability` must be a numeric value between 0 and 1." =
+      assertthat::is.number(detection_probability) &
+      (detection_probability >= 0 & detection_probability <= 1))
+
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (assertthat::is.number(seed) | is.na(seed)) &
+              length(seed) == 1)
 
   # 2. other checks
-  # Detection_probability is a numeric value between 0 and 1
-  if ((!(0 <= detection_probability) || !(detection_probability <= 1))) {
-    cli::cli_abort(c(
-      "{.var detection_probability} must be a numeric value between 0 and 1.",
-      "x" = "You've supplied {(detection_probability)} as
-      {.var detection_probability}."
-    ))
-  }
   # sampling_bias arguments must match
-  sampling_bias <- tolower(sampling_bias)
-  if (!sampling_bias %in% c("no_bias", "polygon", "manual")) {
-    cli::cli_abort(c(
-      '{.var sampling_bias} should be one of "no_bias", "polygon", "manual".',
-      "x" = "You've supplied {.val {sampling_bias[1]}}."
-    ))
-  }
+  sampling_bias <- tryCatch({
+    match.arg(sampling_bias, c("no_bias", "polygon", "manual"))
+    }, error = function(e) {
+      stop("`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.",
+           call. = FALSE)
+  })
+  ### End checks
+
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      withr::local_seed(seed)
-    } else {
-      cli::cli_abort(c(
-        "{.var seed} must be a numeric vector of length 1.",
-        "x" = paste(
-          "You've supplied a {.cls {class(seed)}} vector",
-          "of length {length(seed)}."
-        )
-      ))
-    }
+    withr::local_seed(seed)
   }
-  ### End checks
 
   # Add detection probability
   occurrences$detection_probability <- detection_probability

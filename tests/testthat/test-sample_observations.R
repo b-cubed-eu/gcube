@@ -45,15 +45,8 @@ test_that("arguments are of the right class", {
   # sampling_bias is a character vector
   expect_error(
     sample_observations(points_sf1, 0.5, TRUE),
-    regexp = "`sampling_bias` must be a character vector of length 1.",
+    regexp = "`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.",
     fixed = TRUE)
-
-
-  # bias_area ...
-
-  # bias_strength ...
-
-  # bias_weights ...
 
   # seed is a numeric value
   expect_error(sample_observations(points_sf1, seed = TRUE),
@@ -62,4 +55,4 @@ test_that("arguments are of the right class", {
   expect_error(sample_observations(points_sf1, seed = "123"),
              regexp = "`seed` must be a numeric vector of length 1",
              fixed = TRUE)
- })
+})
