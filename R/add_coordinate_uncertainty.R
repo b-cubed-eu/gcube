@@ -66,7 +66,7 @@ add_coordinate_uncertainty <- function(
   # same when number of values is larger than 1
   if (length(coords_uncertainty_meters) > 1) {
     size_match <- length(coords_uncertainty_meters) == nrow(observations)
-    error_message = paste(
+    error_message <- paste(
       "Number of values in `coords_uncertainty_meters` differs from the number",
       "of observations."
     )
