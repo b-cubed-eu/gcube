@@ -33,41 +33,40 @@ test_that("arguments are of the right class", {
   expect_error(apply_polygon_sampling_bias(data.frame(x = 1, y = 1),
                                          bias_area,
                                          bias_strength),
-               regexp = "`occurrences_sf` must be an sf object",
+               regexp = "`occurrences_sf` must be an sf object.",
                fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf = 1,
                                          bias_area,
                                          bias_strength),
-               regexp = "`occurrences_sf` must be an sf object",
+               regexp = "`occurrences_sf` must be an sf object.",
                fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf = "string",
                                          bias_area,
                                          bias_strength),
-               regexp = "`occurrences_sf` must be an sf object",
+               regexp = "`occurrences_sf` must be an sf object.",
                fixed = TRUE)
 
   # bias_area is sf dataframe
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          data.frame(x = 1, y = 1),
                                          bias_strength = 1),
-               regexp = "`bias_area` must be an sf object",
+               regexp = "`bias_area` must be an sf object.",
                fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          bias_area = 1,
                                          bias_strength = 1),
-               regexp = "`bias_area` must be an sf object",
+               regexp = "`bias_area` must be an sf object.",
                fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          bias_area = "string",
                                          bias_strength = 1),
-               regexp = "`bias_area` must be an sf object",
+               regexp = "`bias_area` must be an sf object.",
                fixed = TRUE)
   #bias_area is an sf dataframe containing only polygons
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
-                                         bias_area = occurrences_sf,
-                                         bias_strength = 1),
-               regexp = paste("`bias_area` must be an sf object containing one",
-                              "or more polygon geometry types"),
+                                           bias_area = occurrences_sf,
+                                           bias_strength = 1),
+               regexp = "`bias_area` must be an sf object.",
                fixed = TRUE)
 
   # bias_strength is numeric
@@ -77,12 +76,12 @@ test_that("arguments are of the right class", {
         bias_area = bias_area,
         bias_strength = data.frame(x = 1, y = 1)
         ),
-     regexp = "`bias_strength` must be a numeric object",
+     regexp = "`bias_strength` must be a single positive number.",
      fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
-                                         bias_area = bias_area,
-                                         bias_strength = "string"),
-               regexp = "`bias_strength` must be a numeric object",
+                                           bias_area = bias_area,
+                                           bias_strength = "string"),
+               regexp = "`bias_strength` must be a single positive number.",
                fixed = TRUE)
 })
 
@@ -91,7 +90,7 @@ test_that("arguments are of the right length", {
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          bias_area,
                                          bias_strength = rep(3, 3)),
-               regexp = "`bias_strength` must be a numeric vector of length 1.",
+               regexp = "`bias_strength` must be a single positive number.",
                fixed = TRUE)
 })
 
