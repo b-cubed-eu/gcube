@@ -107,7 +107,9 @@ grid_designation <- function(
 
   # Check if grid is an sf object
   stopifnot("`grid` must be an sf object." =
-              inherits(grid, "sf"))
+              inherits(grid, "sf") &&
+              sf::st_geometry_type(grid,
+                                   by_geometry = FALSE) == "POLYGON")
 
   # Check if id_col is a character vector of length 1
   stopifnot("`id_col` must be a character vector of length 1." =
