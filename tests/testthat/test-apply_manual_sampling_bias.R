@@ -104,7 +104,7 @@ test_that("Function throws an error if the CRS of inputs not match", {
 })
 
 test_that("Function throws an error if not all occurrences are within grid", {
-  grid_small <- bias_weights01_sf[1,]
+  grid_small <- bias_weights01_sf[1, ]
   expect_error(
     apply_manual_sampling_bias(points_sf1, grid_small),
     "`bias_weights` must be a grid that encompasses all occurrences.")
