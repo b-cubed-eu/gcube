@@ -206,5 +206,5 @@ create_spatial_pattern <- function(
     )
 
   # Return final raster
-  return(terra::rast(dfxy_std))
+  return(terra::rast(dfxy_std, crs = terra::crs(poly_vect)))
 }
