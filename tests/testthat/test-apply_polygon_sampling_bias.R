@@ -1,9 +1,5 @@
-# Prepare example datasets
-
-## set seed for reproducible occurrences_sf object
-set.seed(123)
-
-## Create four random points
+## Prepare example datasets
+# Create four random points
 n_points <- 4
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
@@ -14,19 +10,17 @@ occurrences_sf <- data.frame(
 ) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
-## Create bias_area polygon overlapping two of the points
+# Create bias_area polygon overlapping two of the points
 selected_occurrences_sf <- sf::st_union(occurrences_sf[2:3, ])
 bias_area <- sf::st_convex_hull(selected_occurrences_sf) %>%
   sf::st_buffer(dist = 100) %>%
   sf::st_as_sf()
 
-## Set bias_strength
+# Set bias_strength
 bias_strength <- 2
 
-# Unit tests
-# apply_polygon_sampling_bias <- function(occurrences_sf,
-#                                       bias_area,
-#                                       bias_strength = 1)
+
+## Unit tests
 
 test_that("arguments are of the right class", {
   # occurrences_sf is sf dataframe
@@ -110,5 +104,37 @@ test_that("only one column (bias_weight) is added to occurrences_sf", {
   # Checking if only one column is added
   expect_equal(ncol(result), ncol(occurrences_sf) + 1)
   # Checking if the added column is bias_weight
-  expect_true("bias_weight" %in% names(result))
+  expect_true("bias_weight" %in% colnames(result))
+})
+
+test_that("CRS of output matches CRS of input", {
+  result <- apply_polygon_sampling_bias(occurrences_sf,
+                                        bias_area,
+                                        bias_strength = bias_strength)
+  expect_equal(st_crs(result), st_crs(occurrences_sf))
+})
+
+test_that("Function correctly handles bias_strength of 1", {
+  result <- apply_polygon_sampling_bias(occurrences_sf,
+                                        bias_area,
+                                        bias_strength = 1)
+  expect_true(all(result$bias_weight == 0.5))
+})
+
+test_that("Function adds a column correctly for positive bias_strength", {
+  result <- apply_polygon_sampling_bias(occurrences_sf,
+                                        bias_area,
+                                        bias_strength)
+  expect_true("bias_weight" %in% colnames(result))
+  expect_true(all(result$bias_weight >= 0))
+  expect_equal(sum(result$bias_weight), n_points / 2)
+})
+
+test_that("Function adds a column correctly for bias_strength less than 1", {
+  result <- apply_polygon_sampling_bias(occurrences_sf,
+                                        bias_area,
+                                        bias_strength = 0.5)
+  expect_true("bias_weight" %in% colnames(result))
+  expect_true(all(result$bias_weight >= 0))
+  expect_equal(sum(result$bias_weight), n_points / 2)
 })
