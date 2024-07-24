@@ -206,7 +206,7 @@ How does grid designation take coordinate uncertainty into account?
 The default is `"uniform"` randomisation where a random point within the uncertainty circle is taken as the location of the observation.
 This point is then designated to the overlapping grid cell.
 Another option is `"normal"` where a point is sampled from a bivariate Normal distribution with means equal to the observation point and the variance equal to `(-coordinateUncertaintyInMeters^2) / (2 * log(1 - p_norm))` such that `p_norm` % of all possible samples from this Normal distribution fall within the uncertainty circle.
-This can be visualised by using these helper functions.
+This can be visualised by using these supporting functions.
 
 ```{r, eval=FALSE}
 ?sample_from_uniform_circle

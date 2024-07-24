@@ -25,4 +25,4 @@ abstract: "Simulation framework for biodiversity data cubes."
 identifiers:
 - type: url
   value: https://b-cubed-eu.github.io/gcube/
-version: 0.1.0
+version: 0.2.0

@@ -20,7 +20,6 @@
 #' @import sf
 #' @importFrom stats runif
 #' @importFrom rlang .data
-#' @importFrom cli cli_abort cli_warn
 #'
 #' @family designation
 #'
@@ -53,50 +52,30 @@ sample_from_uniform_circle <- function(
     observations,
     seed = NA) {
   ### Start checks
-  # 1. check input lengths
-  if (length(seed) != 1) {
-    cli::cli_abort(c(
-      "{.var seed} must be a numeric vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(seed)}} vector",
-        "of length {length(seed)}."
-      )
-    ))
-  }
+  # 1. Check input type and length
+  # Check if observations is an sf object
+  stopifnot("`observations` must be an sf object." =
+              inherits(observations, "sf"))
 
-  # 2. check input classes
-  if (!"sf" %in% class(observations)) {
-    cli::cli_abort(c(
-      "{.var observations} must be an sf object",
-      "x" = "You've supplied a {.cls {class(observations)}} object."
-    ))
-  }
+  # Check if seed is NA or a number
+  stopifnot("`seed` must be a numeric vector of length 1 or NA." =
+              (is.numeric(seed) | is.na(seed)) &
+              length(seed) == 1)
   ### End checks
 
   # Set seed if provided
   if (!is.na(seed)) {
-    if (is.numeric(seed)) {
-      withr::local_seed(seed)
-    } else {
-      cli::cli_abort(c(
-        "{.var seed} must be a numeric vector of length 1.",
-        "x" = paste(
-          "You've supplied a {.cls {class(seed)}} vector",
-          "of length {length(seed)}."
-        )
-      ))
-    }
+    withr::local_seed(seed)
   }
 
   # Set uncertainty to zero if column not present in data
   if (!"coordinateUncertaintyInMeters" %in% names(observations)) {
     observations$coordinateUncertaintyInMeters <- 0
-    cli::cli_warn(
-      paste(
-        "No column {.var coordinateUncertaintyInMeters} present!",
-        "Assuming no uncertainty around observations."
-      )
-    )
+    warning(paste(
+      "No column `coordinateUncertaintyInMeters` present!",
+      "Assuming no uncertainty around observations.",
+      sep = "\n"
+    ))
   }
 
   # Get random angle and radius

@@ -20,7 +20,7 @@
 #'
 #' @import sf
 #' @import dplyr
-#' @importFrom cli cli_abort
+#' @import assertthat
 #'
 #' @family detection
 #'
@@ -64,53 +64,27 @@
 #'     geom_sf(aes(colour = bias_weight_f)) +
 #'     ggtitle("Sampling Bias via Polygon")
 
-apply_polygon_sampling_bias <- function(occurrences_sf,
-                                      bias_area,
-                                      bias_strength = 1) {
+apply_polygon_sampling_bias <- function(
+    occurrences_sf,
+    bias_area,
+    bias_strength = 1) {
   ### Start checks
-  # 1. check input classes
-  if (!"sf" %in% class(occurrences_sf)) {
-    cli::cli_abort(c(
-      "{.var occurrences_sf} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(occurrences_sf)}} object."
-    ))
-  }
+  # 1. Check input type and length
+  # Check if occurrences_sf is an sf object with point geometry
+  stopifnot("`occurrences_sf` must be an sf object." =
+              inherits(occurrences_sf, "sf") &&
+              sf::st_geometry_type(occurrences_sf,
+                                   by_geometry = FALSE) == "POINT")
 
-  if (!"sf" %in% class(bias_area)) {
-    cli::cli_abort(c(
-      "{.var bias_area} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(bias_area)}} object."
-    ))
-  }
+  # Check if bias_area is an sf object with POLYGON geometry
+  stopifnot("`bias_area` must be an sf object." =
+              inherits(bias_area, "sf") &&
+              sf::st_geometry_type(bias_area,
+                                   by_geometry = FALSE) == "POLYGON")
 
-  if (!unique(sf::st_geometry_type(bias_area)) == "POLYGON") {
-    cli::cli_abort(c(
-      paste("{.var bias_area} must be an sf object containing one or more",
-            "polygon geometry types."),
-      "x" = paste("You've supplied an sf object with",
-                  "{.cls {unique(sf::st_geometry_type(bias_area))}} geometry",
-                  "types.")
-    ))
-  }
-
-  if (!"numeric" %in% class(bias_strength)) {
-    cli::cli_abort(c(
-      "{.var bias_strength} must be a numeric object.",
-      "x" = "You've supplied a {.cls {class(bias_strength)}} object."
-    ))
-  }
-
-  # 2. check input lengths
-  if (length(bias_strength) != 1) {
-    cli::cli_abort(c(
-      "{.var bias_strength} must be a numeric vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(bias_strength)}} vector",
-        "of length {length(bias_strength)}."
-      )
-    ))
-  }
-
+  # Check if bias_strength is a positive number
+  stopifnot("`bias_strength` must be a single positive number." =
+              assertthat::is.number(bias_strength) & bias_strength >= 0)
   ### End checks
 
   # Combine polygons into multipolygon

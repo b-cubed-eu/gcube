@@ -1,65 +1,165 @@
-# Simulate some occurrence data with coordinates and time points
+## Sample data for testing
+num_points <- 10
 occurrences <- data.frame(
-  lon = c(
-    -67.7872072532773, -32.589017059654, -176.231839740649, -113.81417135708,
-    123.382554799318, -96.7817584611475, -93.9240159653127, -152.391180479899,
-    -91.5394759085029, 83.5686739906669),
-  lat = c(
-    61.1581976618618, -33.7593303155154, 37.4922579992563, -42.2967949043959,
-    16.9817749271169, -3.36783591192216, -42.2941083367914, 11.6262782597914,
-    74.37388014514, 72.3373901098967),
+  lon = runif(num_points, min = -180, max = 180),
+  lat = runif(num_points, min = -90, max = 90),
   time_point = 0
 )
-points_sf1 <- sf::st_as_sf(occurrences, coords = c("lon", "lat"))
+occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-## dataset without geometry
-points_sf2 <- points_sf1 %>%
-  sf::st_drop_geometry()
+# Create bias_area polygon
+selected_observations <- st_union(occurrences_sf[2:3, ])
+bias_area <- st_convex_hull(selected_observations) %>%
+  st_buffer(dist = 100) %>%
+  st_as_sf()
+
+# Create raster grid with bias weights
+grid <- st_make_grid(occurrences_sf) %>%
+  st_sf() %>%
+  mutate(bias_weight = runif(n(), min = 0, max = 1))
 
 
-# Unit tests
-## expect errors
-test_that("arguments are of the right class", {
-  # occurrences is an sf object
-  expect_error(sample_observations(occurrences = occurrences),
-               regexp = "`occurrences` must be an sf object.",
-               fixed = TRUE)
-  expect_error(sample_observations(occurrences = points_sf2),
-               regexp = "`occurrences` must be an sf object.",
-               fixed = TRUE)
-  expect_error(sample_observations(occurrences = "string"),
-               regexp = "`occurrences` must be an sf object.",
-               fixed = TRUE)
+## Unit Tests
+test_that("Function samples observations without sampling bias correctly", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "no_bias",
+    seed = 123
+  )
+  expect_true("sampling_status" %in% colnames(result))
+  expect_equal(nrow(result), num_points)
+})
 
-  # detection_probability is a numeric value
+test_that("Function samples observations with polygon sampling bias", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "polygon",
+    bias_area = bias_area,
+    bias_strength = 2,
+    seed = 123
+  )
+  expect_true("sampling_status" %in% colnames(result))
+  expect_equal(nrow(result), num_points)
+})
+
+test_that("Function samples observations with manual sampling bias correctly", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "manual",
+    bias_weights = grid,
+    seed = 123
+  )
+  expect_true("sampling_status" %in% colnames(result))
+  expect_equal(nrow(result), num_points)
+})
+
+test_that("Function throws an error if occurrences is not an sf object", {
+  non_sf_data <- data.frame(
+    lon = runif(num_points, min = -180, max = 180),
+    lat = runif(num_points, min = -90, max = 90)
+  )
   expect_error(
-    sample_observations(points_sf1, "1"),
-    regexp = "`detection_probability` must be a numeric value between 0 and 1.",
-    fixed = TRUE)
+    sample_observations(non_sf_data,
+                        detection_probability = 0.8,
+                        sampling_bias = "no_bias"),
+    "`occurrences` must be an sf object.")
+})
+
+test_that("Function throws an error if detection_probability is not correct", {
   expect_error(
-    sample_observations(points_sf1,
-                        detection_probability = TRUE),
-    regexp = "`detection_probability` must be a numeric value between 0 and 1.",
-    fixed = TRUE)
-
-  # sampling_bias is a character vector
+    sample_observations(occurrences_sf,
+                        detection_probability = -0.5,
+                        sampling_bias = "no_bias"),
+    "`detection_probability` must be a numeric value between 0 and 1.")
   expect_error(
-    sample_observations(points_sf1, 0.5, TRUE),
-    regexp = "`sampling_bias` must be a character vector of length 1.",
-    fixed = TRUE)
+    sample_observations(occurrences_sf,
+                        detection_probability = 1.5,
+                        sampling_bias = "no_bias"),
+    "`detection_probability` must be a numeric value between 0 and 1.")
+})
 
+test_that("Function throws an error if seed is not a number or NA", {
+  expect_error(
+    sample_observations(occurrences_sf,
+                        detection_probability = 0.8,
+                        sampling_bias = "no_bias",
+                        seed = "not_a_number"),
+    "`seed` must be a numeric vector of length 1 or NA.")
+})
 
-  # bias_area ...
+test_that("Function throws an error if sampling_bias is invalid", {
+  expect_error(
+    sample_observations(occurrences_sf,
+                        detection_probability = 0.8,
+                        sampling_bias = "invalid_bias"),
+    "`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.")
+})
 
-  # bias_strength ...
+test_that("Function returns the correct columns", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "no_bias",
+    seed = 123
+  )
+  expect_true(
+    all(c("detection_probability",
+          "bias_weight",
+          "sampling_probability",
+          "sampling_status",
+          "geometry") %in% colnames(result)))
+})
 
-  # bias_weights ...
+test_that("Function samples observations reproducibly with seed", {
+  result1 <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "no_bias",
+    seed = 123
+  )
+  result2 <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "no_bias",
+    seed = 123
+  )
+  expect_equal(result1, result2)
+})
 
-  # seed is a numeric value
-  expect_error(sample_observations(points_sf1, seed = TRUE),
-               regexp = "`seed` must be a numeric vector of length 1",
-               fixed = TRUE)
-  expect_error(sample_observations(points_sf1, seed = "123"),
-             regexp = "`seed` must be a numeric vector of length 1",
-             fixed = TRUE)
- })
+test_that("Function handles polygon sampling bias correctly", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "polygon",
+    bias_area = bias_area,
+    bias_strength = 2,
+    seed = 123
+  )
+  expect_true(all(result$sampling_probability >= 0 &
+                    result$sampling_probability <= 1))
+})
+
+test_that("Function handles manual sampling bias correctly", {
+  result <- sample_observations(
+    occurrences_sf,
+    detection_probability = 0.8,
+    sampling_bias = "manual",
+    bias_weights = grid,
+    seed = 123
+  )
+  expect_true(all(result$sampling_probability >= 0 &
+                    result$sampling_probability <= 1))
+})
+
+test_that("Function retains the same CRS in output", {
+  result <- sample_observations(
+    st_set_crs(occurrences_sf, 3035),
+    detection_probability = 0.8,
+    sampling_bias = "no_bias",
+    seed = 123
+  )
+  expect_equal(st_crs(result), st_crs(st_set_crs(occurrences_sf, 3035)))
+})

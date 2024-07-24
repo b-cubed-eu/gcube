@@ -44,7 +44,6 @@ grid_df3 <- grid_df1 %>%
   sf::st_drop_geometry()
 
 # Unit tests
-## expect warnings
 test_that("unique ids if id column is provided", {
   expect_warning(
     grid_designation(observations_sf2,
@@ -177,29 +176,29 @@ test_that("correct column names present", {
 })
 
 test_that("no minimal coordinate uncertainty for empty grid cells", {
+  suppressWarnings({
   grid_designation_df1 <- grid_designation(observations_sf1, grid = grid_df1)
   grid_designation_df2 <- grid_designation(observations_sf2, grid = grid_df1)
   grid_designation_df3 <- grid_designation(observations_sf1, grid = grid_df1,
                                            randomisation = "normal")
   grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
                                            randomisation = "normal")
+  })
 
   # randomisation is "uniform"
-  suppressWarnings({
-    expect_equal(sum(grid_designation_df1$n == 0),
-                 sum(is.na(grid_designation_df1$min_coord_uncertainty))
-                 )
-  })
+  expect_equal(sum(grid_designation_df1$n == 0),
+               sum(is.na(grid_designation_df1$min_coord_uncertainty))
+               )
+
   expect_equal(sum(grid_designation_df2$n == 0),
     sum(is.na(grid_designation_df2$min_coord_uncertainty))
   )
 
   # randomisation is "normal"
-  suppressWarnings({
-    expect_equal(sum(grid_designation_df3$n == 0),
-      sum(is.na(grid_designation_df3$min_coord_uncertainty))
-    )
-  })
+  expect_equal(sum(grid_designation_df3$n == 0),
+    sum(is.na(grid_designation_df3$min_coord_uncertainty))
+  )
+
   expect_equal(sum(grid_designation_df4$n == 0),
     sum(is.na(grid_designation_df4$min_coord_uncertainty))
   )
@@ -329,4 +328,55 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
                                 aggregate = FALSE) %>%
                  nrow(),
                nrow(observations_sf2))
+})
+
+test_that("CRS of input observations and output are the same", {
+  # Custom CRS for the test
+  custom_crs <- "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs"
+
+  # Create observations with custom CRS
+  observations_sf_custom_crs <- sf::st_transform(observations_sf2,
+                                                 crs = custom_crs)
+  grid_sf_custom_crs <- sf::st_transform(grid_df1,
+                                         crs = custom_crs)
+
+  # Apply grid_designation function
+  output_sf <- grid_designation(observations_sf_custom_crs,
+                                grid = grid_sf_custom_crs)
+
+  # Check if CRS is the same
+  expect_equal(sf::st_crs(observations_sf_custom_crs), sf::st_crs(output_sf))
+})
+
+test_that("grid_designation raises an error for incorrect observations type", {
+  expect_error(grid_designation(observations_sf3, grid_df1),
+               "`observations` must be an sf object.")
+})
+
+test_that("grid_designation raises an error for incorrect grid type", {
+  expect_error(grid_designation(observations_sf2, grid_df3),
+               "`grid` must be an sf object.")
+})
+
+test_that("grid_designation raises an error for incorrect id_col type", {
+  expect_error(grid_designation(observations_sf2, grid_df1, id_col = 123),
+               "`id_col` must be a character vector of length 1.")
+})
+
+test_that("grid_designation raises an error for incorrect aggregate type", {
+  expect_error(
+    grid_designation(observations_sf2, grid_df1, aggregate = "not_logical"),
+    "`aggregate` must be a logical vector of length 1.")
+})
+
+test_that("grid_designation raises an error for different CRS", {
+  grid_df1_different_crs <- st_transform(grid_df1, crs = 4326)
+  expect_error(grid_designation(observations_sf2, grid_df1_different_crs),
+               "`grid` must have the same CRS as `observations`.")
+})
+
+test_that("grid_designation raises an error for invalid randomisation value", {
+  expect_error(
+    grid_designation(observations_sf2, grid_df1, randomisation = "invalid"),
+    "`randomisation` must be one of 'uniform', 'normal'.")
 })

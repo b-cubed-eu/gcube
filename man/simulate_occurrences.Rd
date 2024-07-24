@@ -18,7 +18,7 @@ simulate_occurrences(
 \item{plgn}{An sf object with POLYGON geometry indicating the spatial
 extend to simulate occurrences.}
 
-\item{initial_average_abundance}{A positive integer value indicating the
+\item{initial_average_abundance}{A positive numeric value indicating the
 average number of occurrences to be simulated within the extend of \code{polygon}
 at time point 1. This value will be used as mean of a Poisson distribution
 (lambda parameter).}

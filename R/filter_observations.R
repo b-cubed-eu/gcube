@@ -14,6 +14,8 @@
 #'
 #' @export
 #'
+#' @import assertthat
+#'
 #' @family main
 #'
 #' @examples

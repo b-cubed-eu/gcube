@@ -67,7 +67,7 @@ The options for user defined arguments are demonstrated in the next subsections.
 
 Say we want to have 100 occurrences in our plot over 10 years.
 You can change the trend in number of occurrences over time.
-We visualise this with the helper functions used in `simulate_occurrences()`.
+We visualise this with the supporting functions used in `simulate_occurrences()`.
 The number of occurrences are always drawn from a Poisson distribution.
 
 ```{r, eval=FALSE}
@@ -194,7 +194,7 @@ tibble(
 ## Changing the degree of spatial clustering
 
 We can also choose the amount of spatial clustering.
-We visualise this with the helper functions used in `simulate_occurrences()`.
+We visualise this with the supporting functions used in `simulate_occurrences()`.
 
 ```{r, eval=FALSE}
 ?create_spatial_pattern
@@ -293,7 +293,7 @@ ggplot() +
   theme_minimal()
 ```
 
-The patterns generated above are then used for sampling using a different helper function.
+The patterns generated above are then used for sampling using a different supporting function.
 
 ```{r, eval=FALSE}
 ?sample_occurrences_from_raster
@@ -318,7 +318,7 @@ ggplot() +
 
 # Example
 
-Now that we know how the helper functions work, we can generate occurrence points within the polygon using the `simulate_occurrences()` function.
+Now that we know how the supporting functions work, we can generate occurrence points within the polygon using the `simulate_occurrences()` function.
 We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100.
 
 ```{r}

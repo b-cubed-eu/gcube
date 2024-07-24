@@ -13,7 +13,7 @@ simulate_timeseries(
 )
 }
 \arguments{
-\item{initial_average_occurrences}{A positive integer value indicating the
+\item{initial_average_occurrences}{A positive numeric value indicating the
 average number of occurrences to be simulated within the extend of \code{polygon}
 at the first time point. This value will be used as mean of a Poisson
 distribution (lambda parameter).}

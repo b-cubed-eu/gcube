@@ -1,3 +1,10 @@
+# gcube 0.2.0
+
+*	Improve function checks with `stopifnot()` and the [assertthat](https://CRAN.R-project.org/package=assertthat) package.
+*	Add missing unit tests.
+*	Set repo status to active.
+* Use tidy contributing and code of conduct.
+
 # gcube 0.1.0
 
 * Create data cube for multiple species using `purrr::pmap()`.
@@ -9,7 +16,7 @@
 
 # gcube 0.0.1
 
-* Add [`checklist`](https://inbo.github.io/checklist/) infrastructure.
+* Add [checklist](https://inbo.github.io/checklist/) infrastructure.
 
 # gcube 0.0.0
 

@@ -45,15 +45,15 @@ reference:
   - title: "Mapping core gcube workflow functions"
     contents:
       - has_concept("multispecies")
-  - title: "Occurrence process helper functions"
+  - title: "Occurrence process supporting functions"
     contents:
       - has_concept("occurrence")
-  - title: "Detection process helper functions"
+  - title: "Detection process supporting functions"
     contents:
       - has_concept("detection")
-  - title: "Grid designation process helper functions"
+  - title: "Grid designation process supporting functions"
     contents:
       - has_concept("designation")
-  - title: "Mapping functions helper function"
+  - title: "Mapping functions supporting function"
     contents:
       - has_concept("multispecies_low")
