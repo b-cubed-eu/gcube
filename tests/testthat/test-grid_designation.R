@@ -330,3 +330,21 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
                  nrow(),
                nrow(observations_sf2))
 })
+
+test_that("CRS of input observations and output are the same", {
+  # Custom CRS for the test
+  custom_crs <- "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs"
+
+  # Create observations with custom CRS
+  observations_sf_custom_crs <- sf::st_transform(observations_sf2,
+                                                 crs = custom_crs)
+  grid_sf_custom_crs <- sf::st_transform(grid_df1,
+                                         crs = custom_crs)
+
+  # Apply grid_designation function
+  output_sf <- grid_designation(observations_sf_custom_crs,
+                                grid = grid_sf_custom_crs)
+
+  # Check if CRS is the same
+  expect_equal(sf::st_crs(observations_sf_custom_crs), sf::st_crs(output_sf))
+})
