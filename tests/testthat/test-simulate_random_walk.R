@@ -1,7 +1,7 @@
 ## Unit tests
 test_that("simulate_random_walk works with default parameters", {
   result <- simulate_random_walk()
-  expect_vector(result, ptype = numeric(), size = 10)
+  expect_vector(result, ptype = double(), size = 10)
   expect_true(all(result >= 0))
 })
 
@@ -10,7 +10,7 @@ test_that("simulate_random_walk handles non-default parameters", {
     initial_average_occurrences = 100,
     n_time_points = 5,
     sd_step = 2)
-  expect_vector(result, ptype = numeric(), size = 5)
+  expect_vector(result, ptype = double(), size = 5)
   expect_true(all(result >= 0))
 })
 

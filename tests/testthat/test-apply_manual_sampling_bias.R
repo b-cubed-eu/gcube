@@ -35,7 +35,6 @@ bias_weights_nogeom <- st_drop_geometry(bias_weights01_sf)
 
 
 ## Unit Tests
-
 test_that("Function adds a bias_weight column with weights between 0 and 1", {
   result <- apply_manual_sampling_bias(points_sf1, bias_weights01_sf)
   expect_true("bias_weight" %in% colnames(result))
