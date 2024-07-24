@@ -96,7 +96,7 @@ test_that("create_spatial_pattern handles CRS correctly", {
   expect_s4_class(result, "SpatRaster")
   expect_equal(
     as.vector(terra::ext(result))[order(names(as.vector(terra::ext(result))))],
-    sf::st_bbox(plgn)[order(names(sf::st_bbox(plgn_sf)))]
+    sf::st_bbox(plgn_sf)[order(names(sf::st_bbox(plgn_sf)))]
   )
   expect_equal(unique(terra::res(result)), 0.1)
   expect_equal(terra::crs(result), sf::st_crs(plgn_sf)$wkt)
