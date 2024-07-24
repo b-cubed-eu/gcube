@@ -4,6 +4,7 @@ n_points <- 4
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 
+set.seed(123)
 occurrences_sf <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
   long = runif(n_points, xlim[1], xlim[2])
