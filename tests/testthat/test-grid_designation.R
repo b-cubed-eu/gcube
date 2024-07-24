@@ -44,7 +44,6 @@ grid_df3 <- grid_df1 %>%
   sf::st_drop_geometry()
 
 # Unit tests
-## expect warnings
 test_that("unique ids if id column is provided", {
   expect_warning(
     grid_designation(observations_sf2,
@@ -347,4 +346,37 @@ test_that("CRS of input observations and output are the same", {
 
   # Check if CRS is the same
   expect_equal(sf::st_crs(observations_sf_custom_crs), sf::st_crs(output_sf))
+})
+
+test_that("grid_designation raises an error for incorrect observations type", {
+  expect_error(grid_designation(observations_sf3, grid_df1),
+               "`observations` must be an sf object.")
+})
+
+test_that("grid_designation raises an error for incorrect grid type", {
+  expect_error(grid_designation(observations_sf2, grid_df3),
+               "`grid` must be an sf object.")
+})
+
+test_that("grid_designation raises an error for incorrect id_col type", {
+  expect_error(grid_designation(observations_sf2, grid_df1, id_col = 123),
+               "`id_col` must be a character vector of length 1.")
+})
+
+test_that("grid_designation raises an error for incorrect aggregate type", {
+  expect_error(
+    grid_designation(observations_sf2, grid_df1, aggregate = "not_logical"),
+    "`aggregate` must be a logical vector of length 1.")
+})
+
+test_that("grid_designation raises an error for different CRS", {
+  grid_df1_different_crs <- st_transform(grid_df1, crs = 4326)
+  expect_error(grid_designation(observations_sf2, grid_df1_different_crs),
+               "`grid` must have the same CRS as `observations`.")
+})
+
+test_that("grid_designation raises an error for invalid randomisation value", {
+  expect_error(
+    grid_designation(observations_sf2, grid_df1, randomisation = "invalid"),
+    "`randomisation` must be one of 'uniform', 'normal'.")
 })
