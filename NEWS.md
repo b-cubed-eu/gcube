@@ -1,3 +1,8 @@
+# gcube 0.3.0
+
+*	`generate_taxonomy()` also creates species key.
+*	Fix bug for mapping simulate occurrences without specified temporal function.
+
 # gcube 0.2.0
 
 *	Improve function checks with `stopifnot()` and the [assertthat](https://CRAN.R-project.org/package=assertthat) package.
