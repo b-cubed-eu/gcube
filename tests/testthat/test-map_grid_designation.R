@@ -4,7 +4,7 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 
 # Create grid
 cube_grid <- st_make_grid(
-    st_buffer(plgn, 25),
+    st_buffer(plgn, 50),
     n = c(20, 20),
     square = TRUE) %>%
   st_sf()
@@ -104,6 +104,29 @@ test_that("map_grid_designation works with simple column names", {
     , !duplicated(t(occ_cube_unnested_test))
   ]
   expect_equal(occ_cube_unnested_test, occ_cube_unnested)
+})
+
+test_that("map_grid_designation works with pipes", {
+  occ_cube_piped <- tibble(
+      species = c("species1", "species2", "species3"),
+      plgn = rep(list(plgn), 3),
+      grid = rep(list(cube_grid), 3),
+      seed = 123
+    ) %>%
+    map_simulate_occurrences() %>%
+    map_sample_observations() %>%
+    map_filter_observations() %>%
+    map_add_coordinate_uncertainty() %>%
+    map_grid_designation(nested = FALSE)
+
+  # Is the occurrence_cube_df column removed?
+  expect_false("occurrence_cube_df" %in% colnames(occ_cube_piped))
+  # Do we have the expected columns?
+  expect_equal(
+    sort(colnames(occ_cube_piped)),
+    sort(c("species", "plgn", "grid", "seed", "occurrences",
+           "observations_total", "observations", "time_point", "id", "n",
+           "min_coord_uncertainty", "geometry")))
 })
 
 test_that("map_grid_designation works with arg_list for renaming columns", {

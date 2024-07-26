@@ -1,7 +1,7 @@
 ## Prepare example data
 n_spec <- 5
-colnames_tax <- c("species", "genus", "family", "order", "class", "phylum",
-                  "kingdom")
+colnames_tax <- c("species", "species_key", "genus", "family", "order", "class",
+                  "phylum", "kingdom")
 
 # Example dataframe
 existing_df <- data.frame(
@@ -11,7 +11,6 @@ existing_df <- data.frame(
 
 
 ## Unit tests
-
 test_that("generate_taxonomy function works correctly", {
   # Is the output format correct?
   # Testing with default values
