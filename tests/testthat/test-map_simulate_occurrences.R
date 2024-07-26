@@ -4,6 +4,11 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 
 # Specify dataframe for 3 species with custom function arguments
 # Dataframe with column names equal to arguments
+species_dataset_df <- tibble(
+  plgn = rep(list(plgn), 3),
+  n_time_points = rep(6, 3),
+  seed = 123)
+
 species_dataset_df1 <- tibble(
   taxonID = c("species1", "species2", "species3"),
   plgn = rep(list(plgn), 3),
@@ -21,6 +26,19 @@ species_dataset_df2 <- species_dataset_df1 %>%
 
 
 ## Unit tests
+test_that("map_simulate_occurrences works with simple column names", {
+  result <- map_simulate_occurrences(df = species_dataset_df)
+
+  # Are previous column names retained and one extra column name created?
+  expect_true("occurrences" %in% colnames(result))
+  expect_equal(sort(c(colnames(species_dataset_df), "occurrences")),
+               sort(colnames(result)))
+  # Is the new column a list-column?
+  expect_true(inherits(result$occurrences, "list"))
+  # Is the output of the function an sf object for each species (each row)?
+  expect_true(all(sapply(result$occurrences, inherits, "sf")))
+})
+
 
 test_that("map_simulate_occurrences works with simple column names", {
   # Test with nested is TRUE
