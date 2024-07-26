@@ -96,9 +96,13 @@ generate_taxonomy <- function(
 
     # Generate species names
     species_df$species <- paste0("species", seq_len(num_species))
+
+    # Generate species keys
+    species_df$species_key <- seq_len(num_species)
   } else {
     # Generate species names
-    species_df <- data.frame(species = paste0("species", seq_len(num_species)))
+    species_df <- data.frame(species = paste0("species", seq_len(num_species)),
+                             species_key = seq_len(num_species))
   }
 
   # Check if number of species is smaller than number of genera is smaller than
@@ -170,8 +174,8 @@ generate_taxonomy <- function(
     dplyr::left_join(orders_to_classes, by = "order") %>%
     dplyr::left_join(classes_to_phyla, by = "class") %>%
     dplyr::left_join(phyla_to_kingdoms, by = "phylum") %>%
-    dplyr::select("species", "genus", "family", "order", "class", "phylum",
-                  "kingdom", everything())
+    dplyr::select("species", "species_key", "genus", "family", "order", "class",
+                  "phylum", "kingdom", everything())
 
   return(taxonomy)
 }
