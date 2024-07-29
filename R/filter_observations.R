@@ -1,6 +1,6 @@
-#' Filter detected observations
+#' Filter detected occurrences
 #'
-#' The function filters observations from all observations based on a
+#' The function filters observations from all occurrences based on a
 #' `sampling_status` column, e.g. created by `sample_observations()`.
 #'
 #' @param observations_total An sf object with POINT geometry or a simple
