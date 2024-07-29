@@ -9,12 +9,6 @@
 #' occurrences.
 #' @param bias_area An sf object with POLYGON geometry specifying the area where
 #' sampling will be biased.
-#' @param bias_strength A positive numeric value. The strength of the bias to
-#' be applied in the biased area (as a multiplier). Above 1, area will be
-#' oversampled. Below 1, area will be undersampled. For example, a value of 50
-#' will result in 50 times more samples within the bias_area than outside.
-#' Conversely, a value of 0.5 will result in half less samples within the
-#' bias_area than outside.
 #' @param bias_strength A positive numeric value that represents the strength of
 #' the bias to be applied within the `bias_area`. Values greater than 1 will
 #' increase the sampling probability within the polygon relative to outside
