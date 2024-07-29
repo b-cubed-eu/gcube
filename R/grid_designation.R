@@ -12,8 +12,8 @@
 #' @param id_col The column name of the column with unique ids for each grid
 #' cell. If `"row_names"` (the default), a new column `id` is created were the
 #' row names represent the unique ids.
-#' @param seed The seed for random number generation to make results
-#' reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #' @param aggregate Logical. If `TRUE` (default), return data cube in
 #' aggregated form (grid with number of observations per grid cell). Otherwise
 #' return sampled points in uncertainty circle.

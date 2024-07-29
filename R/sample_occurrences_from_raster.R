@@ -1,13 +1,13 @@
 #' Sample occurrences from spatial random field
 #'
-#' Draws occurrences (points) from a spatial random field (raster)
+#' This function draws point occurrences from a spatial random field (raster).
 #'
-#' @param rs A SpatRaster object (terra).
+#' @param rs A SpatRaster object (see [terra::rast()]).
 #' @param ts A vector with the number of occurrences per time point.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @return An sf object with POINT geometry
+#' @return An sf object with POINT geometry.
 #'
 #' @export
 #'

@@ -20,8 +20,8 @@
 #' @param num_classes Number of classes to generate. Defaults to 1.
 #' @param num_phyla Number of phyla to generate. Defaults to 1.
 #' @param num_kingdoms Number of kingdoms to generate. Defaults to 1.
-#' @param seed The seed for random number generation to make results
-#' reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @return A data frame with the taxonomic classification of each species. If
 #' `num_species` is a dataframe, the taxonomic classification is added to this

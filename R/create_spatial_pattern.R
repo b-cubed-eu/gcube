@@ -1,27 +1,26 @@
 #' Create spatial pattern within a polygon
 #'
-#' It creates a raster with a spatial pattern for the area of a polygon.
+#' This function creates a raster with a spatial pattern for the area of a
+#' polygon.
 #'
 #' @param polygon An sf object with POLYGON geometry.
-#' @param resolution A numeric value defining the resolution of the raster cell
-#' @param spatial_pattern Define the spatial pattern. It could be a character
-#'   string `"random"` or `"clustered"`, in which `"random"` is the default.
-#'   The user is able to provide a numeric value >= 1 (1 is "random" and
-#'   10 is "clustered"). A larger number means a broader size of the clusters
-#'   area. See details.
-#' @param seed The seed for random number generation to make results
-#' reproducible. If `NA` (the default), no seed is used.
+#' @param resolution A numeric value defining the resolution of the raster cell.
+#' @param spatial_pattern Specifies the desired spatial pattern. It can
+#' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
+#' (1 means random distribution, larger values indicate more clustering).
+#' The default is `"random"`. `"clustered"` corresponds to a value of 10.
+#' See details.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #' @param n_sim Number of simulations. Each simulation is a different layer in
-#'   the raster. Default 1.
+#' the raster. Default is 1.
 #'
-#' @details
-#'   the \code{spatial_pattern} argument change the range parameter of the
-#'   spherical variogram model. \code{spatial_pattern = 1} means the range has
-#'   the same size of the grid cell, which is defined in \code{resolution}
-#'   argument. We use the function [gstat::vgm()] to implement the
-#'   spherical variogram model
+#' @details The `spatial_pattern` argument changes the range parameter of the
+#' spherical variogram model. `spatial_pattern = 1` means the range has the same
+#' size as the grid cell, which is defined in the `resolution` argument. The
+#' function [gstat::vgm()] is used to implement the spherical variogram model.
 #'
-#' @seealso [gstat::vgm()] and its \code{range} argument
+#' @seealso [gstat::vgm()] and its `range` argument
 #'
 #' @return An object of class SpatRaster with a spatial pattern for the area of
 #' the given polygon.

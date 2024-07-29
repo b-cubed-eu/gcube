@@ -26,8 +26,8 @@
 #' applied to the sampling of occurrences. Higher weights mean a higher
 #' probability of sampling. Weights can be numeric values between 0 and 1 or
 #' positive integers that will be rescaled to values between 0 and 1.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled observations, a `detection_probability` column containing the

@@ -14,8 +14,8 @@
 #' @param p_norm A numeric value between 0 and 1. The proportion of all
 #' possible samples from a a bivariate Normal distribution that fall within the
 #' uncertainty circle. If no value is given, the default `p_norm` value is 0.95.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled occurrences and a `coordinateUncertaintyInMeters` column containing

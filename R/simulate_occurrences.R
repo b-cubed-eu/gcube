@@ -1,34 +1,32 @@
-#' Simulate occurrences within a spatiotemporal scope
+#' Simulate species occurrences within a spatiotemporal scope
 #'
-#' The function simulates occurrences of a species within a given spatial
-#' and/or temporal extend.
+#' This function simulates occurrences of a species within a specified spatial
+#' and/or temporal extent.
 #'
 #' @param plgn An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences.
 #' @param initial_average_abundance A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extend of `polygon`
-#' at time point 1. This value will be used as mean of a Poisson distribution
-#' (lambda parameter).
-#' @param spatial_autocorr Define the spatial pattern. It could be a character
-#'   string `"random"` or `"clustered"`, in which `"random"` is the default.
-#'   The user is able to provide a numeric value >= 1 (1 is "random" and
-#'   10 is "clustered"). A larger number means a broader size of the clusters
-#'   area. See details.
-#' @param n_time_points A positive integer value indicating the number of time
-#' points to simulate.
-#' @param temporal_function `NA` (default), or a function which generates
-#' a trend in abundance over time. Only used if `n_time_points > 1`. By default,
-#' the function will sample `n_time_points` times from a Poisson
-#' distribution with average (lambda) `initial_average_occurrences`. When a
-#' function is specified (e.g. the internal `simulate_random_walk()` function).
-#' @param ... Additional argument to be passed to the `temporal_function`
-#' function.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' average number of occurrences to be simulated within the extent of `plgn`
+#' at the first time point. This value serves as the mean (lambda) of a Poisson
+#' distribution.
+#' @param n_time_points A positive integer specifying the number of time points
+#' to simulate.
+#' @param temporal_function A function generating a trend in number of
+#' occurrences over time, or `NA` (default). If `n_time_points` > 1 and a
+#' function is provided, it defines the temporal pattern of number of
+#' occurrences.
+#' @param ... Additional arguments to be passed to `temporal_function`.
+#' @param spatial_autocorr Specifies the spatial pattern of occurrences. It can
+#' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
+#' (1 means random distribution, larger values indicate more clustering).
+#' The default is `"random"`. `"clustered"` corresponds to a value of 10.
+#' See `create_spatial_pattern()`.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
-#' simulated occurrences and a `time_point` column containing the time point
-#' associated with each occurrence.
+#' simulated occurrences and a `time_point` column indicating the associated
+#' time point for each occurrence.
 #'
 #' @export
 #'

@@ -1,27 +1,22 @@
-#' Simulate timeseries for species abundances
+#' Simulate timeseries for species occurrences
 #'
-#' The function simulates a timeseries for the abundance of a species.
+#' This function simulates a timeseries for the number of occurrences of a
+#' species.
 #'
 #' @param initial_average_occurrences A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extend of `polygon`
-#' at the first time point. This value will be used as mean of a Poisson
-#' distribution (lambda parameter).
-#' @param n_time_points A positive integer value indicating the number of time
-#' points to simulate.
-#' @param temporal_function `NA` (default), or a function which generates
-#' a trend in abundance over time. Only used if `n_time_points > 1`. By default,
-#' the function will sample `n_time_points` times from a Poisson
-#' distribution with average (lambda) `initial_average_occurrences`. When a
-#' function is specified (e.g. the internal `simulate_random_walk()` function)
-#' `n_time_points` average abundances (lambdas) are calculated using
-#' `initial_average_occurrences` and any additional arguments passed.
-#' See examples.
-#' @param ... Additional argument to be passed to the `temporal_function`
-#' function.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' average number of occurrences to be simulated at the first time point. This
+#' value serves as the mean (lambda) of a Poisson distribution.
+#' @param n_time_points A positive integer specifying the number of time points
+#' to simulate.
+#' @param temporal_function A function generating a trend in number of
+#' occurrences over time, or `NA` (default). If `n_time_points` > 1 and a
+#' function is provided, it defines the temporal pattern of number of
+#' occurrences.
+#' @param ... Additional arguments to be passed to `temporal_function`.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @returns A vector of integers of length n_time_points with the number of
+#' @return A vector of integers of length `n_time_points` with the number of
 #' occurrences.
 #'
 #' @export

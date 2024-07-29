@@ -7,8 +7,8 @@
 #' `coordinateUncertaintyInMeters` column. If this last column is not present,
 #' the function will assume no (zero meters) uncertainty around the observation
 #' points.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled occurrences and a `coordinateUncertaintyInMeters` column containing
