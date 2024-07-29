@@ -15,33 +15,33 @@ create_spatial_pattern(
 \arguments{
 \item{polygon}{An sf object with POLYGON geometry.}
 
-\item{resolution}{A numeric value defining the resolution of the raster cell}
+\item{resolution}{A numeric value defining the resolution of the raster cell.}
 
-\item{spatial_pattern}{Define the spatial pattern. It could be a character
-string \code{"random"} or \code{"clustered"}, in which \code{"random"} is the default.
-The user is able to provide a numeric value >= 1 (1 is "random" and
-10 is "clustered"). A larger number means a broader size of the clusters
-area. See details.}
+\item{spatial_pattern}{Specifies the desired spatial pattern. It can
+be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
+(1 means random distribution, larger values indicate more clustering).
+The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
+See details.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 
 \item{n_sim}{Number of simulations. Each simulation is a different layer in
-the raster. Default 1.}
+the raster. Default is 1.}
 }
 \value{
 An object of class SpatRaster with a spatial pattern for the area of
 the given polygon.
 }
 \description{
-It creates a raster with a spatial pattern for the area of a polygon.
+This function creates a raster with a spatial pattern for the area of a
+polygon.
 }
 \details{
-the \code{spatial_pattern} argument change the range parameter of the
-spherical variogram model. \code{spatial_pattern = 1} means the range has
-the same size of the grid cell, which is defined in \code{resolution}
-argument. We use the function \code{\link[gstat:vgm]{gstat::vgm()}} to implement the
-spherical variogram model
+The \code{spatial_pattern} argument changes the range parameter of the
+spherical variogram model. \code{spatial_pattern = 1} means the range has the same
+size as the grid cell, which is defined in the \code{resolution} argument. The
+function \code{\link[gstat:vgm]{gstat::vgm()}} is used to implement the spherical variogram model.
 }
 \examples{
 # Load packages

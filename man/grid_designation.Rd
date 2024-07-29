@@ -27,8 +27,8 @@ observations should be designated.}
 cell. If \code{"row_names"} (the default), a new column \code{id} is created were the
 row names represent the unique ids.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 
 \item{aggregate}{Logical. If \code{TRUE} (default), return data cube in
 aggregated form (grid with number of observations per grid cell). Otherwise

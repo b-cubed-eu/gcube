@@ -7,18 +7,18 @@
 sample_occurrences_from_raster(rs, ts, seed = NA)
 }
 \arguments{
-\item{rs}{A SpatRaster object (terra).}
+\item{rs}{A SpatRaster object (see \code{\link[terra:rast]{terra::rast()}}).}
 
 \item{ts}{A vector with the number of occurrences per time point.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
-An sf object with POINT geometry
+An sf object with POINT geometry.
 }
 \description{
-Draws occurrences (points) from a spatial random field (raster)
+This function draws point occurrences from a spatial random field (raster).
 }
 \examples{
 # Load packages

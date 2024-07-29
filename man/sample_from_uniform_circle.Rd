@@ -12,8 +12,8 @@ sample_from_uniform_circle(observations, seed = NA)
 the function will assume no (zero meters) uncertainty around the observation
 points.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
 An sf object with POINT geometry containing the locations of the

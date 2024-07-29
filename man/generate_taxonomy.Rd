@@ -33,8 +33,8 @@ output.}
 
 \item{num_kingdoms}{Number of kingdoms to generate. Defaults to 1.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
 A data frame with the taxonomic classification of each species. If
