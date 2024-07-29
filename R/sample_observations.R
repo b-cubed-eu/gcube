@@ -1,42 +1,62 @@
 #' Sample observations from a larger occurrence dataset
 #'
-#' The function samples observations from occurrences based on detection
+#' The function computes observations from occurrences based on detection
 #' probability and sampling bias by implementing a Bernoulli trial.
 #'
-#' @param occurrences An sf object with POINT geometry.
-#' @param detection_probability A numeric value between 0 and 1, corresponding
-#' to the probability of detection of the species.
+#' @param occurrences An sf object with POINT geometry representing the
+#' occurrences.
+#' @param detection_probability A numeric value between 0 and 1 representing the
+#' probability of detecting the species.
 #' @param sampling_bias `"no_bias"`, `"polygon"` or `"manual"`. The method used
 #' to generate a sampling bias. `"polygon"`: bias the sampling in a polygon.
 #' Provide your polygon to `bias_area`. Provide bias strength to
 #' `bias_strength`. `"manual"`: bias the sampling manually via a raster.
 #' Provide your raster layer in which each cell contains the probability to be
 #' sampled to `bias_weights`.
-#' @param bias_area `NA` or an sf object with POLYGON geometry. Only used if
-#' `sampling_bias = "polygon"`. The area in which the sampling will be biased.
-#' @param bias_strength `NA` or a positive numeric value. Only used if
-#' `sampling_bias = "polygon"`. The strength of the bias to be applied in the
-#' biased area (as a multiplier). Above 1, area will be oversampled. Below 1,
-#' area will be undersampled. For example, a value of 50 will result in a 50
-#' times sampling probability within the `bias_area` than outside. Conversely,
-#' a value of 0.5 will result in half less samples within the `bias_area` than
-#' outside.
-#' @param bias_weights `NA` or a raster layer (sf object with POLYGON geometry).
-#' Only used if `sampling_bias = "manual"`. The raster of bias weights to be
-#' applied to the sampling of occurrences. Higher weights mean a higher
-#' probability of sampling. Weights can be numeric values between 0 and 1 or
-#' positive integers that will be rescaled to values between 0 and 1.
+#' @param sampling_bias A character string specifying the method to generate a
+#' sampling bias.
+#' Options are `"no_bias"`, `"polygon"`, or `"manual"`.
+#' \describe{
+#'   \item{`"no_bias"`}{No bias is applied (default).}
+#'   \item{`"polygon"`}{Bias the sampling within a polygon. Provide the polygon
+#'   to `bias_area` and the bias strength to `bias_strength`.}
+#'   \item{`"manual"`}{Bias the sampling manually using a grid. Provide the grid
+#'   layer in which each cell contains the probability of being sampled to
+#'   `bias_weights`.}
+#' }
+#' @param bias_area An `sf` object with POLYGON geometry, or `NA`. Only used if
+#' `sampling_bias = "polygon"`. This defines the area in which the sampling will
+#' be biased.
+#' @param bias_strength A positive numeric value, or `NA`. Only used if
+#' `sampling_bias = "polygon"`. The value represents the strength of
+#' the bias to be applied within the `bias_area`. Values greater than 1 will
+#' increase the sampling probability within the polygon relative to outside
+#' (oversampling), while values between 0 and 1 will decrease it
+#' (undersampling). For instance, a value of 50 will make the probability 50
+#' times higher within the `bias_area` compared to outside, whereas a value of
+#' 0.5 will make it half as likely.
+#' @param bias_weights A grid layer (an sf object with POLYGON geometry), or
+#' `NA`. Only used if `sampling_bias = "manual"`. The grid of bias weights to be
+#' applied. This sf object should contain a `bias_weight` column with the
+#' weights per grid cell. Higher weights increase the probability of sampling.
+#' Weights can be numeric values between 0 and 1 or positive integers, which
+#' will be rescaled to values between 0 and 1.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @returns An sf object with POINT geometry containing the locations of the
-#' sampled observations, a `detection_probability` column containing the
-#' detection probability for each observation (will be the same for all), a
-#' `bias_weight` column containing the sampling probability based on sampling
-#' bias, a `sampling_probability` column containing the combined sampling
-#' probability from detection probability and sampling bias for each
-#' observation, and a `sampling_status` column indicating whether the
-#' occurrence was detected (observations) or not (unobserved occurrences).
+#' @return An sf object with POINT geometry containing the locations of the
+#' occurrence with detection status. The object includes the following columns:
+#' \describe{
+#'   \item{`detection_probability`}{The detection probability for each
+#'   occurrence (will be the same for all).}
+#'   \item{`bias_weight`}{The sampling probability based on sampling bias for
+#'   each occurrence.}
+#'   \item{`sampling_probability`}{The combined sampling probability from
+#'   detection probability and sampling bias for each occurrence.}
+#'   \item{`sampling_status`}{Indicates whether the occurrence was detected
+#'   (`"detected"`) or not (`"undetected"`). Detected occurrences are called
+#'   observations.}
+#' }
 #'
 #' @export
 #'

@@ -1,10 +1,13 @@
-#' Generate a sampling bias via a polygon
+#' Apply sampling bias to occurrences via a polygon
 #'
-#' The function adds a sampling bias weight column containing the sample
-#' probability based on bias strength within a given polygon.
+#' This function adds a sampling bias weight column to an `sf` object containing
+#' occurrences based on a given polygonal area. The bias is determined by the
+#' specified bias strength, which adjusts the probability of sampling within
+#' the polygonal area.
 #'
-#' @param occurrences_sf An sf object with POINT geometry.
-#' @param bias_area An sf object with POLYGON geometry. The area in which the
+#' @param occurrences_sf An sf object with POINT geometry representing the
+#' occurrences.
+#' @param bias_area An sf object with POLYGON geometry specifying the area where
 #' sampling will be biased.
 #' @param bias_strength A positive numeric value. The strength of the bias to
 #' be applied in the biased area (as a multiplier). Above 1, area will be
@@ -12,9 +15,17 @@
 #' will result in 50 times more samples within the bias_area than outside.
 #' Conversely, a value of 0.5 will result in half less samples within the
 #' bias_area than outside.
+#' @param bias_strength A positive numeric value that represents the strength of
+#' the bias to be applied within the `bias_area`. Values greater than 1 will
+#' increase the sampling probability within the polygon relative to outside
+#' (oversampling), while values between 0 and 1 will decrease it
+#' (undersampling). For instance, a value of 50 will make the probability 50
+#' times higher within the `bias_area` compared to outside, whereas a value of
+#' 0.5 will make it half as likely.
 #'
-#' @returns An sf object with POINT geometry with a bias_weight column
-#' containing the sampling probability based on sampling bias.
+#' @returns An sf object with POINT geometry that includes a `bias_weight`
+#' column containing the sampling probabilities based on the bias area and
+#' strength.
 #'
 #' @export
 #'

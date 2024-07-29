@@ -1,18 +1,19 @@
-#' Generate a sampling bias via a grid
+#' Apply manual sampling bias to occurrences via a grid
 #'
-#' The function adds a sampling bias weight column containing the sample
-#' probability based on bias weights within each cell of a given grid layer.
+#' This function adds a sampling bias weight column to an sf object containing
+#' occurrences. The sampling probabilities are based on bias weights within each
+#' cell of a provided grid layer.
 #'
-#' @param occurrences_sf An sf object with POINT geometry.
-#' @param bias_weights A raster layer (sf object with POLYGON geometry). The
-#' raster of bias weights to be applied to the sampling of occurrences. This sf
-#' object should contain a `bias_weight` and `geometry` column. Higher weights
-#' indicate a higher probability of sampling. Weights must be numeric values
-#' between 0 and 1 OR positive integers that will be rescaled to values between
-#' 0 and 1.
+#' @param occurrences_sf An sf object with POINT geometry representing the
+#' occurrences.
+#' @param bias_weights An `sf` object with POLYGON geometry representing the
+#' grid with bias weights. This sf object should contain a `bias_weight` column
+#' and a `geometry` column. Higher weights indicate a higher probability of
+#' sampling. Weights must be numeric values between 0 and 1 or positive
+#' integers, which will be rescaled to values between 0 and 1.
 #'
-#' @returns An sf object with POINT geometry with a bias_weight column
-#' containing the sampling probability based on sampling bias.
+#' @return An sf object with POINT geometry that includes a `bias_weight`
+#' column containing the sampling probabilities based on the sampling bias.
 #'
 #' @export
 #'
