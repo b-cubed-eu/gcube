@@ -3,7 +3,6 @@
 #' Adds a column to the observations sf object with the coordinate uncertainty
 #' in meters.
 #'
-#'
 #' @param observations An sf object with POINT geometry.
 #' @param coords_uncertainty_meters A numeric value or a vector of numeric
 #' values indicating the coordinate uncertainty associated with observations.
