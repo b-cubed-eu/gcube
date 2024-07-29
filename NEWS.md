@@ -1,3 +1,7 @@
+# gcube 0.4.0
+
+*	Consolidate documentation throughout all functions, readme, and vignettes.
+
 # gcube 0.3.0
 
 *	`generate_taxonomy()` also creates species key.
