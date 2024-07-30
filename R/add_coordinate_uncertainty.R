@@ -1,14 +1,20 @@
 #' Add coordinate uncertainty to observations
 #'
-#' Adds a column to the observations sf object with the coordinate uncertainty
-#' in meters.
+#' This function adds a column to the input sf object containing the coordinate
+#' uncertainty for each observation, measured in meters.
 #'
-#' @param observations An sf object with POINT geometry.
+#' @param observations An sf object with POINT geometry representing the
+#' observations. This object contains the spatial points to which the coordinate
+#' uncertainty will be added.
 #' @param coords_uncertainty_meters A numeric value or a vector of numeric
-#' values indicating the coordinate uncertainty associated with observations.
+#' values representing the coordinate uncertainty (in meters) associated with
+#' each observation. If a single numeric value is provided, it will be applied
+#' to all observations. If a numeric vector is provided, it must be the same
+#' length as the number of observations.
 #'
-#' @return An sf object with POINT geometry with an additional column
-#' `coordinateUncertaintyInMeters`.
+#' @return The input sf object with POINT geometry, with an additional column
+#' named `coordinateUncertaintyInMeters` that contains the coordinate uncertainty
+#' values in meters.
 #'
 #' @export
 #'

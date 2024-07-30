@@ -1,16 +1,19 @@
 #' Filter detected occurrences
 #'
-#' The function filters observations from all occurrences based on a
-#' `sampling_status` column, e.g. created by `sample_observations()`.
+#' This function filters observations from all occurrences based on the
+#' `sampling_status` column, typically created by the `sample_observations()`
+#' function.
 #'
 #' @param observations_total An sf object with POINT geometry or a simple
 #' dataframe with `sampling_status` column containing values `"detected"`.
-#' This format is created by `sample_observations()`.
-#' @param invert Logical. If `FALSE` (default), filter `"detected"`
-#' occurrences. Otherwise, filter all other occurrences.
+#' This format is typically created by the `sample_observations()` function.
+#' @param invert Logical. If `FALSE` (default), the function filters to retain
+#' only `"detected"` occurrences. If `TRUE`, it filters out `"detected"`
+#' occurrences and retains all other occurrences.
 #'
-#' @returns A dataframe or an sf object with POINT geometry containing detected
-#' occurrences (if `invert = FALSE`), or other occurrences (if `invert = TRUE`).
+#' @returns A data frame or an sf object with POINT geometry containing the
+#' filtered observations. If `invert = FALSE`, the function returns detected
+#' occurrences. If `invert = TRUE`, it returns all other occurrences.
 #'
 #' @export
 #'
