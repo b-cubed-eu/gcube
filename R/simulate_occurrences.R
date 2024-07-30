@@ -5,7 +5,7 @@
 #'
 #' @param plgn An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences.
-#' @param initial_average_abundance A positive numeric value indicating the
+#' @param initial_average_occurrences A positive numeric value indicating the
 #' average number of occurrences to be simulated within the extent of `plgn`
 #' at the first time point. This value serves as the mean (lambda) of a Poisson
 #' distribution.
@@ -50,7 +50,7 @@
 #' occ_sf <- simulate_occurrences(
 #'   plgn,
 #'   n_time_points = 4,
-#'   initial_average_abundance = 100,
+#'   initial_average_occurrences = 100,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -67,7 +67,7 @@
 #'   plgn,
 #'   spatial_autocorr = 100,
 #'   n_time_points = 4,
-#'   initial_average_abundance = 100,
+#'   initial_average_occurrences = 100,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -81,7 +81,7 @@
 
 simulate_occurrences <- function(
     plgn,
-    initial_average_abundance = 50,
+    initial_average_occurrences = 50,
     spatial_autocorr = c("random", "clustered"),
     n_time_points = 1,
     temporal_function = NA,
@@ -96,9 +96,9 @@ simulate_occurrences <- function(
 
   # Check if initial_average_occurrences is a positive number
   stopifnot(
-    "`initial_average_abundance` must be a single positive number." =
-      assertthat::is.number(initial_average_abundance) &
-      initial_average_abundance >= 0)
+    "`initial_average_occurrences` must be a single positive number." =
+      assertthat::is.number(initial_average_occurrences) &
+      initial_average_occurrences >= 0)
 
   if (!(assertthat::is.number(spatial_autocorr) && spatial_autocorr >= 1)) {
     # Check if spatial_autocorr is random or clustered
@@ -129,7 +129,7 @@ simulate_occurrences <- function(
 
   # Simulate the timeseries
   ts <- simulate_timeseries(
-    initial_average_occurrences = initial_average_abundance,
+    initial_average_occurrences = initial_average_occurrences,
     n_time_points = n_time_points,
     temporal_function = temporal_function,
     ...,

@@ -55,7 +55,7 @@ cube_grid <- st_make_grid(
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
   plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),

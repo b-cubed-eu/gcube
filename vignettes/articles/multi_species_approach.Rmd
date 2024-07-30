@@ -107,7 +107,7 @@ The values within these columns can change between species.
 # Create dataframe with simulation function arguments
 multi_species_args <- tibble(
   plgn = rep(list(polygon), 6),
-  initial_average_abundance = rep(c(50, 100, 500), 2),
+  initial_average_occurrences = rep(c(50, 100, 500), 2),
   n_time_points = rep(6, 6),
   temporal_function = c(simulate_random_walk, simulate_random_walk, rep(NA, 4)),
   sd_step = c(1, 1, rep(NA, 4)),

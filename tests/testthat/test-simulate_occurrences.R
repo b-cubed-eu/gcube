@@ -11,7 +11,7 @@ plgn_sf <- st_sf(geometry = plgn_sf, crs = example_crs)
 ## Unit Tests
 test_that("simulate_occurrences returns an sf object with POINT geometry", {
   result <- simulate_occurrences(plgn,
-                                 initial_average_abundance = 50,
+                                 initial_average_occurrences = 50,
                                  n_time_points = 1)
 
   expect_s3_class(result, "sf")
@@ -22,11 +22,11 @@ test_that("simulate_occurrences returns an sf object with POINT geometry", {
 test_that("simulate_occurrences returns reproducible results with a seed", {
   seed <- 123
   result1 <- simulate_occurrences(plgn,
-                                  initial_average_abundance = 50,
+                                  initial_average_occurrences = 50,
                                   n_time_points = 1,
                                   seed = seed)
   result2 <- simulate_occurrences(plgn,
-                                  initial_average_abundance = 50,
+                                  initial_average_occurrences = 50,
                                   n_time_points = 1,
                                   seed = seed)
 
@@ -35,11 +35,11 @@ test_that("simulate_occurrences returns reproducible results with a seed", {
 
 test_that("simulate_occurrences handles different spatial_autocorr values", {
   result_random <- simulate_occurrences(plgn,
-                                        initial_average_abundance = 50,
+                                        initial_average_occurrences = 50,
                                         spatial_autocorr = "random",
                                         n_time_points = 1)
   result_clustered <- simulate_occurrences(plgn,
-                                           initial_average_abundance = 50,
+                                           initial_average_occurrences = 50,
                                            spatial_autocorr = "clustered",
                                            n_time_points = 1)
 
@@ -54,7 +54,7 @@ test_that("simulate_occurrences handles different spatial_autocorr values", {
 test_that("simulate_occurrences handles different n_time_points values", {
   n_time_points <- 4
   result <- simulate_occurrences(plgn,
-                                 initial_average_abundance = 50,
+                                 initial_average_occurrences = 50,
                                  temporal_function = simulate_random_walk,
                                  n_time_points = n_time_points)
 
@@ -72,8 +72,8 @@ test_that("simulate_occurrences raises an error for incorrect plgn type", {
 
 test_that("simulate_occurrences raises an error for non-numeric abundance", {
   expect_error(simulate_occurrences(plgn,
-                                    initial_average_abundance = "not_numeric"),
-               "`initial_average_abundance` must be a single positive number.")
+                                    initial_average_occurrences = "not_numeric"),
+               "`initial_average_occurrences` must be a single positive number.")
 })
 
 test_that("simulate_occurrences raises an error for invalid spatial_autocorr", {
@@ -102,10 +102,10 @@ test_that("simulate_occurrences raises an error for invalid seed type", {
 
 test_that("simulate_occurrences returns different results without a seed", {
   result1 <- simulate_occurrences(plgn,
-                                  initial_average_abundance = 50,
+                                  initial_average_occurrences = 50,
                                   n_time_points = 1)
   result2 <- simulate_occurrences(plgn,
-                                  initial_average_abundance = 50,
+                                  initial_average_occurrences = 50,
                                   n_time_points = 1)
 
   expect_false(identical(result1, result2))
@@ -113,7 +113,7 @@ test_that("simulate_occurrences returns different results without a seed", {
 
 test_that("simulate_occurrences handles CRS correctly", {
   result <- simulate_occurrences(plgn_sf,
-                                 initial_average_abundance = 50,
+                                 initial_average_occurrences = 50,
                                  temporal_function = simulate_random_walk,
                                  n_time_points = 5)
 

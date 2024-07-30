@@ -85,7 +85,7 @@ We can for example sample randomly within the polygon over 6 time points were we
 ```{r}
 occurrences_df <- simulate_occurrences(
   plgn = polygon,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,

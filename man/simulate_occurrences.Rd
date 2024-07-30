@@ -6,7 +6,7 @@
 \usage{
 simulate_occurrences(
   plgn,
-  initial_average_abundance = 50,
+  initial_average_occurrences = 50,
   spatial_autocorr = c("random", "clustered"),
   n_time_points = 1,
   temporal_function = NA,
@@ -18,7 +18,7 @@ simulate_occurrences(
 \item{plgn}{An sf object with POLYGON geometry indicating the spatial
 extend to simulate occurrences.}
 
-\item{initial_average_abundance}{A positive numeric value indicating the
+\item{initial_average_occurrences}{A positive numeric value indicating the
 average number of occurrences to be simulated within the extent of \code{plgn}
 at the first time point. This value serves as the mean (lambda) of a Poisson
 distribution.}
@@ -66,7 +66,7 @@ ggplot() +
 occ_sf <- simulate_occurrences(
   plgn,
   n_time_points = 4,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +
@@ -83,7 +83,7 @@ occ_sf_100 <- simulate_occurrences(
   plgn,
   spatial_autocorr = 100,
   n_time_points = 4,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +
