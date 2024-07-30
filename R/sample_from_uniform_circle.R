@@ -1,11 +1,11 @@
 #' Sample from a circle using the Uniform distribution
 #'
-#' The function samples occurrences of a species within the uncertainty circle
-#' around each observation assuming a Uniform distribution.
+#' This function samples a new observations point of a species within the
+#' uncertainty circle around each observation assuming a Uniform distribution.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If this last column is not present,
-#' the function will assume no (zero meters) uncertainty around the observation
+#' `coordinateUncertaintyInMeters` column. If the latter column is not present,
+#' the function will assume no uncertainty (zero meters) around the observation
 #' points.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.

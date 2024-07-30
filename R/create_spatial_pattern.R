@@ -9,7 +9,7 @@
 #' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
 #' (1 means random distribution, larger values indicate more clustering).
 #' The default is `"random"`. `"clustered"` corresponds to a value of 10.
-#' See details.
+#' See Details.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #' @param n_sim Number of simulations. Each simulation is a different layer in
@@ -22,7 +22,7 @@
 #'
 #' @seealso [gstat::vgm()] and its `range` argument
 #'
-#' @return An object of class SpatRaster with a spatial pattern for the area of
+#' @returns An object of class SpatRaster with a spatial pattern for the area of
 #' the given polygon.
 #'
 #' @export

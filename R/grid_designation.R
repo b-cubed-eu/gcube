@@ -1,44 +1,41 @@
 #' Observations to grid designation to create a data cube
 #'
-#' The function designates observations to cells of a given grid to create an
+#' This function designates observations to cells of a given grid to create an
 #' aggregated data cube.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If this last column is not present,
-#' the function will assume no (zero meters) uncertainty around the observation
+#' `coordinateUncertaintyInMeters` column. If the latter column is not present,
+#' the function will assume no uncertainty (zero meters) around the observation
 #' points.
 #' @param grid An sf object with POLYGON geometry (usually a grid) to which
 #' observations should be designated.
-#' @param id_col The column name of the column with unique ids for each grid
-#' cell. If `"row_names"` (the default), a new column `id` is created were the
-#' row names represent the unique ids.
+#' @param id_col The column name containing unique IDs for each grid cell. If
+#' `"row_names"` (the default), a new column `id` is created where the row names
+#' represent the unique IDs.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
-#' @param aggregate Logical. If `TRUE` (default), return data cube in
-#' aggregated form (grid with number of observations per grid cell). Otherwise
-#' return sampled points in uncertainty circle.
-#' @param randomisation `"uniform"` or `"normal"`. Randomisation method used
-#' for sampling within uncertainty circle around each observation. By default
-#' `"uniform"` which means each point uncertainty circle has an equal
-#' probability to be selected. The other option is `"normal"` where a point is
-#' sampled from a bivariate Normal distribution with means equal to the
-#' observation point and the variance equal to
-#' (-`coordinateUncertaintyInMeters`^2) / (2 * log(1 - `p_norm`)) such that
-#' `p_norm` % of all possible samples from this Normal distribution fall
-#' within the uncertainty circle.
-#' @param p_norm A numeric value between 0 and 1. Only used if
-#' `randomisation = "normal"`. The proportion of all possible samples from a a
-#' bivariate Normal distribution that fall within the uncertainty circle. If
-#' normal randomisation is used and no value is given, the default `p_norm`
-#' value is 0.95.
+#' @param aggregate Logical. If `TRUE` (default), returns data cube in
+#' aggregated form (grid with the number of observations per grid cell).
+#' Otherwise, returns sampled points within the uncertainty circle.
+#' @param randomisation Character. Method used for sampling within the
+#' uncertainty circle around each observation. `"uniform"` (default) means each
+#' point in the uncertainty circle has an equal probability of being selected.
+#' The other option is `"normal"`, where a point is sampled from a bivariate
+#' Normal distribution with means equal to the observation point and variance
+#' such that `p_norm` % of all possible samples from this Normal distribution
+#' fall within the uncertainty circle.
+#' See `sample_from_binormal_circle()`.
+#' @param p_norm A numeric value between 0 and 1, used only if
+#' `randomisation = "normal"`. The proportion of all possible samples from a
+#' bivariate Normal distribution that fall within the uncertainty circle.
+#' Default is 0.95.
 #'
-#' @returns In case of `aggregate = TRUE`, an sf object with POLYGON geometry
-#' containing the locations of the grid cells, an `n` column with the number of
-#' observations per grid cell, and a `min_coord_uncertainty` column containing
-#' the minimal coordinate uncertainty per grid cell. In case of
-#' `aggregate = FALSE`, an sf object with POINT geometry containing the
-#' locations of the sampled observations within the uncertainty circle, and a
-#' `coordinateUncertaintyInMeters` column containing the coordinate uncertainty
+#' @return If `aggregate = TRUE`, an sf object with POLYGON geometry
+#' containing the grid cells, an `n` column with the number of observations per
+#' grid cell, and a `min_coord_uncertainty` column with the minimum coordinate
+#' uncertainty per grid cell. If `aggregate = FALSE`, an sf object with POINT
+#' geometry containing the sampled observations within the uncertainty circles,
+#' and a `coordinateUncertaintyInMeters` column with the coordinate uncertainty
 #' for each observation.
 #'
 #' @export
