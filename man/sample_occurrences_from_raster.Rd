@@ -18,7 +18,9 @@ generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 An sf object with POINT geometry.
 }
 \description{
-This function draws point occurrences from a spatial random field (raster).
+This function draws point occurrences from a spatial random field represented
+by a raster. Points are sampled based on the values in the raster, with the
+number of occurrences specified for each time step.
 }
 \examples{
 # Load packages

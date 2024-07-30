@@ -1,6 +1,8 @@
 #' Sample occurrences from spatial random field
 #'
-#' This function draws point occurrences from a spatial random field (raster).
+#' This function draws point occurrences from a spatial random field represented
+#' by a raster. Points are sampled based on the values in the raster, with the
+#' number of occurrences specified for each time step.
 #'
 #' @param rs A SpatRaster object (see [terra::rast()]).
 #' @param ts A vector with the number of occurrences per time point.
