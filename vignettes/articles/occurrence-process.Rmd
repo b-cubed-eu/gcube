@@ -305,8 +305,8 @@ If we for example sample 500 occurrences from the last raster, we see the sampli
 #| fig.alt: >
 #|   500 sampled occurrences from highly clustered spatial pattern.
 pts_occ_clustered3 <- sample_occurrences_from_raster(
-  rs = rs_pattern_clustered3,
-  ts = 500,
+  raster = rs_pattern_clustered3,
+  time_series = 500,
   seed = 123)
 
 ggplot() +

@@ -149,8 +149,8 @@ simulate_occurrences <- function(
 
   # Sample occurrences from raster
   occ <- sample_occurrences_from_raster(
-    rs = rs_pattern,
-    ts = ts,
+    raster = rs_pattern,
+    time_series = ts,
     seed = seed)
 
   # Return the occurences (sf point geometry)
