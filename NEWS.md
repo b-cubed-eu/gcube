@@ -1,6 +1,6 @@
 # gcube 0.4.0
 
-*	Consolidate documentation throughout all functions, readme, and vignettes.
+*	Consolidate documentation throughout all functions, README, and vignettes.
 
 # gcube 0.3.0
 
