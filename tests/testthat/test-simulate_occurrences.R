@@ -71,9 +71,11 @@ test_that("simulate_occurrences raises an error for incorrect plgn type", {
 })
 
 test_that("simulate_occurrences raises an error for non-numeric abundance", {
-  expect_error(simulate_occurrences(plgn,
-                                    initial_average_occurrences = "not_numeric"),
-               "`initial_average_occurrences` must be a single positive number.")
+  expect_error(
+    simulate_occurrences(
+      plgn,
+      initial_average_occurrences = "not_numeric"),
+    "`initial_average_occurrences` must be a single positive number.")
 })
 
 test_that("simulate_occurrences raises an error for invalid spatial_autocorr", {
