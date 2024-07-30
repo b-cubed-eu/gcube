@@ -44,7 +44,7 @@
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @return An sf object with POINT geometry containing the locations of the
+#' @returns An sf object with POINT geometry containing the locations of the
 #' occurrence with detection status. The object includes the following columns:
 #' \describe{
 #'   \item{`detection_probability`}{The detection probability for each

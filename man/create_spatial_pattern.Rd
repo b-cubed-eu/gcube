@@ -21,7 +21,7 @@ create_spatial_pattern(
 be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
 (1 means random distribution, larger values indicate more clustering).
 The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
-See details.}
+See Details.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), no seed is used.}

@@ -12,9 +12,9 @@
 #' to all observations. If a numeric vector is provided, it must be the same
 #' length as the number of observations.
 #'
-#' @return The input sf object with POINT geometry, with an additional column
-#' named `coordinateUncertaintyInMeters` that contains the coordinate uncertainty
-#' values in meters.
+#' @returns The input sf object with POINT geometry, with an additional column
+#' named `coordinateUncertaintyInMeters` that contains the coordinate
+#' uncertainty values in meters.
 #'
 #' @export
 #'

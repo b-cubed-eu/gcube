@@ -2,36 +2,37 @@
 % Please edit documentation in R/map_filter_observations.R
 \name{map_filter_observations}
 \alias{map_filter_observations}
-\title{Map \code{filter_observations()} function over multiple species}
+\title{Map \code{filter_observations()} over multiple species}
 \usage{
 map_filter_observations(df, nested = TRUE, arg_list = NA)
 }
 \arguments{
-\item{df}{A dataframe containing multiple rows. Each row is considered a
+\item{df}{A dataframe containing multiple rows, each representing a
 different species. The columns are function arguments with values used for
-mapping \code{filter_observations()} for each species. \code{df} can have columns that
-are not used by this function. They will be retained in the output.}
+mapping \code{filter_observations()} for each species. Columns not used by this
+function will be retained in the output.}
 
-\item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
+\item{nested}{Logical. If \code{TRUE} (default), retains list-column containing
 sf objects/dataframes calculated by \code{filter_observations()}. Otherwise,
-expand this list-column into rows and columns.}
+expands this list-column into rows and columns.}
 
 \item{arg_list}{A named list or \code{NA}. If \code{NA} (default), the function assumes
 column names in \code{df} are identical to argument names of
-\code{filter_observations()}. If column names are not identical, they need to be
+\code{filter_observations()}. If column names differ, they must be
 specified as a named list where the names are the argument names of
-\code{filter_observations()}.}
+\code{filter_observations()}, and the associated values are the corresponding
+column names in \code{df}.}
 }
 \value{
-In case of \code{nested = TRUE}, a dataframe identical to the input
-dataframe \code{df}, but with an extra list-column called \code{observations}
-containing an sf object with POINT geometry or simple dataframe for each row
-computed by \code{filter_observations()}. In case of \code{nested = FALSE}, this
-list-column is expanded into additional rows and columns.
+In case of \code{nested = TRUE}, a dataframe identical to \code{df}, with an
+extra list-column called \code{observations} containing an sf object with POINT
+geometry or simple dataframe for each row computed by
+\code{filter_observations()}. In case of \code{nested = FALSE}, this list-column is
+expanded into additional rows and columns.
 }
 \description{
-The function executes \code{filter_observations()} over multiple rows of a
-dataframe, representing multiple different species, containing potentially
+This function executes \code{filter_observations()} over multiple rows of a
+dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{

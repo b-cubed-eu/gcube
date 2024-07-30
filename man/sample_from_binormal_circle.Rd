@@ -8,13 +8,14 @@ sample_from_binormal_circle(observations, p_norm = 0.95, seed = NA)
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
-\code{coordinateUncertaintyInMeters} column. If this last column is not present,
-the function will assume no (zero meters) uncertainty around the observation
+\code{coordinateUncertaintyInMeters} column. If the latter column is not present,
+the function will assume no uncertainty (zero meters) around the observation
 points.}
 
-\item{p_norm}{A numeric value between 0 and 1. The proportion of all
-possible samples from a a bivariate Normal distribution that fall within the
-uncertainty circle. If no value is given, the default \code{p_norm} value is 0.95.}
+\item{p_norm}{A numeric value between 0 and 1. The proportion of all possible
+samples from a bivariate Normal distribution that fall within the uncertainty
+circle. Default is 0.95.
+See Details.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
@@ -25,12 +26,17 @@ sampled occurrences and a \code{coordinateUncertaintyInMeters} column containing
 the coordinate uncertainty for each observation.
 }
 \description{
-The function samples occurrences of a species within the uncertainty circle
-around each observation assuming a bivariate Normal distribution with means
-equal to the observation point and the variance equal to
-(-\code{coordinateUncertaintyInMeters}^2) / (2 * log(1 - \code{p_norm})) such that
-\code{p_norm} \% of all possible samples from this Normal distribution fall within
-the uncertainty circle.
+This function samples a new observations point of a species within the
+uncertainty circle around each observation assuming a bivariate Normal
+distribution.
+}
+\details{
+A new observation point is sampled from a bivariate Normal
+distribution with means equal to the X and Y coordinates of its original
+observation point and variances equal to
+(-\code{coordinateUncertaintyInMeters}^2) / (2 * log(1 - \code{p_norm})),
+ensuring \code{p_norm} \% of all possible samples fall within the uncertainty
+circle.
 }
 \examples{
 library(sf)

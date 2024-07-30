@@ -12,7 +12,7 @@
 #' sampling. Weights must be numeric values between 0 and 1 or positive
 #' integers, which will be rescaled to values between 0 and 1.
 #'
-#' @return An sf object with POINT geometry that includes a `bias_weight`
+#' @returns An sf object with POINT geometry that includes a `bias_weight`
 #' column containing the sampling probabilities based on the sampling bias.
 #'
 #' @export

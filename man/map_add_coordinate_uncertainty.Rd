@@ -2,37 +2,37 @@
 % Please edit documentation in R/map_add_coordinate_uncertainty.R
 \name{map_add_coordinate_uncertainty}
 \alias{map_add_coordinate_uncertainty}
-\title{Map \code{add_coordinate_uncertainty()} function over multiple species}
+\title{Map \code{add_coordinate_uncertainty()} over multiple species}
 \usage{
 map_add_coordinate_uncertainty(df, nested = TRUE, arg_list = NA)
 }
 \arguments{
-\item{df}{A dataframe containing multiple rows. Each row is considered a
+\item{df}{A dataframe containing multiple rows, each representing a
 different species. The columns are function arguments with values used for
-mapping \code{add_coordinate_uncertainty()} for each species. \code{df} can have
-columns that are not used by this function. They will be retained in the
-output.}
+mapping \code{add_coordinate_uncertainty()} for each species. Columns not used by
+this function will be retained in the output.}
 
-\item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
-sf objects calculated by \code{add_coordinate_uncertainty()}. Otherwise, expand
+\item{nested}{Logical. If \code{TRUE} (default), retains list-column containing
+sf objects calculated by \code{add_coordinate_uncertainty()}. Otherwise, expands
 this list-column into rows and columns.}
 
 \item{arg_list}{A named list or \code{NA}. If \code{NA} (default), the function assumes
 column names in \code{df} are identical to argument names of
-\code{add_coordinate_uncertainty()}. If column names are not identical, they need
+\code{add_coordinate_uncertainty()}. If column names differ, they must
 to be specified as a named list where the names are the argument names of
-\code{add_coordinate_uncertainty()}.}
+\code{add_coordinate_uncertainty()}, and the associated values are the
+corresponding column names in \code{df}.}
 }
 \value{
-In case of \code{nested = TRUE}, a dataframe identical to the input
-dataframe \code{df}, but each sf object with POINT geometry in the list-column
-\code{observations} now has an additional column \code{coordinateUncertaintyInMeters}
-added by \code{add_coordinate_uncertainty()}. In case of \code{nested = FALSE}, this
+In case of \code{nested = TRUE}, a dataframe identical to \code{df}, but each
+sf object with POINT geometry in the list-column \code{observations} now has an
+additional column \code{coordinateUncertaintyInMeters} added by
+\code{add_coordinate_uncertainty()}. In case of \code{nested = FALSE}, this
 list-column is expanded into additional rows and columns.
 }
 \description{
-The function executes \code{add_coordinate_uncertainty()} over multiple rows of a
-dataframe, representing multiple different species, containing potentially
+This function executes \code{add_coordinate_uncertainty()} over multiple rows of a
+dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{

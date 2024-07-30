@@ -16,7 +16,7 @@
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @return A vector of integers of length `n_time_points` with the number of
+#' @returns A vector of integers of length `n_time_points` with the number of
 #' occurrences.
 #'
 #' @export

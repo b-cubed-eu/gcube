@@ -48,10 +48,10 @@ of species, genera, families, orders, classes, phyla, and kingdoms. The
 output is a data frame with the hierarchical classification for each species.
 }
 \details{
-The function works by randomly assigning species to genera, genera to
-families, families to orders, orders to classes, classes to phyla, and phyla
-to kingdoms. Sampling is done with replacement, meaning that multiple
-lower-level taxa (e.g., species) can be assigned to the same higher-level
+The function works by randomly assigning species to genera, genera
+to families, families to orders, orders to classes, classes to phyla, and
+phyla to kingdoms. Sampling is done with replacement, allowing multiple
+lower-level taxa (e.g., species) to be assigned to the same higher-level
 taxon (e.g., genus).
 }
 \examples{

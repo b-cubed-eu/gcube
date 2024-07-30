@@ -30,7 +30,7 @@
 #' bivariate Normal distribution that fall within the uncertainty circle.
 #' Default is 0.95.
 #'
-#' @return If `aggregate = TRUE`, an sf object with POLYGON geometry
+#' @returns If `aggregate = TRUE`, an sf object with POLYGON geometry
 #' containing the grid cells, an `n` column with the number of observations per
 #' grid cell, and a `min_coord_uncertainty` column with the minimum coordinate
 #' uncertainty per grid cell. If `aggregate = FALSE`, an sf object with POINT

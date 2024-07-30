@@ -1,18 +1,25 @@
-#' Function to collect arguments of cube simulation functions
+#' Function to collect arguments from cube simulation functions
 #'
-#' This function collects all arguments of a cube simulation function
-#' (`simulate_occurrences()`, `sample_observations()` or `grid_designation()`)
+#' This function collects all arguments from a cube simulation function
+#' (`simulate_occurrences()`, `sample_observations()`, `filter_observations()`,
+#' `add_coordinate_uncertainty()`, or `grid_designation()`)
 #' also taking into account the ellipsis (`...`) and `temporal_function`
 #' of `simulate_occurrences()`.
 #'
-#' @param f One of three cube simulation functions: `simulate_occurrences()`,
-#' `sample_observations()` or `grid_designation()`.
-#' @param df A dataframe containing multiple rows. Each row is considered a
+#' @param f One of five cube simulation functions: `simulate_occurrences()`,
+#' `sample_observations()`, `filter_observations()`,
+#' `add_coordinate_uncertainty()`, or `grid_designation()`.
+#' @param df A dataframe containing multiple rows, each representing a
 #' different species. The columns are function arguments with values used for
-#' mapping `simulate_occurrences()` for each species. `df` can have columns that
-#' are not used by this function. They will be retained in the output.
+#' mapping `f` for each species. This dataframe is used to get the correct
+#' arguments of the `temporal_function` of if `f` is `simulate_occurrences()`.
 #'
 #' @importFrom methods formalArgs
+#'
+#' @returns A character vector of argument names for the specified function `f`.
+#' If `f` is `simulate_occurrences` and the dataframe `df` contains a
+#' `temporal_function` column, the returned vector includes arguments from the
+#' `temporal_function`.
 #'
 #' @noRd
 
@@ -34,15 +41,29 @@ get_function_arguments <- function(f, df) {
 }
 
 
-#' Function to return repeated warnings during mapping
+#' Handle repeated warnings during mapping
 #'
-#' This function stores all warnings captured by `purrr::quietly()` that
-#' occurred during mapping and reports them in a clean way.
+#' This function captures and reports warnings that occurred during the
+#' execution of a mapping function wrapped with `purrr::quietly()`. The function
+#' extracts warnings from the results stored in a list-column of a dataframe,
+#' counts their occurrences, and prints a summary of these warnings.
 #'
 #' @param df A dataframe containing a list-column with the output of a mapped
-#' function wrapped with `purrr::quietly()`.
-#' @param mapped_col The name of the list-column described above. Defaults to
-#' `"mapped_col"`.
+#' function wrapped with `purrr::quietly()`. This list-column should include
+#' a `$warnings` component for capturing warnings.
+#' @param mapped_col The name of the list-column in `df` that contains the output
+#' from the mapped function. Defaults to `"mapped_col"`.
+#'
+#' @returns A dataframe identical to the input `df`, but with the list-column
+#' specified by `mapped_col` updated to retain only the results from the mapping
+#' function, excluding any warnings.
+#'
+#' @details This function first verifies that the specified `mapped_col` is
+#' present in the dataframe and that it is a list-column. It then collects all
+#' warnings from the list-column, counts their occurrences, and prints a summary
+#' of these warnings. Finally, the function updates the dataframe to include
+#' only the results from the mapping function, discarding any warning
+#' information.
 #'
 #' @noRd
 

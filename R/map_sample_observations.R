@@ -1,27 +1,28 @@
-#' Map `sample_observations()` function over multiple species
+#' Map `sample_observations()` over multiple species
 #'
-#' The function executes `sample_observations()` over multiple rows of a
-#' dataframe, representing multiple different species, containing potentially
+#' This function executes `sample_observations()` over multiple rows of a
+#' dataframe, representing different species, with potentially
 #' different function arguments over multiple columns.
 #'
-#' @param df A dataframe containing multiple rows. Each row is considered a
+#' @param df A dataframe containing multiple rows, each representing a
 #' different species. The columns are function arguments with values used for
-#' mapping `sample_observations()` for each species. `df` can have columns that
-#' are not used by this function. They will be retained in the output.
-#' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects calculated by `sample_observations()`. Otherwise, expand this
+#' mapping `sample_observations()` for each species. Columns not used by this
+#' function will be retained in the output.
+#' @param nested Logical. If `TRUE` (default), retains list-column containing
+#' sf objects calculated by `sample_observations()`. Otherwise, expands this
 #' list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
-#' `sample_observations()`. If column names are not identical, they need to be
+#' `sample_observations()`. If column names differ, they must be
 #' specified as a named list where the names are the argument names of
-#' `sample_observations()`.
+#' `sample_observations()`, and the associated values are the corresponding
+#' column names in `df`.
 #'
-#' @returns In case of `nested = TRUE`, a dataframe identical to the input
-#' dataframe `df`, but with an extra list-column called `occurrences` containing
-#' an sf object with POINT geometry for each row computed by
-#' `sample_observations()`. In case of `nested = FALSE`, this list-column is
-#' expanded into additional rows and columns.
+#' @returns In case of `nested = TRUE`, a dataframe identical to `df`, with an
+#' extra list-column called `occurrences` containing an sf object with POINT
+#' geometry for each row computed by `sample_observations()`. In case of
+#' `nested = FALSE`, this list-column is expanded into additional rows and
+#' columns.
 #'
 #' @export
 #'

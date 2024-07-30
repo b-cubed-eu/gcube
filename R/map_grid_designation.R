@@ -1,25 +1,25 @@
-#' Map `grid_designation()` function over multiple species
+#' Map `grid_designation()` over multiple species
 #'
-#' The function executes `grid_designation()` over multiple rows of a
-#' dataframe, representing multiple different species, containing potentially
+#' This function executes `grid_designation()` over multiple rows of a
+#' dataframe, representing different species, with potentially
 #' different function arguments over multiple columns.
 #'
-#' @param df A dataframe containing multiple rows. Each row is considered a
+#' @param df A dataframe containing multiple rows, each representing a
 #' different species. The columns are function arguments with values used for
-#' mapping `grid_designation()` for each species. `df` can have
-#' columns that are not used by this function. They will be retained in the
-#' output.
-#' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects calculated by `grid_designation()`. Otherwise, expand
+#' mapping `grid_designation()` for each species. Columns not used by this
+#' function will be retained in the output.
+#' @param nested Logical. If `TRUE` (default), retains list-column containing
+#' sf objects calculated by `grid_designation()`. Otherwise, expands
 #' this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
-#' `grid_designation()`. If column names are not identical, they need
+#' `grid_designation()`. If column names differ, they must
 #' to be specified as a named list where the names are the argument names of
-#' `grid_designation()`.
+#' `grid_designation()`, and the associated values are the corresponding column
+#' names in `df`.
 #'
-#' @returns In case of `nested = TRUE`, a dataframe identical to the input
-#' dataframe `df`, but each sf object with POINT geometry in the list-column
+#' @returns In case of `nested = TRUE`, a dataframe identical to `df`, but each
+#' sf object with POINT geometry in the list-column
 #' `observations` now has an additional column `coordinateUncertaintyInMeters`
 #' added by `grid_designation()`. In case of `nested = FALSE`, this
 #' list-column is expanded into additional rows and columns.

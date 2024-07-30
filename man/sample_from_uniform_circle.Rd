@@ -8,8 +8,8 @@ sample_from_uniform_circle(observations, seed = NA)
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
-\code{coordinateUncertaintyInMeters} column. If this last column is not present,
-the function will assume no (zero meters) uncertainty around the observation
+\code{coordinateUncertaintyInMeters} column. If the latter column is not present,
+the function will assume no uncertainty (zero meters) around the observation
 points.}
 
 \item{seed}{A positive numeric value setting the seed for random number
@@ -21,8 +21,8 @@ sampled occurrences and a \code{coordinateUncertaintyInMeters} column containing
 the coordinate uncertainty for each observation.
 }
 \description{
-The function samples occurrences of a species within the uncertainty circle
-around each observation assuming a Uniform distribution.
+This function samples a new observations point of a species within the
+uncertainty circle around each observation assuming a Uniform distribution.
 }
 \examples{
 library(sf)
