@@ -51,8 +51,8 @@ get_function_arguments <- function(f, df) {
 #' @param df A dataframe containing a list-column with the output of a mapped
 #' function wrapped with `purrr::quietly()`. This list-column should include
 #' a `$warnings` component for capturing warnings.
-#' @param mapped_col The name of the list-column in `df` that contains the output
-#' from the mapped function. Defaults to `"mapped_col"`.
+#' @param mapped_col The name of the list-column in `df` that contains the
+#' output from the mapped function. Defaults to `"mapped_col"`.
 #'
 #' @returns A dataframe identical to the input `df`, but with the list-column
 #' specified by `mapped_col` updated to retain only the results from the mapping
