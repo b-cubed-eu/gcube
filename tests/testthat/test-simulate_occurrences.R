@@ -33,14 +33,14 @@ test_that("simulate_occurrences returns reproducible results with a seed", {
   expect_equal(result1, result2)
 })
 
-test_that("simulate_occurrences handles different spatial_autocorr values", {
+test_that("simulate_occurrences handles different spatial_pattern values", {
   result_random <- simulate_occurrences(plgn,
                                         initial_average_occurrences = 50,
-                                        spatial_autocorr = "random",
+                                        spatial_pattern = "random",
                                         n_time_points = 1)
   result_clustered <- simulate_occurrences(plgn,
                                            initial_average_occurrences = 50,
-                                           spatial_autocorr = "clustered",
+                                           spatial_pattern = "clustered",
                                            n_time_points = 1)
 
   expect_s3_class(result_random, "sf")
@@ -78,10 +78,10 @@ test_that("simulate_occurrences raises an error for non-numeric abundance", {
     "`initial_average_occurrences` must be a single positive number.")
 })
 
-test_that("simulate_occurrences raises an error for invalid spatial_autocorr", {
+test_that("simulate_occurrences raises an error for invalid spatial_pattern", {
   expect_error(
-    simulate_occurrences(plgn, spatial_autocorr = "invalid_value"),
-    paste("`spatial_autocorr` must be one of 'random', 'clustered', or a",
+    simulate_occurrences(plgn, spatial_pattern = "invalid_value"),
+    paste("`spatial_pattern` must be one of 'random', 'clustered', or a",
           "single number larger or equal to 1.")
   )
 })

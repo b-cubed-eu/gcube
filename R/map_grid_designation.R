@@ -56,7 +56,7 @@
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
-#'   spatial_autocorr = "random",
+#'   spatial_pattern = "random",
 #'   detection_probability = c(0.8, 0.9, 1),
 #'   invert = FALSE,
 #'   coords_uncertainty_meters = c(25, 30, 50),

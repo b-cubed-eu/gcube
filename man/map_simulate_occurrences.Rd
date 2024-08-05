@@ -54,7 +54,7 @@ species_dataset_df <- tibble(
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 
 # Simulate occurrences

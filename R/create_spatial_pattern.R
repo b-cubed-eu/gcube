@@ -4,7 +4,8 @@
 #' polygon.
 #'
 #' @param polygon An sf object with POLYGON geometry.
-#' @param resolution A numeric value defining the resolution of the raster cell.
+#' @param resolution A numeric value defining the resolution of the raster
+#' cells.
 #' @param spatial_pattern Specifies the desired spatial pattern. It can
 #' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
 #' (1 means random distribution, larger values indicate more clustering).

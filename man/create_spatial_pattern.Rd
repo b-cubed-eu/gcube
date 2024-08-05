@@ -15,7 +15,8 @@ create_spatial_pattern(
 \arguments{
 \item{polygon}{An sf object with POLYGON geometry.}
 
-\item{resolution}{A numeric value defining the resolution of the raster cell.}
+\item{resolution}{A numeric value defining the resolution of the raster
+cells.}
 
 \item{spatial_pattern}{Specifies the desired spatial pattern. It can
 be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1

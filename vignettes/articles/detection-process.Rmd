@@ -58,7 +58,7 @@ occurrences_df <- simulate_occurrences(
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 ```
 

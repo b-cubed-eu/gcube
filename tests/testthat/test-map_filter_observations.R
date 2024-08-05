@@ -11,7 +11,7 @@ species_dataset_df1 <- tibble(
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   invert = FALSE,
   seed = 123)

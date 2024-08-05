@@ -7,7 +7,7 @@
 simulate_occurrences(
   species_range,
   initial_average_occurrences = 50,
-  spatial_autocorr = c("random", "clustered"),
+  spatial_pattern = c("random", "clustered"),
   n_time_points = 1,
   temporal_function = NA,
   ...,
@@ -23,7 +23,7 @@ average number of occurrences to be simulated within the extent of
 \code{species_range} at the first time point. This value serves as the mean
 (lambda) of a Poisson distribution.}
 
-\item{spatial_autocorr}{Specifies the spatial pattern of occurrences. It can
+\item{spatial_pattern}{Specifies the spatial pattern of occurrences. It can
 be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
 (1 means random distribution, larger values indicate more clustering).
 The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
@@ -81,7 +81,7 @@ ggplot() +
 ## Clustered spatial pattern with 4 time points
 occ_sf_100 <- simulate_occurrences(
   species_range = plgn,
-  spatial_autocorr = 100,
+  spatial_pattern = 100,
   n_time_points = 4,
   initial_average_occurrences = 100,
   seed = 123)

@@ -16,7 +16,7 @@
 #' function is provided, it defines the temporal pattern of number of
 #' occurrences.
 #' @param ... Additional arguments to be passed to `temporal_function`.
-#' @param spatial_autocorr Specifies the spatial pattern of occurrences. It can
+#' @param spatial_pattern Specifies the spatial pattern of occurrences. It can
 #' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
 #' (1 means random distribution, larger values indicate more clustering).
 #' The default is `"random"`. `"clustered"` corresponds to a value of 10.
@@ -65,7 +65,7 @@
 #' ## Clustered spatial pattern with 4 time points
 #' occ_sf_100 <- simulate_occurrences(
 #'   species_range = plgn,
-#'   spatial_autocorr = 100,
+#'   spatial_pattern = 100,
 #'   n_time_points = 4,
 #'   initial_average_occurrences = 100,
 #'   seed = 123)
@@ -82,7 +82,7 @@
 simulate_occurrences <- function(
     species_range,
     initial_average_occurrences = 50,
-    spatial_autocorr = c("random", "clustered"),
+    spatial_pattern = c("random", "clustered"),
     n_time_points = 1,
     temporal_function = NA,
     ...,
@@ -102,12 +102,12 @@ simulate_occurrences <- function(
       assertthat::is.number(initial_average_occurrences) &
       initial_average_occurrences >= 0)
 
-  if (!(assertthat::is.number(spatial_autocorr) && spatial_autocorr >= 1)) {
-    # Check if spatial_autocorr is random or clustered
-    spatial_autocorr <- tryCatch({
-      match.arg(spatial_autocorr, c("random", "clustered"))
+  if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
+    # Check if spatial_pattern is random or clustered
+    spatial_pattern <- tryCatch({
+      match.arg(spatial_pattern, c("random", "clustered"))
     }, error = function(e) {
-      stop(paste0("`spatial_autocorr` must be one of 'random', 'clustered',",
+      stop(paste0("`spatial_pattern` must be one of 'random', 'clustered',",
                   " or a single number larger or equal to 1."),
            call. = FALSE)
     })
@@ -146,7 +146,7 @@ simulate_occurrences <- function(
   rs_pattern <- create_spatial_pattern(
     polygon = species_range,
     resolution = res,
-    spatial_pattern = spatial_autocorr,
+    spatial_pattern = spatial_pattern,
     seed = seed,
     n_sim = 1)
 

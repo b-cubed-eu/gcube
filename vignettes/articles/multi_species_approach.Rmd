@@ -111,7 +111,7 @@ multi_species_args <- tibble(
   n_time_points = rep(6, 6),
   temporal_function = c(simulate_random_walk, simulate_random_walk, rep(NA, 4)),
   sd_step = c(1, 1, rep(NA, 4)),
-  spatial_autocorr = c(rep("random", 3), rep("clustered", 3)),
+  spatial_pattern = c(rep("random", 3), rep("clustered", 3)),
   detection_probability = rep(c(0.8, 0.9, 1), 2),
   sampling_bias = c(rep("polygon", 3), rep("no_bias", 3)),
   bias_area = c(rep(list(road_polygon), 3), rep(NA, 3)),
