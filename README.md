@@ -94,7 +94,7 @@ over time.
 ``` r
 # Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
+  species_range = polygon,
   seed = 123)
 #> [using unconditional Gaussian simulation]
 

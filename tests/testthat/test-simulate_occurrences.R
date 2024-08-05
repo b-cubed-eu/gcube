@@ -67,7 +67,7 @@ test_that("simulate_occurrences handles different n_time_points values", {
 test_that("simulate_occurrences raises an error for incorrect plgn type", {
   plgn <- list() # Not an sf object
   expect_error(simulate_occurrences(plgn),
-               "`plgn` must be an sf object with POLYGON geometry.")
+               "`species_range` must be an sf object with POLYGON geometry.")
 })
 
 test_that("simulate_occurrences raises an error for non-numeric abundance", {

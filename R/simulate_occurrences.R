@@ -3,12 +3,12 @@
 #' This function simulates occurrences of a species within a specified spatial
 #' and/or temporal extent.
 #'
-#' @param plgn An sf object with POLYGON geometry indicating the spatial
-#' extend to simulate occurrences.
+#' @param species_range An sf object with POLYGON geometry indicating the
+#' spatial extend to simulate occurrences.
 #' @param initial_average_occurrences A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extent of `plgn`
-#' at the first time point. This value serves as the mean (lambda) of a Poisson
-#' distribution.
+#' average number of occurrences to be simulated within the extent of
+#' `species_range` at the first time point. This value serves as the mean
+#' (lambda) of a Poisson distribution.
 #' @param n_time_points A positive integer specifying the number of time points
 #' to simulate.
 #' @param temporal_function A function generating a trend in number of
@@ -48,7 +48,7 @@
 #'
 #' ## Random spatial pattern with 4 time points
 #' occ_sf <- simulate_occurrences(
-#'   plgn,
+#'   species_range = plgn,
 #'   n_time_points = 4,
 #'   initial_average_occurrences = 100,
 #'   seed = 123)
@@ -64,7 +64,7 @@
 #'
 #' ## Clustered spatial pattern with 4 time points
 #' occ_sf_100 <- simulate_occurrences(
-#'   plgn,
+#'   species_range = plgn,
 #'   spatial_autocorr = 100,
 #'   n_time_points = 4,
 #'   initial_average_occurrences = 100,
@@ -80,7 +80,7 @@
 #'   theme_bw()
 
 simulate_occurrences <- function(
-    plgn,
+    species_range,
     initial_average_occurrences = 50,
     spatial_autocorr = c("random", "clustered"),
     n_time_points = 1,
@@ -89,10 +89,12 @@ simulate_occurrences <- function(
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
-  # Check if plgn is an sf object
-  stopifnot("`plgn` must be an sf object with POLYGON geometry." =
-              inherits(plgn, "POLYGON") | inherits(plgn, "sfc_POLYGON") |
-              (inherits(plgn, "sf") && sf::st_geometry_type(plgn) == "POLYGON"))
+  # Check if species_range is an sf object
+  stopifnot("`species_range` must be an sf object with POLYGON geometry." =
+              inherits(species_range, "POLYGON") |
+              inherits(species_range, "sfc_POLYGON") |
+              (inherits(species_range, "sf") &&
+                 sf::st_geometry_type(species_range) == "POLYGON"))
 
   # Check if initial_average_occurrences is a positive number
   stopifnot(
@@ -136,12 +138,13 @@ simulate_occurrences <- function(
     seed = seed)
 
   # Create the random field
-  boxplgn <- sf::st_bbox(plgn)
-  plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
-  res <- plgn_maxr / 100
+  box_plgn <- sf::st_bbox(species_range)
+  species_range_maxr <- max(box_plgn[3] - box_plgn[1],
+                            box_plgn[4] - box_plgn[2])
+  res <- species_range_maxr / 100
 
   rs_pattern <- create_spatial_pattern(
-    polygon = plgn,
+    polygon = species_range,
     resolution = res,
     spatial_pattern = spatial_autocorr,
     seed = seed,

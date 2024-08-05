@@ -5,7 +5,7 @@
 \title{Simulate species occurrences within a spatiotemporal scope}
 \usage{
 simulate_occurrences(
-  plgn,
+  species_range,
   initial_average_occurrences = 50,
   spatial_autocorr = c("random", "clustered"),
   n_time_points = 1,
@@ -15,13 +15,13 @@ simulate_occurrences(
 )
 }
 \arguments{
-\item{plgn}{An sf object with POLYGON geometry indicating the spatial
-extend to simulate occurrences.}
+\item{species_range}{An sf object with POLYGON geometry indicating the
+spatial extend to simulate occurrences.}
 
 \item{initial_average_occurrences}{A positive numeric value indicating the
-average number of occurrences to be simulated within the extent of \code{plgn}
-at the first time point. This value serves as the mean (lambda) of a Poisson
-distribution.}
+average number of occurrences to be simulated within the extent of
+\code{species_range} at the first time point. This value serves as the mean
+(lambda) of a Poisson distribution.}
 
 \item{spatial_autocorr}{Specifies the spatial pattern of occurrences. It can
 be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
@@ -64,7 +64,7 @@ ggplot() +
 
 ## Random spatial pattern with 4 time points
 occ_sf <- simulate_occurrences(
-  plgn,
+  species_range = plgn,
   n_time_points = 4,
   initial_average_occurrences = 100,
   seed = 123)
@@ -80,7 +80,7 @@ ggplot() +
 
 ## Clustered spatial pattern with 4 time points
 occ_sf_100 <- simulate_occurrences(
-  plgn,
+  species_range = plgn,
   spatial_autocorr = 100,
   n_time_points = 4,
   initial_average_occurrences = 100,
