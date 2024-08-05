@@ -193,15 +193,14 @@ simulate_timeseries <- function(
     if (length_pars == 0) {
       # Generate timeseries using the provided function
       lambdas <- temporal_function(
-        initial_average_occurrences,
-        n_time_points,
-        seed = seed
+        initial_average_occurrences = initial_average_occurrences,
+        n_time_points = n_time_points
       )
     } else {
       # Generate timeseries using the provided function
       lambdas <- temporal_function(
-        initial_average_occurrences,
-        n_time_points,
+        initial_average_occurrences = initial_average_occurrences,
+        n_time_points = n_time_points,
         ...
       )
     }

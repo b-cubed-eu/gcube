@@ -5,9 +5,9 @@
 \title{Simulate species occurrences within a spatiotemporal scope}
 \usage{
 simulate_occurrences(
-  plgn,
-  initial_average_abundance = 50,
-  spatial_autocorr = c("random", "clustered"),
+  species_range,
+  initial_average_occurrences = 50,
+  spatial_pattern = c("random", "clustered"),
   n_time_points = 1,
   temporal_function = NA,
   ...,
@@ -15,15 +15,15 @@ simulate_occurrences(
 )
 }
 \arguments{
-\item{plgn}{An sf object with POLYGON geometry indicating the spatial
-extend to simulate occurrences.}
+\item{species_range}{An sf object with POLYGON geometry indicating the
+spatial extend to simulate occurrences.}
 
-\item{initial_average_abundance}{A positive numeric value indicating the
-average number of occurrences to be simulated within the extent of \code{plgn}
-at the first time point. This value serves as the mean (lambda) of a Poisson
-distribution.}
+\item{initial_average_occurrences}{A positive numeric value indicating the
+average number of occurrences to be simulated within the extent of
+\code{species_range} at the first time point. This value serves as the mean
+(lambda) of a Poisson distribution.}
 
-\item{spatial_autocorr}{Specifies the spatial pattern of occurrences. It can
+\item{spatial_pattern}{Specifies the spatial pattern of occurrences. It can
 be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
 (1 means random distribution, larger values indicate more clustering).
 The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
@@ -64,9 +64,9 @@ ggplot() +
 
 ## Random spatial pattern with 4 time points
 occ_sf <- simulate_occurrences(
-  plgn,
+  species_range = plgn,
   n_time_points = 4,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +
@@ -80,10 +80,10 @@ ggplot() +
 
 ## Clustered spatial pattern with 4 time points
 occ_sf_100 <- simulate_occurrences(
-  plgn,
-  spatial_autocorr = 100,
+  species_range = plgn,
+  spatial_pattern = 100,
   n_time_points = 4,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +

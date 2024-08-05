@@ -91,7 +91,7 @@ In the `simulate_occurrences()` function, the user can specify different levels 
 #|   Spatial distribution of occurrences within the polygon.
 # Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
+  species_range = polygon,
   seed = 123)
 
 # Visualise

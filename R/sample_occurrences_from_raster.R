@@ -1,9 +1,11 @@
 #' Sample occurrences from spatial random field
 #'
-#' This function draws point occurrences from a spatial random field (raster).
+#' This function draws point occurrences from a spatial random field represented
+#' by a raster. Points are sampled based on the values in the raster, with the
+#' number of occurrences specified for each time step.
 #'
-#' @param rs A SpatRaster object (see [terra::rast()]).
-#' @param ts A vector with the number of occurrences per time point.
+#' @param raster A SpatRaster object (see [terra::rast()]).
+#' @param time_series A vector with the number of occurrences per time point.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
@@ -39,8 +41,8 @@
 #'
 #' # Sample 200 occurrences from random field
 #' pts_occ_clustered <- sample_occurrences_from_raster(
-#'   rs = rs_pattern_clustered,
-#'   ts = 200,
+#'   raster = rs_pattern_clustered,
+#'   time_series = 200,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -59,8 +61,8 @@
 #'
 #' # Sample 200 occurrences from random field
 #' pts_occ_large <- sample_occurrences_from_raster(
-#'   rs = rs_pattern_large,
-#'   ts = 200,
+#'   raster = rs_pattern_large,
+#'   time_series = 200,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -70,18 +72,20 @@
 #'   theme_minimal()
 
 sample_occurrences_from_raster <- function(
-    rs,
-    ts,
+    raster,
+    time_series,
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
-  # Check if rs is a SpatRaster object
-  stopifnot("`rs` must be a SpatRaster object." =
-              inherits(rs, "SpatRaster"))
+  # Check if raster is a SpatRaster object
+  stopifnot("`raster` must be a SpatRaster object." =
+              inherits(raster, "SpatRaster"))
 
-  # Check if ts is a numeric vector
-  stopifnot("`ts` must be a positive numeric vector." = is.numeric(ts))
-  stopifnot("`ts` must be a positive numeric vector." = all(ts >= 0))
+  # Check if time_series is a numeric vector
+  stopifnot("`time_series` must be a positive numeric vector." =
+              is.numeric(time_series))
+  stopifnot("`time_series` must be a positive numeric vector." =
+              all(time_series >= 0))
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
@@ -90,8 +94,8 @@ sample_occurrences_from_raster <- function(
   ### End checks
 
   # centre the values of the raster (mean = 0)
-  rs_mean <- terra::global(rs, "mean", na.rm = TRUE)[, 1]
-  rs2 <- rs - rs_mean
+  rs_mean <- terra::global(raster, "mean", na.rm = TRUE)[, 1]
+  rs2 <- raster - rs_mean
 
   # increase contrast between high and low values
   a <- 30 # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
@@ -107,9 +111,9 @@ sample_occurrences_from_raster <- function(
     withr::local_seed(seed)
   }
 
-  for (t in seq_along(ts)) {
+  for (t in seq_along(time_series)) {
     occ_p <- terra::spatSample(
-      x = rs3, size = ts[t], method = "weights",
+      x = rs3, size = time_series[t], method = "weights",
       replace = TRUE, as.points = TRUE
     )
     occ_sf <- sf::st_as_sf(occ_p)

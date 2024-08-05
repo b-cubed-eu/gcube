@@ -3,12 +3,12 @@
 #' This function simulates occurrences of a species within a specified spatial
 #' and/or temporal extent.
 #'
-#' @param plgn An sf object with POLYGON geometry indicating the spatial
-#' extend to simulate occurrences.
-#' @param initial_average_abundance A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extent of `plgn`
-#' at the first time point. This value serves as the mean (lambda) of a Poisson
-#' distribution.
+#' @param species_range An sf object with POLYGON geometry indicating the
+#' spatial extend to simulate occurrences.
+#' @param initial_average_occurrences A positive numeric value indicating the
+#' average number of occurrences to be simulated within the extent of
+#' `species_range` at the first time point. This value serves as the mean
+#' (lambda) of a Poisson distribution.
 #' @param n_time_points A positive integer specifying the number of time points
 #' to simulate.
 #' @param temporal_function A function generating a trend in number of
@@ -16,7 +16,7 @@
 #' function is provided, it defines the temporal pattern of number of
 #' occurrences.
 #' @param ... Additional arguments to be passed to `temporal_function`.
-#' @param spatial_autocorr Specifies the spatial pattern of occurrences. It can
+#' @param spatial_pattern Specifies the spatial pattern of occurrences. It can
 #' be a character string (`"random"` or `"clustered"`) or a numeric value ≥ 1
 #' (1 means random distribution, larger values indicate more clustering).
 #' The default is `"random"`. `"clustered"` corresponds to a value of 10.
@@ -48,9 +48,9 @@
 #'
 #' ## Random spatial pattern with 4 time points
 #' occ_sf <- simulate_occurrences(
-#'   plgn,
+#'   species_range = plgn,
 #'   n_time_points = 4,
-#'   initial_average_abundance = 100,
+#'   initial_average_occurrences = 100,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -64,10 +64,10 @@
 #'
 #' ## Clustered spatial pattern with 4 time points
 #' occ_sf_100 <- simulate_occurrences(
-#'   plgn,
-#'   spatial_autocorr = 100,
+#'   species_range = plgn,
+#'   spatial_pattern = 100,
 #'   n_time_points = 4,
-#'   initial_average_abundance = 100,
+#'   initial_average_occurrences = 100,
 #'   seed = 123)
 #'
 #' ggplot() +
@@ -80,32 +80,34 @@
 #'   theme_bw()
 
 simulate_occurrences <- function(
-    plgn,
-    initial_average_abundance = 50,
-    spatial_autocorr = c("random", "clustered"),
+    species_range,
+    initial_average_occurrences = 50,
+    spatial_pattern = c("random", "clustered"),
     n_time_points = 1,
     temporal_function = NA,
     ...,
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
-  # Check if plgn is an sf object
-  stopifnot("`plgn` must be an sf object with POLYGON geometry." =
-              inherits(plgn, "POLYGON") | inherits(plgn, "sfc_POLYGON") |
-              (inherits(plgn, "sf") && sf::st_geometry_type(plgn) == "POLYGON"))
+  # Check if species_range is an sf object
+  stopifnot("`species_range` must be an sf object with POLYGON geometry." =
+              inherits(species_range, "POLYGON") |
+              inherits(species_range, "sfc_POLYGON") |
+              (inherits(species_range, "sf") &&
+                 sf::st_geometry_type(species_range) == "POLYGON"))
 
   # Check if initial_average_occurrences is a positive number
   stopifnot(
-    "`initial_average_abundance` must be a single positive number." =
-      assertthat::is.number(initial_average_abundance) &
-      initial_average_abundance >= 0)
+    "`initial_average_occurrences` must be a single positive number." =
+      assertthat::is.number(initial_average_occurrences) &
+      initial_average_occurrences >= 0)
 
-  if (!(assertthat::is.number(spatial_autocorr) && spatial_autocorr >= 1)) {
-    # Check if spatial_autocorr is random or clustered
-    spatial_autocorr <- tryCatch({
-      match.arg(spatial_autocorr, c("random", "clustered"))
+  if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
+    # Check if spatial_pattern is random or clustered
+    spatial_pattern <- tryCatch({
+      match.arg(spatial_pattern, c("random", "clustered"))
     }, error = function(e) {
-      stop(paste0("`spatial_autocorr` must be one of 'random', 'clustered',",
+      stop(paste0("`spatial_pattern` must be one of 'random', 'clustered',",
                   " or a single number larger or equal to 1."),
            call. = FALSE)
     })
@@ -129,28 +131,29 @@ simulate_occurrences <- function(
 
   # Simulate the timeseries
   ts <- simulate_timeseries(
-    initial_average_occurrences = initial_average_abundance,
+    initial_average_occurrences = initial_average_occurrences,
     n_time_points = n_time_points,
     temporal_function = temporal_function,
     ...,
     seed = seed)
 
   # Create the random field
-  boxplgn <- sf::st_bbox(plgn)
-  plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
-  res <- plgn_maxr / 100
+  box_plgn <- sf::st_bbox(species_range)
+  species_range_maxr <- max(box_plgn[3] - box_plgn[1],
+                            box_plgn[4] - box_plgn[2])
+  res <- species_range_maxr / 100
 
   rs_pattern <- create_spatial_pattern(
-    polygon = plgn,
+    polygon = species_range,
     resolution = res,
-    spatial_pattern = spatial_autocorr,
+    spatial_pattern = spatial_pattern,
     seed = seed,
     n_sim = 1)
 
   # Sample occurrences from raster
   occ <- sample_occurrences_from_raster(
-    rs = rs_pattern,
-    ts = ts,
+    raster = rs_pattern,
+    time_series = ts,
     seed = seed)
 
   # Return the occurences (sf point geometry)

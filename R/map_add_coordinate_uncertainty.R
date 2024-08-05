@@ -44,12 +44,12 @@
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df <- tibble(
 #'   taxonID = c("species1", "species2", "species3"),
-#'   plgn = rep(list(plgn), 3),
-#'   initial_average_abundance = c(50, 100, 500),
+#'   species_range = rep(list(plgn), 3),
+#'   initial_average_occurrences = c(50, 100, 500),
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
-#'   spatial_autocorr = "random",
+#'   spatial_pattern = "random",
 #'   detection_probability = c(0.8, 0.9, 1),
 #'   invert = FALSE,
 #'   coords_uncertainty_meters = c(25, 30, 50),
@@ -78,7 +78,7 @@
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
-#'   rename(polygon = plgn,
+#'   rename(polygon = species_range,
 #'          sd = sd_step,
 #'          det_prob = detection_probability,
 #'          inv = invert,
@@ -86,7 +86,7 @@
 #'
 #' # Create named list for argument conversion
 #' arg_conv_list <- list(
-#'     plgn = "polygon",
+#'     species_range = "polygon",
 #'     sd_step = "sd",
 #'     detection_probability = "det_prob",
 #'     invert = "inv",
