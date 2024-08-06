@@ -4,12 +4,6 @@
 #' of species, genera, families, orders, classes, phyla, and kingdoms. The
 #' output is a data frame with the hierarchical classification for each species.
 #'
-#' The function works by randomly assigning species to genera, genera to
-#' families, families to orders, orders to classes, classes to phyla, and phyla
-#' to kingdoms. Sampling is done with replacement, meaning that multiple
-#' lower-level taxa (e.g., species) can be assigned to the same higher-level
-#' taxon (e.g., genus).
-#'
 #' @param num_species Number of species to generate, or a dataframe. With a
 #' dataframe, the function will create a species with taxonomic hierarchy for
 #' each row. The original columns of the dataframe will be retained in the
@@ -20,10 +14,16 @@
 #' @param num_classes Number of classes to generate. Defaults to 1.
 #' @param num_phyla Number of phyla to generate. Defaults to 1.
 #' @param num_kingdoms Number of kingdoms to generate. Defaults to 1.
-#' @param seed The seed for random number generation to make results
-#' reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @return A data frame with the taxonomic classification of each species. If
+#' @details The function works by randomly assigning species to genera, genera
+#' to families, families to orders, orders to classes, classes to phyla, and
+#' phyla to kingdoms. Sampling is done with replacement, allowing multiple
+#' lower-level taxa (e.g., species) to be assigned to the same higher-level
+#' taxon (e.g., genus).
+#'
+#' @returns A data frame with the taxonomic classification of each species. If
 #' `num_species` is a dataframe, the taxonomic classification is added to this
 #' input dataframe. The original columns of the dataframe will be retained in
 #' the output.

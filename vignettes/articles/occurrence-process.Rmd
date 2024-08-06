@@ -305,8 +305,8 @@ If we for example sample 500 occurrences from the last raster, we see the sampli
 #| fig.alt: >
 #|   500 sampled occurrences from highly clustered spatial pattern.
 pts_occ_clustered3 <- sample_occurrences_from_raster(
-  rs = rs_pattern_clustered3,
-  ts = 500,
+  raster = rs_pattern_clustered3,
+  time_series = 500,
   seed = 123)
 
 ggplot() +
@@ -323,12 +323,12 @@ We can for example sample randomly within the polygon over 6 time points were we
 
 ```{r}
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
-  initial_average_abundance = 100,
+  species_range = polygon,
+  initial_average_occurrences = 100,
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 ```
 

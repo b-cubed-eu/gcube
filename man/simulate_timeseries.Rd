@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_timeseries.R
 \name{simulate_timeseries}
 \alias{simulate_timeseries}
-\title{Simulate timeseries for species abundances}
+\title{Simulate timeseries for species occurrences}
 \usage{
 simulate_timeseries(
   initial_average_occurrences = 50,
@@ -14,34 +14,29 @@ simulate_timeseries(
 }
 \arguments{
 \item{initial_average_occurrences}{A positive numeric value indicating the
-average number of occurrences to be simulated within the extend of \code{polygon}
-at the first time point. This value will be used as mean of a Poisson
-distribution (lambda parameter).}
+average number of occurrences to be simulated at the first time point. This
+value serves as the mean (lambda) of a Poisson distribution.}
 
-\item{n_time_points}{A positive integer value indicating the number of time
-points to simulate.}
+\item{n_time_points}{A positive integer specifying the number of time points
+to simulate.}
 
-\item{temporal_function}{\code{NA} (default), or a function which generates
-a trend in abundance over time. Only used if \code{n_time_points > 1}. By default,
-the function will sample \code{n_time_points} times from a Poisson
-distribution with average (lambda) \code{initial_average_occurrences}. When a
-function is specified (e.g. the internal \code{simulate_random_walk()} function)
-\code{n_time_points} average abundances (lambdas) are calculated using
-\code{initial_average_occurrences} and any additional arguments passed.
-See examples.}
+\item{temporal_function}{A function generating a trend in number of
+occurrences over time, or \code{NA} (default). If \code{n_time_points} > 1 and a
+function is provided, it defines the temporal pattern of number of
+occurrences.}
 
-\item{...}{Additional argument to be passed to the \code{temporal_function}
-function.}
+\item{...}{Additional arguments to be passed to \code{temporal_function}.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
-A vector of integers of length n_time_points with the number of
+A vector of integers of length \code{n_time_points} with the number of
 occurrences.
 }
 \description{
-The function simulates a timeseries for the abundance of a species.
+This function simulates a timeseries for the number of occurrences of a
+species.
 }
 \examples{
 library(ggplot2)

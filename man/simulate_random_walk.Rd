@@ -13,25 +13,24 @@ simulate_random_walk(
 }
 \arguments{
 \item{initial_average_occurrences}{A positive numeric value indicating the
-average number of occurrences to be simulated within the extend of \code{polygon}
-at time point 1. This value will be used as mean of a Poisson distribution
-(lambda parameter).}
+average number of occurrences to be simulated at the first time point.}
 
-\item{n_time_points}{A positive integer value indicating the number of time
-points to simulate.}
+\item{n_time_points}{A positive integer specifying the number of time points
+to simulate.}
 
 \item{sd_step}{A positive numeric value indicating the standard deviation of
 the random steps.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
 A vector of integers of length \code{n_time_points} with the average
 number of occurrences.
 }
 \description{
-The function simulates occurrences of a species in a temporal extent.
+This function simulates a timeseries for the average number of occurrences of
+a species using a random walk over time.
 }
 \examples{
 

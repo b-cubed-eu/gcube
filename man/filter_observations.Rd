@@ -2,25 +2,28 @@
 % Please edit documentation in R/filter_observations.R
 \name{filter_observations}
 \alias{filter_observations}
-\title{Filter detected observations}
+\title{Filter detected occurrences}
 \usage{
 filter_observations(observations_total, invert = FALSE)
 }
 \arguments{
 \item{observations_total}{An sf object with POINT geometry or a simple
 dataframe with \code{sampling_status} column containing values \code{"detected"}.
-This format is created by \code{sample_observations()}.}
+This format is typically created by the \code{sample_observations()} function.}
 
-\item{invert}{Logical. If \code{FALSE} (default), filter \code{"detected"}
-occurrences. Otherwise, filter all other occurrences.}
+\item{invert}{Logical. If \code{FALSE} (default), the function filters to retain
+only \code{"detected"} occurrences. If \code{TRUE}, it filters out \code{"detected"}
+occurrences and retains all other occurrences.}
 }
 \value{
-A dataframe or an sf object with POINT geometry containing detected
-occurrences (if \code{invert = FALSE}), or other occurrences (if \code{invert = TRUE}).
+A data frame or an sf object with POINT geometry containing the
+filtered observations. If \code{invert = FALSE}, the function returns detected
+occurrences. If \code{invert = TRUE}, it returns all other occurrences.
 }
 \description{
-The function filters observations from all observations based on a
-\code{sampling_status} column, e.g. created by \code{sample_observations()}.
+This function filters observations from all occurrences based on the
+\code{sampling_status} column, typically created by the \code{sample_observations()}
+function.
 }
 \examples{
 # Load packages

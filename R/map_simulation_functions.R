@@ -1,27 +1,26 @@
-#' Map cube simulation functions over multiple rows of a dataframe
+#' Map a cube simulation function over multiple rows of a dataframe
 #'
-#' The function executes a cube simulation function (`simulate_occurrences()`,
+#' This function executes a cube simulation function (`simulate_occurrences()`,
 #' `sample_observations()`, `filter_observations()`,
 #' `add_coordinate_uncertainty()`, or `grid_designation()`) over multiple rows
-#' of a dataframe containing potentially different function arguments over
-#' multiple columns.
+#' of a dataframe with potentially different function arguments over multiple
+#' columns.
 #'
 #' @param f One of five cube simulation functions: `simulate_occurrences()`,
 #' `sample_observations()`, `filter_observations()`,
 #' `add_coordinate_uncertainty()`, or `grid_designation()`.
-#' @param df A dataframe containing multiple rows. Each row is considered a
+#' @param df A dataframe containing multiple rows, each representing a
 #' different species. The columns are function arguments with values used for
-#' mapping `f` for each species. `df` can have columns that are not used by this
-#' function. They will be retained in the output.
-#' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' dataframes calculated by `f`. Otherwise, expand this list-column into rows
+#' mapping `f` for each species. Columns not used by this
+#' function will be retained in the output.
+#' @param nested Logical. If `TRUE` (default), retains list-column containing
+#' dataframes calculated by `f`. Otherwise, expands this list-column into rows
 #' and columns.
 #'
-#' @returns In case of `nested = TRUE`, a dataframe identical to the input
-#' dataframe `df`, but with an extra list-column called `mapped_col` containing
-#' an sf object for each row computed by the function specified in `f`. In case
-#' of `nested = FALSE`, this list-column is expanded into additional rows and
-#' columns.
+#' @returns In case of `nested = TRUE`, a dataframe identical to `df`, with an
+#' extra list-column called `mapped_col` containing an sf object for each row
+#' computed by the function specified in `f`. In case of `nested = FALSE`, this
+#' list-column is expanded into additional rows and columns.
 #'
 #' @export
 #'
@@ -45,12 +44,12 @@
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df <- tibble(
 #'   taxonID = c("species1", "species2", "species3"),
-#'   plgn = rep(list(plgn), 3),
-#'   initial_average_abundance = c(50, 100, 500),
+#'   species_range = rep(list(plgn), 3),
+#'   initial_average_occurrences = c(50, 100, 500),
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
-#'   spatial_autocorr = "random",
+#'   spatial_pattern = "random",
 #'   seed = 123)
 #'
 #' # Simulate occurrences

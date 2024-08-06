@@ -33,8 +33,8 @@ output.}
 
 \item{num_kingdoms}{Number of kingdoms to generate. Defaults to 1.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
 A data frame with the taxonomic classification of each species. If
@@ -48,10 +48,10 @@ of species, genera, families, orders, classes, phyla, and kingdoms. The
 output is a data frame with the hierarchical classification for each species.
 }
 \details{
-The function works by randomly assigning species to genera, genera to
-families, families to orders, orders to classes, classes to phyla, and phyla
-to kingdoms. Sampling is done with replacement, meaning that multiple
-lower-level taxa (e.g., species) can be assigned to the same higher-level
+The function works by randomly assigning species to genera, genera
+to families, families to orders, orders to classes, classes to phyla, and
+phyla to kingdoms. Sampling is done with replacement, allowing multiple
+lower-level taxa (e.g., species) to be assigned to the same higher-level
 taxon (e.g., genus).
 }
 \examples{
