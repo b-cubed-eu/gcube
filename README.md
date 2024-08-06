@@ -234,3 +234,19 @@ ggplot() +
 ```
 
 <img src="man/figures/readme-visualise-designation-1.png" alt="Distribution of minimal coordinate uncertainty." width="80%" />
+
+### Cubes for multiple species
+
+Each cube simulation function mentioned earlier has a corresponding
+mapping function. These mapping functions are designed to handle
+operations for multiple species simultaneously by using the
+`purrr::pmap()` function. Please consult the documentation for detailed
+information on how these mapping functions are implemented.
+
+| single species               | multiple species                 |
+|------------------------------|----------------------------------|
+| simulate_occurrences()       | map_simulate_occurrences()       |
+| sample_observations()        | map_sample_observations()        |
+| filter_observations()        | map_filter_observations()        |
+| add_coordinate_uncertainty() | map_add_coordinate_uncertainty() |
+| grid_designation()           | map_grid_designation()           |
