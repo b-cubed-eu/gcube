@@ -46,8 +46,8 @@ The name **gcube** stands for 'generate cube' since it can be used to generate b
 
 ## Example
 
-This is a basic example which shows you the workflow for simulating a biodiversity data cube.
-This is divided in three steps or processes:
+This is a basic example which shows the workflow for simulating a biodiversity data cube.
+It is divided in three steps or processes:
 
 1.  Occurrence process
 2.  Detection process
@@ -66,12 +66,12 @@ library(dplyr)   # data wrangling
 library(ggplot2) # visualisation with ggplot
 ```
 
-We create a random polygon as input.
+We create a polygon as input. It represents the spatial extend of the species.
 
 ```{r polygon}
 #| fig.alt: >
 #|   Spatial extend in which we will simulate species occurrences.
-# Create a polygon to simulate occurrences
+# Create a polygon to simulate occurrences within
 polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
 
 # Visualise
@@ -83,8 +83,8 @@ ggplot() +
 ### Occurrence process
 
 We generate occurrence points within the polygon using the `simulate_occurrences()` function.
-These are the "real" occurrences of the species, whether we have observed them or not. 
-In the `simulate_occurrences()` function, the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
+In this function, the user can specify different levels of spatial clustering, and define the trend of number of occurrences over time.
+The default is a random spatial pattern and a single time point with `rpois(1, 50)` occurrences.
 
 ```{r simulate-occurrences}
 #| fig.alt: >
@@ -92,6 +92,9 @@ In the `simulate_occurrences()` function, the user can specify different levels 
 # Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
   species_range = polygon,
+  initial_average_occurrences = 50,
+  spatial_pattern = c("random", "clustered"),
+  n_time_points = 1,
   seed = 123)
 
 # Visualise
@@ -103,9 +106,9 @@ ggplot() +
 
 ### Detection process
 
-In this step we define the sampling process, based on the detection probability of the species and the sampling bias.
+In the second step we define the sampling process, based on the detection probability of the species and the sampling bias.
 This is done using the `sample_observations()` function.
-The default sampling bias is `"no_bias"`, but bias can also be inserted using a polygon or a grid.
+The default sampling bias is `"no_bias"`, but bias can be added using a polygon or a grid as well.
 
 ```{r detect-occurrences}
 #| fig.alt: >
@@ -114,6 +117,7 @@ The default sampling bias is `"no_bias"`, but bias can also be inserted using a 
 detections_df_raw <- sample_observations(
   occurrences = occurrences_df,
   detection_probability = 0.5,
+  sampling_bias = c("no_bias", "polygon", "manual"),
   seed = 123)
 
 # Visualise
@@ -157,7 +161,7 @@ ggplot() +
 
 ### Grid designation process
 
-Finally, observations are designated to a grid to create an occurrence cube.
+Finally, observations are designated to a grid with `grid_designation()` to create an occurrence cube.
 We create a grid over the spatial extend using `sf::st_make_grid()`. 
 
 ```{r create-grid}
