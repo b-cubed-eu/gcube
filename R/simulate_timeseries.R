@@ -88,7 +88,7 @@
 #' data_abundances <- do.call(rbind.data.frame, list_abundances)
 #'
 #' # Plot the simulated abundances over time using ggplot2
-#' library(ggplot)
+#' library(ggplot2)
 #' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 #'   geom_line() +
 #'   labs(
