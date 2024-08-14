@@ -55,14 +55,14 @@ lower-level taxa (e.g., species) to be assigned to the same higher-level
 taxon (e.g., genus).
 }
 \examples{
-# Create simple taxonomic hierarchy
+# 1. Create simple taxonomic hierarchy
 generate_taxonomy(
   num_species = 5,
   num_genera = 3,
   num_families = 2,
   seed = 123)
 
-# Add taxonomic hierarchy to a dataframe
+# 2. Add taxonomic hierarchy to a dataframe
 existing_df <- data.frame(
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
