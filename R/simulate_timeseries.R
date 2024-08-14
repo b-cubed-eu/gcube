@@ -27,9 +27,7 @@
 #' @family occurrence
 #'
 #' @examples
-#' library(ggplot2)
-#'
-#' ## 1. Use the function simulate_random_walk()
+#' # 1. Use the function simulate_random_walk()
 #' simulate_timeseries(
 #'   initial_average_occurrences = 50,
 #'   n_time_points = 10,
@@ -38,52 +36,7 @@
 #'   seed = 123
 #' )
 #'
-#' ## 2. Visualising multiple draws
-#' # Set seed for reproducibility
-#' set.seed(123)
-#'
-#' # Draw n_sim abundances from Poisson distribution using random walk
-#' n_sim <- 10
-#' n_time_points <- 50
-#' sd_step <- 1
-#' list_abundances <- vector("list", length = n_sim)
-#'
-#' # Loop n_sim times over simulate_timeseries()
-#' for (i in seq_len(n_sim)) {
-#'   abundances <- simulate_timeseries(
-#'     initial_average_occurrences = 50,
-#'     n_time_points = n_time_points,
-#'     temporal_function = simulate_random_walk,
-#'     sd_step = sd_step
-#'   )
-#'
-#'   list_abundances[[i]] <- data.frame(
-#'     time = seq_along(abundances),
-#'     abundance = abundances,
-#'     sim = i
-#'   )
-#' }
-#'
-#' # Combine list of dataframes
-#' data_abundances <- do.call(rbind.data.frame, list_abundances)
-#'
-#' # Plot the simulated abundances over time using ggplot2
-#' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
-#'   geom_line() +
-#'   labs(
-#'     x = "Time", y = "Species abundance",
-#'     title = paste(
-#'       n_sim, "simulated abundances using random walk",
-#'       "with sd =", sd_step
-#'     )
-#'   ) +
-#'   scale_y_continuous(limits = c(0, NA)) +
-#'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
-#'   theme_minimal() +
-#'   theme(legend.position = "")
-#'
-#' ## 3. Using your own function
-#' # You can also specify your own trend function, e.g. this linear function
+#' # 2. Using your own custom function, e.g. this linear function
 #' my_own_linear_function <- function(
 #'     initial_average_occurrences = initial_average_occurrences,
 #'     n_time_points = n_time_points,
@@ -108,7 +61,8 @@
 #' # Set seed for reproducibility
 #' set.seed(123)
 #'
-#' # Draw n_sim abundances from Poisson distribution using our own function
+#' # Draw n_sim number of occurrences from Poisson distribution using
+#' # the custom function
 #' n_sim <- 10
 #' n_time_points <- 50
 #' slope <- 1
@@ -134,12 +88,13 @@
 #' data_abundances <- do.call(rbind.data.frame, list_abundances)
 #'
 #' # Plot the simulated abundances over time using ggplot2
+#' library(ggplot)
 #' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 #'   geom_line() +
 #'   labs(
 #'     x = "Time", y = "Species abundance",
 #'     title = paste(
-#'       n_sim, "simulated abundances using our own linear function",
+#'       n_sim, "simulated trends using custom linear function",
 #'       "with slope", slope
 #'     )
 #'   ) +

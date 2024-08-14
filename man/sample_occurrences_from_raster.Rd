@@ -30,9 +30,6 @@ library(tidyterra)
 
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-ggplot() +
-  geom_sf(data = plgn) +
-  theme_minimal()
 
 ## Medium scale clustering
 # Create the random field

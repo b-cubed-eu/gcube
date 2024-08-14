@@ -46,7 +46,7 @@ num_points <- 10
 occurrences <- data.frame(
   lon = runif(num_points, min = -180, max = 180),
   lat = runif(num_points, min = -90, max = 90),
-  time_point = 0
+  time_point = 1
   )
 
 # Convert the occurrence data to an sf object
@@ -55,7 +55,7 @@ occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 # Create bias_area polygon overlapping at least two of the points
 selected_observations <- st_union(occurrences_sf[2:3,])
 bias_area <- st_convex_hull(selected_observations) \%>\%
-  st_buffer(dist = 100) \%>\%
+  st_buffer(dist = 50) \%>\%
   st_as_sf()
 
 occurrence_bias_sf <- apply_polygon_sampling_bias(
@@ -66,11 +66,11 @@ occurrence_bias_sf
 
 # Visualise where the bias is
 occurrence_bias_sf \%>\%
-  mutate(bias_weight_f = as.factor(round(bias_weight, 3))) \%>\%
+  mutate(bias_weight = as.factor(round(bias_weight, 3))) \%>\%
   ggplot() +
     geom_sf(data = bias_area) +
-    geom_sf(aes(colour = bias_weight_f)) +
-    ggtitle("Sampling Bias via Polygon")
+    geom_sf(aes(colour = bias_weight)) +
+    theme_minimal()
 }
 \seealso{
 Other detection: 

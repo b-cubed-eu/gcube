@@ -28,43 +28,34 @@
 #' library(dplyr)
 #' library(ggplot2)
 #'
+#' # Create polygon
+#' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
+#'
+#' # Get occurrence points
+#' occurrences_sf <- simulate_occurrences(plgn)
+#'
 #' # Set seed for reproducibility
 #' set.seed(123)
 #'
-#' # Simulate some occurrence data with coordinates and time points
-#' num_points <- 10
-#' occurrences <- data.frame(
-#'   lon = runif(num_points, min = -180, max = 180),
-#'   lat = runif(num_points, min = -90, max = 90),
-#'   time_point = 0
-#' )
-#'
-#' # Convert the occurrence data to an sf object
-#' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
-#'
-#' # Create raster grid
-#' grid <- st_make_grid(occurrences_sf) %>%
+#' # Create grid with bias weights
+#' grid <- st_make_grid(
+#'     plgn,
+#'     n = c(10, 10),
+#'     square = TRUE) %>%
 #'   st_sf()
+#' grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
 #'
-#' # Bias weights between 0 and 1
-#' grid1 <- grid %>%
-#'   mutate(bias_weight = runif(nrow(grid), min = 0, max = 1))
-#'
-#' apply_manual_sampling_bias(occurrences_sf, grid1)
-#'
-#' # Bias weights larger than 1
-#' grid2 <- grid %>%
-#'   mutate(bias_weight = rpois(nrow(grid), 5))
-#'
-#' occurrence_bias_sf <- apply_manual_sampling_bias(occurrences_sf, grid2)
-#' occurrence_bias_sf
+#' # Calculate occurrence bias
+#' occurrence_bias <- apply_manual_sampling_bias(occurrences_sf, grid)
+#' occurrence_bias
 #'
 #' # Visualise where the bias is
 #' ggplot() +
-#'  geom_sf(data = grid2) +
-#'  geom_sf_text(data = grid2, aes(label = bias_weight)) +
-#'  geom_sf(data = occurrence_bias_sf, aes(colour = bias_weight)) +
-#'  scale_color_gradient(trans = "reverse")
+#'   geom_sf(data = plgn) +
+#'   geom_sf(data = grid, alpha = 0) +
+#'   geom_sf(data = occurrence_bias, aes(colour = bias_weight)) +
+#'   geom_sf_text(data = grid, aes(label = round(bias_weight, 2))) +
+#'   theme_minimal()
 
 apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   ### Start checks

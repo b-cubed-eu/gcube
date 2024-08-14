@@ -94,7 +94,7 @@ occurrences <- data.frame(
 # Convert the occurrence data to an sf object
 occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-# Sample observations without sampling bias
+# 1. Sample observations without sampling bias
 sample_observations(
   occurrences_sf,
   detection_probability = 0.8,
@@ -102,11 +102,11 @@ sample_observations(
   seed = 123
   )
 
-# Sample observations with sampling bias in a polygon
+# 2. Sample observations with sampling bias in a polygon
 # Create bias_area polygon overlapping two of the points
 selected_observations <- st_union(occurrences_sf[2:3,])
 bias_area <- st_convex_hull(selected_observations) \%>\%
-  st_buffer(dist = 100) \%>\%
+  st_buffer(dist = 50) \%>\%
   st_as_sf()
 
 sample_observations(
@@ -118,7 +118,7 @@ sample_observations(
   seed = 123
   )
 
-# Sample observations with sampling bias given manually in a grid
+# 3. Sample observations with sampling bias given manually in a grid
 # Create raster grid with bias weights between 0 and 1
 grid <- st_make_grid(occurrences_sf) \%>\%
   st_sf() \%>\%
