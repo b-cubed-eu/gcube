@@ -36,6 +36,7 @@ The user can change these arguments to allow for more flexibility.
 In this tutorial we will demonstrate the different options.
 
 As input, we create a polygon in which we want to simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -66,7 +67,7 @@ The options for user defined arguments are demonstrated in the next subsections.
 ## Changing number of occurrences over time
 
 Say we want to have 100 occurrences in our plot over 10 years.
-You can change the trend in number of occurrences over time.
+You can change the trend in the average number of occurrences over time.
 We visualise this with the supporting functions used in `simulate_occurrences()`.
 The number of occurrences are always drawn from a Poisson distribution.
 

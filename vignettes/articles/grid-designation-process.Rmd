@@ -32,8 +32,10 @@ library(ggExtra)   # enhance data visualisation
 # Input
 
 The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+
 The user can change these arguments to allow for more flexibility.
 As input, we create a polygon in which we simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),

@@ -30,6 +30,7 @@ library(ggplot2)   # data visualisation
 # Spatial extend
 
 As input, we create a polygon in which we simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
