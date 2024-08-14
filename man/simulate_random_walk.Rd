@@ -33,7 +33,6 @@ This function simulates a timeseries for the average number of occurrences of
 a species using a random walk over time.
 }
 \examples{
-
 simulate_random_walk(
   initial_average_occurrences = 50,
   n_time_points = 10,

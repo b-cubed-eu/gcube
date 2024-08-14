@@ -47,11 +47,8 @@
 #'
 #' # Create polygon
 #' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-#' ggplot() +
-#'   geom_sf(data = plgn) +
-#'   theme_minimal()
 #'
-#' # Random spatial pattern
+#' # 1. Random spatial pattern
 #' rs_pattern_random <- create_spatial_pattern(
 #'   polygon = plgn,
 #'   resolution = 0.1,
@@ -63,7 +60,7 @@
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()
 #'
-#' ## Clustered spatial pattern
+#' # 2. Clustered spatial pattern
 #' rs_pattern_clustered <- create_spatial_pattern(
 #'   polygon = plgn,
 #'   resolution = 0.1,
@@ -75,31 +72,7 @@
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()
 #'
-#' ## User defined spatial pattern
-#' # Small scale clustering
-#' rs_pattern_small <- create_spatial_pattern(
-#'   polygon = plgn,
-#'   resolution = 0.1,
-#'   spatial_pattern = 5,
-#'   seed = 123)
-#'
-#' ggplot() +
-#'   geom_spatraster(data = rs_pattern_small) +
-#'   scale_fill_continuous(type = "viridis") +
-#'   theme_minimal()
-#'
-#' # Medium scale clustering (= the built-in clustered pattern)
-#' rs_pattern_medium <- create_spatial_pattern(
-#'   polygon = plgn,
-#'   resolution = 0.1,
-#'   spatial_pattern = 10,
-#'   seed = 123)
-#'
-#' ggplot() +
-#'   geom_spatraster(data = rs_pattern_medium) +
-#'   scale_fill_continuous(type = "viridis") +
-#'   theme_minimal()
-#'
+#' # 3. User defined spatial pattern
 #' # Large scale clustering
 #' rs_pattern_large <- create_spatial_pattern(
 #'   polygon = plgn,

@@ -24,7 +24,6 @@
 #' @family occurrence
 #'
 #' @examples
-#'
 #' simulate_random_walk(
 #'   initial_average_occurrences = 50,
 #'   n_time_points = 10,

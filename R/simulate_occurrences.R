@@ -42,11 +42,8 @@
 #'
 #' # Create polygon
 #' plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-#' ggplot() +
-#'   geom_sf(data = plgn) +
-#'   theme_minimal()
 #'
-#' ## Random spatial pattern with 4 time points
+#' # 1. Random spatial pattern with 4 time points
 #' occ_sf <- simulate_occurrences(
 #'   species_range = plgn,
 #'   n_time_points = 4,
@@ -58,15 +55,15 @@
 #'  geom_sf(data = plgn, fill = NA) +
 #'  facet_wrap("time_point") +
 #'  labs(
-#'       title = "Occurrences with random\nspatial and temporal pattern",
+#'       title = "Occurrences with random spatial and temporal pattern",
 #'       subtitle = "4 time steps") +
-#'  theme_bw()
+#'  theme_minimal()
 #'
-#' ## Clustered spatial pattern with 4 time points
+#' # 2. Highly clustered spatial pattern with 6 time points
 #' occ_sf_100 <- simulate_occurrences(
 #'   species_range = plgn,
 #'   spatial_pattern = 100,
-#'   n_time_points = 4,
+#'   n_time_points = 6,
 #'   initial_average_occurrences = 100,
 #'   seed = 123)
 #'
@@ -75,9 +72,9 @@
 #'   geom_sf(data = plgn, fill = NA) +
 #'   facet_wrap("time_point") +
 #'   labs(
-#'        title = "Occurrences with structured\nspatial and temporal pattern",
-#'        subtitle = "4 time steps") +
-#'   theme_bw()
+#'        title = "Occurrences with structured spatial and temporal pattern",
+#'        subtitle = "6 time steps") +
+#'   theme_minimal()
 
 simulate_occurrences <- function(
     species_range,
