@@ -4,7 +4,7 @@
 * Update `sample_occurrences_from_raster()`
   - Use `lapply()` instead of for-loop
   - Randomise points in raster cells.
-* Fix issues (#37, #76).
+* Fix issues (#37, #70, #76).
 
 # gcube 0.3.0
 
