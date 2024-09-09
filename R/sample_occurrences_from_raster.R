@@ -110,7 +110,11 @@ sample_occurrences_from_raster <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   occ_pf_list <- lapply(seq_along(time_series), function(t) {

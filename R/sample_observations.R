@@ -63,7 +63,6 @@
 #' @import dplyr
 #' @import assertthat
 #' @importFrom stats rbinom
-#' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'
 #' @family main
@@ -164,7 +163,11 @@ sample_observations <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Add detection probability

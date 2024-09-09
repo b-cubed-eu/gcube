@@ -19,7 +19,6 @@
 #'
 #' @import assertthat
 #' @importFrom stats rnorm
-#' @importFrom withr local_seed
 #'
 #' @family occurrence
 #'
@@ -62,7 +61,11 @@ simulate_random_walk <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Initialize an empty vector to store average abundance values

@@ -35,7 +35,6 @@
 #' @importFrom stats predict
 #' @importFrom terra vect rast rasterize
 #' @importFrom gstat vgm gstat
-#' @importFrom withr local_seed
 #' @importFrom vegan decostand
 #'
 #' @family occurrence
@@ -149,7 +148,11 @@ create_spatial_pattern <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Use gstat object with vgm model to create spatial pattern
