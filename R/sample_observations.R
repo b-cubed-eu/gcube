@@ -42,7 +42,9 @@
 #' Weights can be numeric values between 0 and 1 or positive integers, which
 #' will be rescaled to values between 0 and 1.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' occurrence with detection status. The object includes the following columns:

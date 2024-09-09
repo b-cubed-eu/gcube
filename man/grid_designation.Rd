@@ -28,7 +28,9 @@ observations should be designated.}
 represent the unique IDs.}
 
 \item{seed}{A positive numeric value setting the seed for random number
-generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 
 \item{aggregate}{Logical. If \code{TRUE} (default), returns data cube in
 aggregated form (grid with the number of observations per grid cell).

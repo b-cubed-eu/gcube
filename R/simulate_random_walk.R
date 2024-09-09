@@ -10,7 +10,9 @@
 #' @param sd_step A positive numeric value indicating the standard deviation of
 #' the random steps.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns A vector of integers of length `n_time_points` with the average
 #' number of occurrences.
