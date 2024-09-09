@@ -6,8 +6,8 @@ ylim <- c(3110000, 3112000)
 
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
-  lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2]),
+  lat = c(3110575, 3111577, 3110818, 3111766),
+  long = c(3841940, 3841046, 3841528, 3841892),
   time_point = 1
   ) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
