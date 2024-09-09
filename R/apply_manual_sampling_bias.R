@@ -34,9 +34,6 @@
 #' # Get occurrence points
 #' occurrences_sf <- simulate_occurrences(plgn)
 #'
-#' # Set seed for reproducibility
-#' set.seed(123)
-#'
 #' # Create grid with bias weights
 #' grid <- st_make_grid(
 #'     plgn,

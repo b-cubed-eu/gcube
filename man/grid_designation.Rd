@@ -67,8 +67,6 @@ aggregated data cube.
 library(sf)
 library(dplyr)
 
-set.seed(123)
-
 # Create four random points
 n_points <- 4
 xlim <- c(3841000, 3842000)

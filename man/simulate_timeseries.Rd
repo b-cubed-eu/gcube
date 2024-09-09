@@ -72,9 +72,6 @@ my_own_linear_function <- function(
   return(lambdas)
 }
 
-# Set seed for reproducibility
-set.seed(123)
-
 # Draw n_sim number of occurrences from Poisson distribution using
 # the custom function
 n_sim <- 10

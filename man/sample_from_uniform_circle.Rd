@@ -29,8 +29,6 @@ uncertainty circle around each observation assuming a Uniform distribution.
 \examples{
 library(sf)
 
-set.seed(123)
-
 # Create four random points
 n_points <- 4
 xlim <- c(3841000, 3842000)

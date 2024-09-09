@@ -82,9 +82,6 @@ probability and sampling bias by implementing a Bernoulli trial.
 library(sf)
 library(dplyr)
 
-# Set seed for reproducibility
-set.seed(123)
-
 # Simulate some occurrence data with coordinates and time points
 num_points <- 10
 occurrences <- data.frame(
