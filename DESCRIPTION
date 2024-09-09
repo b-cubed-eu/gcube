@@ -50,8 +50,7 @@ Imports:
     stats,
     terra,
     tidyr,
-    vegan,
-    withr
+    vegan
 Suggests: 
     ggExtra,
     ggplot2,

@@ -12,7 +12,9 @@
 #' The default is `"random"`. `"clustered"` corresponds to a value of 10.
 #' See Details.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #' @param n_sim Number of simulations. Each simulation is a different layer in
 #' the raster. Default is 1.
 #'
@@ -35,7 +37,6 @@
 #' @importFrom stats predict
 #' @importFrom terra vect rast rasterize
 #' @importFrom gstat vgm gstat
-#' @importFrom withr local_seed
 #' @importFrom vegan decostand
 #'
 #' @family occurrence
@@ -149,7 +150,11 @@ create_spatial_pattern <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Use gstat object with vgm model to create spatial pattern

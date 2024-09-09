@@ -15,7 +15,9 @@
 #' @param num_phyla Number of phyla to generate. Defaults to 1.
 #' @param num_kingdoms Number of kingdoms to generate. Defaults to 1.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @details The function works by randomly assigning species to genera, genera
 #' to families, families to orders, orders to classes, classes to phyla, and
@@ -32,7 +34,6 @@
 #'
 #' @import dplyr
 #' @import assertthat
-#' @importFrom withr local_seed
 #'
 #' @family multispecies
 #'
@@ -129,7 +130,11 @@ generate_taxonomy <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Assign species to genera

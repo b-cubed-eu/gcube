@@ -8,7 +8,9 @@
 #' the function will assume no uncertainty (zero meters) around the observation
 #' points.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled occurrences and a `coordinateUncertaintyInMeters` column containing
@@ -25,8 +27,6 @@
 #'
 #' @examples
 #' library(sf)
-#'
-#' set.seed(123)
 #'
 #' # Create four random points
 #' n_points <- 4
@@ -65,7 +65,11 @@ sample_from_uniform_circle <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Set uncertainty to zero if column not present in data

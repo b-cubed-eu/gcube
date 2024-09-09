@@ -25,7 +25,9 @@ The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
 See Details.}
 
 \item{seed}{A positive numeric value setting the seed for random number
-generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 
 \item{n_sim}{Number of simulations. Each simulation is a different layer in
 the raster. Default is 1.}

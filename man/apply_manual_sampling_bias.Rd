@@ -37,9 +37,6 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 # Get occurrence points
 occurrences_sf <- simulate_occurrences(plgn)
 
-# Set seed for reproducibility
-set.seed(123)
-
 # Create grid with bias weights
 grid <- st_make_grid(
     plgn,

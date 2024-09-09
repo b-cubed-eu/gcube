@@ -332,21 +332,9 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=vegan"
     },
-    "13": {
-      "@type": "SoftwareApplication",
-      "identifier": "withr",
-      "name": "withr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=withr"
-    },
     "SystemRequirements": null
   },
-  "fileSize": "549.627KB",
+  "fileSize": "550.823KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

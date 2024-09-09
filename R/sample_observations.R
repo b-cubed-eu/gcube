@@ -42,7 +42,9 @@
 #' Weights can be numeric values between 0 and 1 or positive integers, which
 #' will be rescaled to values between 0 and 1.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' occurrence with detection status. The object includes the following columns:
@@ -63,7 +65,6 @@
 #' @import dplyr
 #' @import assertthat
 #' @importFrom stats rbinom
-#' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'
 #' @family main
@@ -72,9 +73,6 @@
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
-#'
-#' # Set seed for reproducibility
-#' set.seed(123)
 #'
 #' # Simulate some occurrence data with coordinates and time points
 #' num_points <- 10
@@ -164,7 +162,11 @@ sample_observations <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Add detection probability

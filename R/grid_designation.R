@@ -13,7 +13,9 @@
 #' `"row_names"` (the default), a new column `id` is created where the row names
 #' represent the unique IDs.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #' @param aggregate Logical. If `TRUE` (default), returns data cube in
 #' aggregated form (grid with the number of observations per grid cell).
 #' Otherwise, returns sampled points within the uncertainty circle.
@@ -50,8 +52,6 @@
 #' @examples
 #' library(sf)
 #' library(dplyr)
-#'
-#' set.seed(123)
 #'
 #' # Create four random points
 #' n_points <- 4

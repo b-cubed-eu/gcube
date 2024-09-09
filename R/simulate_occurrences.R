@@ -22,7 +22,9 @@
 #' The default is `"random"`. `"clustered"` corresponds to a value of 10.
 #' See `create_spatial_pattern()`.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' simulated occurrences, a `time_point` column indicating the associated

@@ -38,9 +38,6 @@ library(sf)
 library(dplyr)
 library(ggplot2)
 
-# Set seed for reproducibility
-set.seed(123)
-
 # Simulate some occurrence data with coordinates and time points
 num_points <- 10
 occurrences <- data.frame(

@@ -7,7 +7,9 @@
 #' @param raster A SpatRaster object (see [terra::rast()]).
 #' @param time_series A vector with the number of occurrences per time point.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' simulated occurrences, a `time_point` column indicating the associated
@@ -110,7 +112,11 @@ sample_occurrences_from_raster <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   occ_pf_list <- lapply(seq_along(time_series), function(t) {

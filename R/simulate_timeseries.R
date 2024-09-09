@@ -14,7 +14,9 @@
 #' occurrences.
 #' @param ... Additional arguments to be passed to `temporal_function`.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns A vector of integers of length `n_time_points` with the number of
 #' occurrences.
@@ -57,9 +59,6 @@
 #'   # Return average abundances
 #'   return(lambdas)
 #' }
-#'
-#' # Set seed for reproducibility
-#' set.seed(123)
 #'
 #' # Draw n_sim number of occurrences from Poisson distribution using
 #' # the custom function
@@ -135,7 +134,11 @@ simulate_timeseries <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Check type of temporal_function

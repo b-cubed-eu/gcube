@@ -13,7 +13,9 @@
 #' circle. Default is 0.95.
 #' See Details.
 #' @param seed A positive numeric value setting the seed for random number
-#' generation to ensure reproducibility. If `NA` (default), no seed is used.
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @details A new observation point is sampled from a bivariate Normal
 #' distribution with means equal to the X and Y coordinates of its original
@@ -39,8 +41,6 @@
 #' @examples
 #' library(sf)
 #' library(dplyr)
-#'
-#' set.seed(123)
 #'
 #' # Create four random points
 #' n_points <- 4
@@ -86,7 +86,11 @@ sample_from_binormal_circle <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Set uncertainty to zero if column not present in data

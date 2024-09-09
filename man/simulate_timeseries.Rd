@@ -28,7 +28,9 @@ occurrences.}
 \item{...}{Additional arguments to be passed to \code{temporal_function}.}
 
 \item{seed}{A positive numeric value setting the seed for random number
-generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 }
 \value{
 A vector of integers of length \code{n_time_points} with the number of
@@ -69,9 +71,6 @@ my_own_linear_function <- function(
   # Return average abundances
   return(lambdas)
 }
-
-# Set seed for reproducibility
-set.seed(123)
 
 # Draw n_sim number of occurrences from Poisson distribution using
 # the custom function
