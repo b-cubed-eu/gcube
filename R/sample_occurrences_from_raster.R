@@ -20,7 +20,7 @@
 #' @import sf
 #' @import assertthat
 #' @importFrom terra spatSample global res
-#' @importFrom purrr map_dfr map
+#' @importFrom purrr map
 #' @importFrom stats runif
 #'
 #' @family occurrence
@@ -113,7 +113,7 @@ sample_occurrences_from_raster <- function(
     withr::local_seed(seed)
   }
 
-  occ_pf <- purrr::map_dfr(seq_along(time_series), function(t) {
+  occ_pf_list <- lapply(seq_along(time_series), function(t) {
     # Sample points within the raster
     occ_p <- terra::spatSample(
       x = rs3, size = time_series[t], method = "weights",
@@ -139,6 +139,8 @@ sample_occurrences_from_raster <- function(
 
     return(occ_sf)
   })
+  occ_pf <- do.call(rbind.data.frame, occ_pf_list) %>%
+    dplyr::select("time_point", dplyr::everything())
 
   return(occ_pf)
 }
