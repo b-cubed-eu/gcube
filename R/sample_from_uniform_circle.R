@@ -4,9 +4,10 @@
 #' uncertainty circle around each observation assuming a Uniform distribution.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If the latter column is not present,
-#' the function will assume no uncertainty (zero meters) around the observation
-#' points.
+#' `coordinateUncertaintyInMeters` column. If the former column is not present,
+#' the function will assume a single time point. If the latter column is not
+#' present, the function will assume no uncertainty (zero meters) around the
+#' observation points.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
@@ -70,6 +71,16 @@ sample_from_uniform_circle <- function(
       on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
     }
     set.seed(seed)
+  }
+
+  # Create time_point column if column not present in data
+  if (!"time_point" %in% names(observations)) {
+    observations$time_point <- 1
+    warning(paste(
+      "No column `time_point` present!",
+      "Assuming only a single time point.",
+      sep = "\n"
+    ))
   }
 
   # Set uncertainty to zero if column not present in data

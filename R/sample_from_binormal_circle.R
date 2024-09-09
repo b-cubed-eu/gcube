@@ -5,9 +5,10 @@
 #' distribution.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If the latter column is not present,
-#' the function will assume no uncertainty (zero meters) around the observation
-#' points.
+#' `coordinateUncertaintyInMeters` column. If the former column is not present,
+#' the function will assume a single time point. If the latter column is not
+#' present, the function will assume no uncertainty (zero meters) around the
+#' observation points.
 #' @param p_norm A numeric value between 0 and 1. The proportion of all possible
 #' samples from a bivariate Normal distribution that fall within the uncertainty
 #' circle. Default is 0.95.
@@ -91,6 +92,16 @@ sample_from_binormal_circle <- function(
       on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
     }
     set.seed(seed)
+  }
+
+  # Create time_point column if column not present in data
+  if (!"time_point" %in% names(observations)) {
+    observations$time_point <- 1
+    warning(paste(
+      "No column `time_point` present!",
+      "Assuming only a single time point.",
+      sep = "\n"
+    ))
   }
 
   # Set uncertainty to zero if column not present in data
