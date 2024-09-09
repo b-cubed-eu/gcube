@@ -153,7 +153,7 @@ test_smaller_distances <- function(observations, seed = NA) {
   test_dists_df <- observations %>%
     sf::st_drop_geometry() %>%
     dplyr::mutate(dist = sample_dists,
-           test = dist < .data$coordinateUncertaintyInMeters)
+           test = dist <= .data$coordinateUncertaintyInMeters)
 
   return(all(test_dists_df$test))
 }

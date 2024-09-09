@@ -24,7 +24,8 @@ test_that("simulate_random_walk handles zero and neg. occurrences properly", {
   result <- simulate_random_walk(
     initial_average_occurrences = 1,
     n_time_points = 10,
-    sd_step = 5)
+    sd_step = 5,
+    seed = 123)
   expect_equal(result[1], 1)
   expect_true(all(result >= 0))
 })

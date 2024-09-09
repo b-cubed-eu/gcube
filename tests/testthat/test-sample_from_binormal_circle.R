@@ -95,7 +95,7 @@ test_that("warning if coordinateUncertaintyInMeters column is not present", {
 
 test_that("warning if time_point column is not present", {
   expect_warning(
-    sample_from_uniform_circle(observations_sf4),
+    sample_from_binormal_circle(observations_sf4),
     regexp = paste(
       "No column `time_point` present!",
       "Assuming only a single time point.",
