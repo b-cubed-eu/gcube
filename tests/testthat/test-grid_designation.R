@@ -322,7 +322,8 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
   })
   expect_equal(grid_designation(observations_sf2, grid = grid_df1,
                                 randomisation = "normal",
-                                aggregate = FALSE) %>%
+                                aggregate = FALSE,
+                                seed = 123) %>%
                  nrow(),
                nrow(observations_sf2))
 })
