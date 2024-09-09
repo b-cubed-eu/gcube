@@ -13,8 +13,7 @@ observations_sf1 <- data.frame(
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## dataset with coordinateUncertaintyInMeters
-set.seed(123)
-coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+coordinate_uncertainty <- c(24.32870, 53.96961, 28.16026, 43.24885)
 observations_sf2 <- observations_sf1 %>%
   dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
 
