@@ -48,7 +48,7 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
   species_range = rep(list(plgn), 3),
-  initial_average_occurrences = c(50, 100, 500),
+  initial_average_occurrences = c(50, 100, 200),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
@@ -66,13 +66,6 @@ samp_obs1 <- map_sample_observations(df = sim_occ1)
 # Filter observations
 filter_obs_nested <- map_filter_observations(df = samp_obs1)
 filter_obs_nested
-
-# Unnest output and create sf object again
-filter_obs_unnested <- map_filter_observations(df = samp_obs1,
-                                               nested = FALSE)
-filter_obs_unnested \%>\%
-   st_sf()
-
 
 ## Example with deviating column names
 # Specify dataframe for 3 species with custom function arguments

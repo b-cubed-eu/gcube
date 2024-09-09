@@ -45,7 +45,7 @@
 #' species_dataset_df <- tibble(
 #'   taxonID = c("species1", "species2", "species3"),
 #'   species_range = rep(list(plgn), 3),
-#'   initial_average_occurrences = c(50, 100, 500),
+#'   initial_average_occurrences = c(50, 100, 200),
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
@@ -59,12 +59,6 @@
 #' # Sample observations
 #' samp_obs_nested <- map_sample_observations(df = sim_occ1)
 #' samp_obs_nested
-#'
-#' # Unnest output and create sf object again
-#' samp_obs_unnested <- map_sample_observations(df = sim_occ1,
-#'                                              nested = FALSE)
-#' samp_obs_unnested %>%
-#'    st_sf()
 #'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments

@@ -79,16 +79,6 @@
 #' occ_cube_nested <- map_grid_designation(df = obs_uncertainty1)
 #' occ_cube_nested
 #'
-#' # From filtered observations
-#' map_grid_designation(df = filter_obs1)
-#'
-#' # Unnest output and create sf object again
-#' occ_cube_unnested <- map_grid_designation(df = obs_uncertainty1,
-#'                                           nested = FALSE)
-#' occ_cube_unnested %>%
-#'    st_sf()
-#'
-#'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%

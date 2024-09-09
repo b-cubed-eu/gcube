@@ -68,12 +68,6 @@
 #' obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
 #' obs_uncertainty_nested
 #'
-#' # Unnest output and create sf object again
-#' obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
-#'                                                            nested = FALSE)
-#' obs_uncertainty_unnested %>%
-#'    st_sf()
-#'
 #'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments

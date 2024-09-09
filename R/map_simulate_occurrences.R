@@ -58,13 +58,6 @@
 #' sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
 #' sim_occ_nested
 #'
-#' # Unnest output and create sf object again
-#' sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df,
-#'                                              nested = FALSE)
-#' sim_occ_unnested %>%
-#'    st_sf()
-#'
-#'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
@@ -80,11 +73,6 @@
 #' # Simulate occurrences
 #' map_simulate_occurrences(
 #'   df = species_dataset_df2,
-#'   arg_list = arg_conv_list)
-#'
-#' map_simulate_occurrences(
-#'   df = species_dataset_df2,
-#'   nested = FALSE,
 #'   arg_list = arg_conv_list)
 
 map_simulate_occurrences <- function(

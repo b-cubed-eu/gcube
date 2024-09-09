@@ -55,7 +55,7 @@ cube_grid <- st_make_grid(
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
   species_range = rep(list(plgn), 3),
-  initial_average_occurrences = c(50, 100, 500),
+  initial_average_occurrences = c(50, 100, 200),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
@@ -81,16 +81,6 @@ obs_uncertainty1 <- map_add_coordinate_uncertainty(df = filter_obs1)
 # Grid designation
 occ_cube_nested <- map_grid_designation(df = obs_uncertainty1)
 occ_cube_nested
-
-# From filtered observations
-map_grid_designation(df = filter_obs1)
-
-# Unnest output and create sf object again
-occ_cube_unnested <- map_grid_designation(df = obs_uncertainty1,
-                                          nested = FALSE)
-occ_cube_unnested \%>\%
-   st_sf()
-
 
 ## Example with deviating column names
 # Specify dataframe for 3 species with custom function arguments
