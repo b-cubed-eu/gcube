@@ -25,8 +25,10 @@
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
-#' simulated occurrences and a `time_point` column indicating the associated
-#' time point for each occurrence.
+#' simulated occurrences, a `time_point` column indicating the associated
+#' time point for each occurrence and a `sampling_p1` column indicating the
+#' sampling probability associated with the spatial pattern (see
+#' `create_spatial_pattern()`).
 #'
 #' @export
 #'
