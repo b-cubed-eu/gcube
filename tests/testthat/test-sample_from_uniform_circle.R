@@ -21,6 +21,9 @@ observations_sf2 <- observations_sf1 %>%
 observations_sf3 <- observations_sf2 %>%
   sf::st_drop_geometry()
 
+## dataset without time points
+observations_sf4 <- observations_sf2[-1]
+
 # Unit tests
 ## expect errors
 test_that("arguments are of the right class", {
@@ -61,6 +64,17 @@ test_that("warning if coordinateUncertaintyInMeters column is not present", {
     regexp = paste(
       "No column `coordinateUncertaintyInMeters` present!",
       "Assuming no uncertainty around observations.",
+      sep = "\n"
+    ),
+    fixed = TRUE)
+})
+
+test_that("warning if time_point column is not present", {
+  expect_warning(
+    sample_from_uniform_circle(observations_sf4),
+    regexp = paste(
+      "No column `time_point` present!",
+      "Assuming only a single time point.",
       sep = "\n"
     ),
     fixed = TRUE)
