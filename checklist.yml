@@ -10,6 +10,10 @@ allowed:
       Maintainer: 'Ward Langeraert <ward.langeraert@inbo.be>'
 
       New submission
+  - motivation: Mapping functions are expected to take some time.
+    value: |-
+      checking examples ... NOTE
+      Examples with CPU (user + system) or elapsed time > 5s
 required:
 - CITATION
 - DESCRIPTION
