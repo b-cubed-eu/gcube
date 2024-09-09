@@ -47,7 +47,7 @@
 #' species_dataset_df <- tibble(
 #'   taxonID = c("species1", "species2", "species3"),
 #'   species_range = rep(list(plgn), 3),
-#'   initial_average_occurrences = c(50, 100, 500),
+#'   initial_average_occurrences = c(50, 100, 200),
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
@@ -57,13 +57,6 @@
 #' # Simulate occurrences
 #' sim_occ_nested <- map_simulate_occurrences(df = species_dataset_df)
 #' sim_occ_nested
-#'
-#' # Unnest output and create sf object again
-#' sim_occ_unnested <- map_simulate_occurrences(df = species_dataset_df,
-#'                                              nested = FALSE)
-#' sim_occ_unnested %>%
-#'    st_sf()
-#'
 #'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
@@ -80,11 +73,6 @@
 #' # Simulate occurrences
 #' map_simulate_occurrences(
 #'   df = species_dataset_df2,
-#'   arg_list = arg_conv_list)
-#'
-#' map_simulate_occurrences(
-#'   df = species_dataset_df2,
-#'   nested = FALSE,
 #'   arg_list = arg_conv_list)
 
 map_simulate_occurrences <- function(

@@ -9,13 +9,19 @@
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), no seed is used.
 #'
-#' @returns An sf object with POINT geometry.
+#' @returns An sf object with POINT geometry containing the locations of the
+#' simulated occurrences, a `time_point` column indicating the associated
+#' time point for each occurrence and columns used as weights for sampling.
+#' If the raster is created with `create_spatial_pattern()`, the column
+#' `sampling_p1` is used.
 #'
 #' @export
 #'
 #' @import sf
 #' @import assertthat
-#' @importFrom terra spatSample global
+#' @importFrom terra spatSample global res
+#' @importFrom purrr map
+#' @importFrom stats runif
 #'
 #' @family occurrence
 #'
@@ -90,36 +96,51 @@ sample_occurrences_from_raster <- function(
               length(seed) == 1)
   ### End checks
 
-  # centre the values of the raster (mean = 0)
+  # Center the values of the raster (mean = 0)
   rs_mean <- terra::global(raster, "mean", na.rm = TRUE)[, 1]
   rs2 <- raster - rs_mean
 
-  # increase contrast between high and low values
+  # Increase contrast between high and low values
   a <- 30 # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
   rs3 <- 1 / (1 + exp(-a * rs2))
 
-  # For each time step sample points from the raster
-  # Should be recoded: with lapply? or map?
-
-  occ_pf <- NULL
+  # For each time step, sample points from the raster
+  # Get raster resolution to determine cell size
+  cell_size <- terra::res(rs3)
 
   # Set seed if provided
   if (!is.na(seed)) {
     withr::local_seed(seed)
   }
 
-  for (t in seq_along(time_series)) {
+  occ_pf_list <- lapply(seq_along(time_series), function(t) {
+    # Sample points within the raster
     occ_p <- terra::spatSample(
       x = rs3, size = time_series[t], method = "weights",
       replace = TRUE, as.points = TRUE
     )
-    occ_sf <- sf::st_as_sf(occ_p)
-    occ_sf$time_point <- t
-    occ_pf <- rbind(occ_pf, occ_sf)
-  }
 
-  # points need to be shifted randomly (uniform within the raster cell size)
-  # For the moment the points are all at the center of the raster cells
+    # Convert to sf object
+    occ_sf <- sf::st_as_sf(occ_p)
+
+    # Random shift within raster cells
+    # Assuming coordinates are in two dimensions (x and y)
+    occ_sf$geometry <- sf::st_sfc(purrr::map(occ_sf$geometry, function(pt) {
+        shift_x <- stats::runif(1, -0.5 * cell_size[1], 0.5 * cell_size[1])
+        shift_y <- stats::runif(1, -0.5 * cell_size[2], 0.5 * cell_size[2])
+
+        sf::st_point(c(sf::st_coordinates(pt)[1] + shift_x,
+                       sf::st_coordinates(pt)[2] + shift_y))
+      }),
+      crs = sf::st_crs(occ_sf))
+
+    # Add time_point column
+    occ_sf$time_point <- t
+
+    return(occ_sf)
+  })
+  occ_pf <- do.call(rbind.data.frame, occ_pf_list) %>%
+    dplyr::select("time_point", dplyr::everything())
 
   return(occ_pf)
 }

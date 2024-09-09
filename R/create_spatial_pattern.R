@@ -24,7 +24,8 @@
 #' @seealso [gstat::vgm()] and its `range` argument
 #'
 #' @returns An object of class SpatRaster with a spatial pattern for the area of
-#' the given polygon.
+#' the given polygon with `n_sim` layers `sampling_p'n_sim'` containing the
+#' sampling probabilities from the raster grid for each simulation.
 #'
 #' @export
 #'
@@ -176,7 +177,8 @@ create_spatial_pattern <- function(
         dplyr::starts_with("sim"),
         ~vegan::decostand(.x, "range")
         )
-    )
+    ) %>%
+    dplyr::rename_with(~ gsub("sim", "sampling_p", .x))
 
   # Return final raster
   return(terra::rast(dfxy_std, crs = terra::crs(poly_vect)))

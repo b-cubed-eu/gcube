@@ -15,7 +15,11 @@ sample_occurrences_from_raster(raster, time_series, seed = NA)
 generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
-An sf object with POINT geometry.
+An sf object with POINT geometry containing the locations of the
+simulated occurrences, a \code{time_point} column indicating the associated
+time point for each occurrence and columns used as weights for sampling.
+If the raster is created with \code{create_spatial_pattern()}, the column
+\code{sampling_p1} is used.
 }
 \description{
 This function draws point occurrences from a spatial random field represented

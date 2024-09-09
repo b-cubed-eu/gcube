@@ -48,7 +48,7 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
   species_range = rep(list(plgn), 3),
-  initial_average_occurrences = c(50, 100, 500),
+  initial_average_occurrences = c(50, 100, 200),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
@@ -70,12 +70,6 @@ filter_obs1 <- map_filter_observations(df = samp_obs1)
 # Add coordinate uncertainty
 obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
 obs_uncertainty_nested
-
-# Unnest output and create sf object again
-obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
-                                                           nested = FALSE)
-obs_uncertainty_unnested \%>\%
-   st_sf()
 
 
 ## Example with deviating column names
