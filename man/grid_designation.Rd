@@ -16,9 +16,10 @@ grid_designation(
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
-\code{coordinateUncertaintyInMeters} column. If the latter column is not present,
-the function will assume no uncertainty (zero meters) around the observation
-points.}
+\code{coordinateUncertaintyInMeters} column. If the former column is not present,
+the function will assume a single time point. If the latter column is not
+present, the function will assume no uncertainty (zero meters) around the
+observation points.}
 
 \item{grid}{An sf object with POLYGON geometry (usually a grid) to which
 observations should be designated.}

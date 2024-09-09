@@ -4,9 +4,10 @@
 #' aggregated data cube.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If the latter column is not present,
-#' the function will assume no uncertainty (zero meters) around the observation
-#' points.
+#' `coordinateUncertaintyInMeters` column. If the former column is not present,
+#' the function will assume a single time point. If the latter column is not
+#' present, the function will assume no uncertainty (zero meters) around the
+#' observation points.
 #' @param grid An sf object with POLYGON geometry (usually a grid) to which
 #' observations should be designated.
 #' @param id_col The column name containing unique IDs for each grid cell. If

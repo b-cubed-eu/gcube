@@ -6,8 +6,8 @@ ylim <- c(3110000, 3112000)
 
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
-  lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2]),
+  lat = c(3110575, 3111577, 3110818, 3111766),
+  long = c(3841940, 3841046, 3841528, 3841892),
   time_point = 1
   ) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
@@ -20,6 +20,9 @@ observations_sf2 <- observations_sf1 %>%
 ## dataset without geometry
 observations_sf3 <- observations_sf2 %>%
   sf::st_drop_geometry()
+
+## dataset without time points
+observations_sf4 <- observations_sf2[-1]
 
 # Unit tests
 ## expect errors
@@ -85,6 +88,17 @@ test_that("warning if coordinateUncertaintyInMeters column is not present", {
     regexp = paste(
       "No column `coordinateUncertaintyInMeters` present!",
       "Assuming no uncertainty around observations.",
+      sep = "\n"
+    ),
+    fixed = TRUE)
+})
+
+test_that("warning if time_point column is not present", {
+  expect_warning(
+    sample_from_uniform_circle(observations_sf4),
+    regexp = paste(
+      "No column `time_point` present!",
+      "Assuming only a single time point.",
       sep = "\n"
     ),
     fixed = TRUE)

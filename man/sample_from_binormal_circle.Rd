@@ -8,9 +8,10 @@ sample_from_binormal_circle(observations, p_norm = 0.95, seed = NA)
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
-\code{coordinateUncertaintyInMeters} column. If the latter column is not present,
-the function will assume no uncertainty (zero meters) around the observation
-points.}
+\code{coordinateUncertaintyInMeters} column. If the former column is not present,
+the function will assume a single time point. If the latter column is not
+present, the function will assume no uncertainty (zero meters) around the
+observation points.}
 
 \item{p_norm}{A numeric value between 0 and 1. The proportion of all possible
 samples from a bivariate Normal distribution that fall within the uncertainty
