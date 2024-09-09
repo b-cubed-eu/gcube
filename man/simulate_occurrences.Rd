@@ -44,8 +44,10 @@ generation to ensure reproducibility. If \code{NA} (default), no seed is used.}
 }
 \value{
 An sf object with POINT geometry containing the locations of the
-simulated occurrences and a \code{time_point} column indicating the associated
-time point for each occurrence.
+simulated occurrences, a \code{time_point} column indicating the associated
+time point for each occurrence and a \code{sampling_p1} column indicating the
+sampling probability associated with the spatial pattern (see
+\code{create_spatial_pattern()}).
 }
 \description{
 This function simulates occurrences of a species within a specified spatial

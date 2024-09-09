@@ -32,7 +32,8 @@ the raster. Default is 1.}
 }
 \value{
 An object of class SpatRaster with a spatial pattern for the area of
-the given polygon.
+the given polygon with \code{n_sim} layers \verb{sampling_p'n_sim'} containing the
+sampling probabilities from the raster grid for each simulation.
 }
 \description{
 This function creates a raster with a spatial pattern for the area of a
