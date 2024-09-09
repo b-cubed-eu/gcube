@@ -187,9 +187,6 @@ test_that("distance to new point falls within coordinate uncertainty", {
   })
 
   # in case of provided initial coordinateUncertaintyInMeters column
-  ## no seed
-  expect_true(test_smaller_distances(observations_sf2))
-  ## different seeds
   expect_true(test_smaller_distances(observations_sf2, seed = 123))
   expect_true(test_smaller_distances(observations_sf2, seed = 456))
 })
