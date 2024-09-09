@@ -350,6 +350,8 @@ sampled_points <- grid_designation(
 ```
 
 Lets visualise were the samples were taken for time point 1.
+Note that no distinction is made between zeroes and `NA` values!
+Every absence gets a zero value.
 
 ```{r}
 #| fig.alt: >
