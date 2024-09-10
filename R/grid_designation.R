@@ -11,7 +11,7 @@
 #' @param grid An sf object with POLYGON geometry (usually a grid) to which
 #' observations should be designated.
 #' @param id_col The column name containing unique IDs for each grid cell. If
-#' `"row_names"` (the default), a new column `id` is created where the row names
+#' `"row_names"` (the default), a new column `cell_code` is created where the row names
 #' represent the unique IDs.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
@@ -136,7 +136,7 @@ grid_designation <- function(
       warning(
         paste0(
           "Column name '",  id_col, "' not present in provided grid!\n",
-          "Creating ids based on row names."
+          "Creating 'cell_code' column with ids based on row names."
           )
         )
       id_col <- "row_names"
@@ -144,7 +144,7 @@ grid_designation <- function(
       warning(
         paste0(
           "Column '",  id_col, "' does not contain unique ids for grid cells!",
-          "\nCreating new ids based on row names."
+          "\nCreating 'cell_code' column with ids based on row names."
         )
       )
       id_col <- "row_names"
@@ -162,7 +162,7 @@ grid_designation <- function(
   # We assign each occurrence to a grid cell
   # Each grid cell needs a unique id
   if (id_col == "row_names") {
-    id_col <- "id"
+    id_col <- "cell_code"
     grid[[id_col]] <- rownames(grid)
   }
   sf::st_agr(new_points) <- "constant"

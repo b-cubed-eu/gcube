@@ -125,7 +125,7 @@ test_that("map_grid_designation works with pipes", {
   expect_equal(
     sort(colnames(occ_cube_piped)),
     sort(c("species", "species_range", "grid", "seed", "occurrences",
-           "observations_total", "observations", "time_point", "id", "n",
+           "observations_total", "observations", "time_point", "cell_code", "n",
            "min_coord_uncertainty", "geometry")))
 })
 
