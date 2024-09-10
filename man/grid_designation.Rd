@@ -25,8 +25,8 @@ observation points.}
 observations should be designated.}
 
 \item{id_col}{The column name containing unique IDs for each grid cell. If
-\code{"row_names"} (the default), a new column \code{cell_code} is created where the row names
-represent the unique IDs.}
+\code{"row_names"} (the default), a new column \code{cell_code} is created where the
+row names represent the unique IDs.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}

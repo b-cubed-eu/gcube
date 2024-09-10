@@ -11,8 +11,8 @@
 #' @param grid An sf object with POLYGON geometry (usually a grid) to which
 #' observations should be designated.
 #' @param id_col The column name containing unique IDs for each grid cell. If
-#' `"row_names"` (the default), a new column `cell_code` is created where the row names
-#' represent the unique IDs.
+#' `"row_names"` (the default), a new column `cell_code` is created where the
+#' row names represent the unique IDs.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
