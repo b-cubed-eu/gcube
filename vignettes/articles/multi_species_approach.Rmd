@@ -30,6 +30,7 @@ library(ggplot2)   # data visualisation
 # Spatial extend
 
 As input, we create a polygon in which we simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -106,12 +107,12 @@ The values within these columns can change between species.
 ```{r}
 # Create dataframe with simulation function arguments
 multi_species_args <- tibble(
-  plgn = rep(list(polygon), 6),
-  initial_average_abundance = rep(c(50, 100, 500), 2),
+  species_range = rep(list(polygon), 6),
+  initial_average_occurrences = rep(c(50, 100, 500), 2),
   n_time_points = rep(6, 6),
   temporal_function = c(simulate_random_walk, simulate_random_walk, rep(NA, 4)),
   sd_step = c(1, 1, rep(NA, 4)),
-  spatial_autocorr = c(rep("random", 3), rep("clustered", 3)),
+  spatial_pattern = c(rep("random", 3), rep("clustered", 3)),
   detection_probability = rep(c(0.8, 0.9, 1), 2),
   sampling_bias = c(rep("polygon", 3), rep("no_bias", 3)),
   bias_area = c(rep(list(road_polygon), 3), rep(NA, 3)),
@@ -256,14 +257,14 @@ The mapping functions will retain the original column names in the output.
 
 We rename for example three column names such that they do not longer match the argument names of the single-species functions:
 
-- plgn $\rightarrow$ polygon (argument of `simulate_occurrences()`)
+- species_range $\rightarrow$ polygon (argument of `simulate_occurrences()`)
 - detection_probability $\rightarrow$ det_prob (argument of `sample_observations()`)
 - grid $\rightarrow$ raster (argument of `grid_designation()`)
 
 ```{r}
 # Create dataframe with custom column names
 multi_species_dataset2_renamed <- multi_species_dataset2 %>%
-  rename("polygon" = "plgn",
+  rename("polygon" = "species_range",
          "det_prob" = "detection_probability",
          "raster" = "grid")
 ```
@@ -274,7 +275,7 @@ The names are the argument names of the single-species functions and the values 
 ```{r}
 # Create named list for argument conversion
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     detection_probability = "det_prob",
     grid = "raster"
   )

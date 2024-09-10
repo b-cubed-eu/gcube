@@ -8,12 +8,6 @@ observations_sf <-
   ) %>%
   st_as_sf(coords = c("long", "lat"), crs = 3035)
 
-# Create dataframe without geometry
-non_sf_data <- data.frame(
-  lat = runif(n_observations, 3110000, 3112000),
-  long = runif(n_observations, 3841000, 3842000)
-)
-
 
 ## Unit tests
 
@@ -29,8 +23,8 @@ test_that("Function adds a column with a vector of uncertainty values", {
 })
 
 test_that("Function throws an error if observations is not an sf object", {
-  expect_error(add_coordinate_uncertainty(non_sf_data, 1000),
-               "`observations` must be an sf object with POINT geometry.")
+  expect_error(add_coordinate_uncertainty("non_sf_data", 1000),
+               "`observations` must be an sf object or a dataframe.")
 })
 
 test_that("Function throws an error if coord. uncert. is not numeric", {

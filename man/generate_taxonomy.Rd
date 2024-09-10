@@ -33,8 +33,10 @@ output.}
 
 \item{num_kingdoms}{Number of kingdoms to generate. Defaults to 1.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 }
 \value{
 A data frame with the taxonomic classification of each species. If
@@ -48,21 +50,21 @@ of species, genera, families, orders, classes, phyla, and kingdoms. The
 output is a data frame with the hierarchical classification for each species.
 }
 \details{
-The function works by randomly assigning species to genera, genera to
-families, families to orders, orders to classes, classes to phyla, and phyla
-to kingdoms. Sampling is done with replacement, meaning that multiple
-lower-level taxa (e.g., species) can be assigned to the same higher-level
+The function works by randomly assigning species to genera, genera
+to families, families to orders, orders to classes, classes to phyla, and
+phyla to kingdoms. Sampling is done with replacement, allowing multiple
+lower-level taxa (e.g., species) to be assigned to the same higher-level
 taxon (e.g., genus).
 }
 \examples{
-# Create simple taxonomic hierarchy
+# 1. Create simple taxonomic hierarchy
 generate_taxonomy(
   num_species = 5,
   num_genera = 3,
   num_families = 2,
   seed = 123)
 
-# Add taxonomic hierarchy to a dataframe
+# 2. Add taxonomic hierarchy to a dataframe
 existing_df <- data.frame(
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)

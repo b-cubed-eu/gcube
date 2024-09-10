@@ -1,27 +1,27 @@
-#' Map `add_coordinate_uncertainty()` function over multiple species
+#' Map `add_coordinate_uncertainty()` over multiple species
 #'
-#' The function executes `add_coordinate_uncertainty()` over multiple rows of a
-#' dataframe, representing multiple different species, containing potentially
+#' This function executes `add_coordinate_uncertainty()` over multiple rows of a
+#' dataframe, representing different species, with potentially
 #' different function arguments over multiple columns.
 #'
-#' @param df A dataframe containing multiple rows. Each row is considered a
+#' @param df A dataframe containing multiple rows, each representing a
 #' different species. The columns are function arguments with values used for
-#' mapping `add_coordinate_uncertainty()` for each species. `df` can have
-#' columns that are not used by this function. They will be retained in the
-#' output.
-#' @param nested Logical. If `TRUE` (default), retain list-column containing
-#' sf objects calculated by `add_coordinate_uncertainty()`. Otherwise, expand
+#' mapping `add_coordinate_uncertainty()` for each species. Columns not used by
+#' this function will be retained in the output.
+#' @param nested Logical. If `TRUE` (default), retains list-column containing
+#' sf objects calculated by `add_coordinate_uncertainty()`. Otherwise, expands
 #' this list-column into rows and columns.
 #' @param arg_list A named list or `NA`. If `NA` (default), the function assumes
 #' column names in `df` are identical to argument names of
-#' `add_coordinate_uncertainty()`. If column names are not identical, they need
+#' `add_coordinate_uncertainty()`. If column names differ, they must
 #' to be specified as a named list where the names are the argument names of
-#' `add_coordinate_uncertainty()`.
+#' `add_coordinate_uncertainty()`, and the associated values are the
+#' corresponding column names in `df`.
 #'
-#' @returns In case of `nested = TRUE`, a dataframe identical to the input
-#' dataframe `df`, but each sf object with POINT geometry in the list-column
-#' `observations` now has an additional column `coordinateUncertaintyInMeters`
-#' added by `add_coordinate_uncertainty()`. In case of `nested = FALSE`, this
+#' @returns In case of `nested = TRUE`, a dataframe identical to `df`, but each
+#' sf object with POINT geometry in the list-column `observations` now has an
+#' additional column `coordinateUncertaintyInMeters` added by
+#' `add_coordinate_uncertainty()`. In case of `nested = FALSE`, this
 #' list-column is expanded into additional rows and columns.
 #'
 #' @export
@@ -44,12 +44,12 @@
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df <- tibble(
 #'   taxonID = c("species1", "species2", "species3"),
-#'   plgn = rep(list(plgn), 3),
-#'   initial_average_abundance = c(50, 100, 500),
+#'   species_range = rep(list(plgn), 3),
+#'   initial_average_occurrences = c(50, 100, 200),
 #'   n_time_points = rep(6, 3),
 #'   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
 #'   sd_step = c(1, 1, NA),
-#'   spatial_autocorr = "random",
+#'   spatial_pattern = "random",
 #'   detection_probability = c(0.8, 0.9, 1),
 #'   invert = FALSE,
 #'   coords_uncertainty_meters = c(25, 30, 50),
@@ -68,17 +68,11 @@
 #' obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
 #' obs_uncertainty_nested
 #'
-#' # Unnest output and create sf object again
-#' obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
-#'                                                            nested = FALSE)
-#' obs_uncertainty_unnested %>%
-#'    st_sf()
-#'
 #'
 #' ## Example with deviating column names
 #' # Specify dataframe for 3 species with custom function arguments
 #' species_dataset_df2 <- species_dataset_df %>%
-#'   rename(polygon = plgn,
+#'   rename(polygon = species_range,
 #'          sd = sd_step,
 #'          det_prob = detection_probability,
 #'          inv = invert,
@@ -86,7 +80,7 @@
 #'
 #' # Create named list for argument conversion
 #' arg_conv_list <- list(
-#'     plgn = "polygon",
+#'     species_range = "polygon",
 #'     sd_step = "sd",
 #'     detection_probability = "det_prob",
 #'     invert = "inv",

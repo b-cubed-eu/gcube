@@ -48,8 +48,8 @@ generate biodiversity data cubes from minimal input.
 
 ## Example
 
-This is a basic example which shows you the workflow for simulating a
-biodiversity data cube. This is divided in three steps or processes:
+This is a basic example which shows the workflow for simulating a
+biodiversity data cube. It is divided in three steps or processes:
 
 1.  Occurrence process
 2.  Detection process
@@ -68,10 +68,11 @@ library(dplyr)   # data wrangling
 library(ggplot2) # visualisation with ggplot
 ```
 
-We create a random polygon as input.
+We create a polygon as input. It represents the spatial extend of the
+species.
 
 ``` r
-# Create a polygon to simulate occurrences
+# Create a polygon to simulate occurrences within
 polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
 
 # Visualise
@@ -85,16 +86,18 @@ ggplot() +
 ### Occurrence process
 
 We generate occurrence points within the polygon using the
-`simulate_occurrences()` function. These are the “real” occurrences of
-the species, whether we have observed them or not. In the
-`simulate_occurrences()` function, the user can specify different levels
-of spatial clustering, and can define the trend change of the species
-over time.
+`simulate_occurrences()` function. In this function, the user can
+specify different levels of spatial clustering, and define the trend of
+number of occurrences over time. The default is a random spatial pattern
+and a single time point with `rpois(1, 50)` occurrences.
 
 ``` r
 # Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
+  species_range = polygon,
+  initial_average_occurrences = 50,
+  spatial_pattern = c("random", "clustered"),
+  n_time_points = 1,
   seed = 123)
 #> [using unconditional Gaussian simulation]
 
@@ -109,16 +112,17 @@ ggplot() +
 
 ### Detection process
 
-In this step we define the sampling process, based on the detection
-probability of the species and the sampling bias. This is done using the
-`sample_observations()` function. The default sampling bias is
-`"no_bias"`, but bias can also be inserted using a polygon or a grid.
+In the second step we define the sampling process, based on the
+detection probability of the species and the sampling bias. This is done
+using the `sample_observations()` function. The default sampling bias is
+`"no_bias"`, but bias can be added using a polygon or a grid as well.
 
 ``` r
 # Detect occurrences
 detections_df_raw <- sample_observations(
   occurrences = occurrences_df,
   detection_probability = 0.5,
+  sampling_bias = c("no_bias", "polygon", "manual"),
   seed = 123)
 
 # Visualise
@@ -165,9 +169,9 @@ ggplot() +
 
 ### Grid designation process
 
-Finally, observations are designated to a grid to create an occurrence
-cube. We create a grid over the spatial extend using
-`sf::st_make_grid()`.
+Finally, observations are designated to a grid with `grid_designation()`
+to create an occurrence cube. We create a grid over the spatial extend
+using `sf::st_make_grid()`.
 
 ``` r
 # Define a grid over spatial extend
@@ -230,3 +234,19 @@ ggplot() +
 ```
 
 <img src="man/figures/readme-visualise-designation-1.png" alt="Distribution of minimal coordinate uncertainty." width="80%" />
+
+### Cubes for multiple species
+
+Each cube simulation function mentioned earlier has a corresponding
+mapping function. These mapping functions are designed to handle
+operations for multiple species simultaneously by using the
+`purrr::pmap()` function. Please consult the documentation for detailed
+information on how these mapping functions are implemented.
+
+| single species               | multiple species                 |
+|------------------------------|----------------------------------|
+| simulate_occurrences()       | map_simulate_occurrences()       |
+| sample_observations()        | map_sample_observations()        |
+| filter_observations()        | map_filter_observations()        |
+| add_coordinate_uncertainty() | map_add_coordinate_uncertainty() |
+| grid_designation()           | map_grid_designation()           |

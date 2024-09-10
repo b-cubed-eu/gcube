@@ -32,7 +32,9 @@ library(ggplot2)   # data visualisation
 
 The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
 The user can change these arguments to allow for more flexibility.
+
 As input, we create a polygon in which we simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -53,12 +55,12 @@ We can for example sample randomly within the polygon over 6 time points were we
 
 ```{r}
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
-  initial_average_abundance = 100,
+  species_range = polygon,
+  initial_average_occurrences = 100,
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 ```
 

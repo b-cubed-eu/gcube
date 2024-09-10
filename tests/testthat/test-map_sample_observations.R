@@ -20,24 +20,24 @@ road_polygon <- st_linestring(road_points) %>%
 # Dataframe with column names equal to arguments for simple polygon
 species_dataset_df1 <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   seed = 123)
 
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
 species_dataset_df2 <- species_dataset_df1 %>%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step,
          det_prob = detection_probability)
 
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob"
   )
@@ -45,12 +45,12 @@ arg_conv_list <- list(
 # Dataframe with column names equal to arguments for road polygon
 species_dataset_df3 <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   sampling_bias = "polygon",
   bias_area = rep(list(road_polygon), 3),
@@ -156,7 +156,7 @@ test_that("map_sample_observations handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd",
       detection_probability = TRUE
     )
@@ -167,7 +167,7 @@ test_that("map_sample_observations handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd",
       detection_probability = "det_probab"
     )

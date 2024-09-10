@@ -2,12 +2,12 @@
 % Please edit documentation in R/simulate_occurrences.R
 \name{simulate_occurrences}
 \alias{simulate_occurrences}
-\title{Simulate occurrences within a spatiotemporal scope}
+\title{Simulate species occurrences within a spatiotemporal scope}
 \usage{
 simulate_occurrences(
-  plgn,
-  initial_average_abundance = 50,
-  spatial_autocorr = c("random", "clustered"),
+  species_range,
+  initial_average_occurrences = 50,
+  spatial_pattern = c("random", "clustered"),
   n_time_points = 1,
   temporal_function = NA,
   ...,
@@ -15,43 +15,45 @@ simulate_occurrences(
 )
 }
 \arguments{
-\item{plgn}{An sf object with POLYGON geometry indicating the spatial
-extend to simulate occurrences.}
+\item{species_range}{An sf object with POLYGON geometry indicating the
+spatial extend to simulate occurrences.}
 
-\item{initial_average_abundance}{A positive numeric value indicating the
-average number of occurrences to be simulated within the extend of \code{polygon}
-at time point 1. This value will be used as mean of a Poisson distribution
-(lambda parameter).}
+\item{initial_average_occurrences}{A positive numeric value indicating the
+average number of occurrences to be simulated within the extent of
+\code{species_range} at the first time point. This value serves as the mean
+(lambda) of a Poisson distribution.}
 
-\item{spatial_autocorr}{Define the spatial pattern. It could be a character
-string \code{"random"} or \code{"clustered"}, in which \code{"random"} is the default.
-The user is able to provide a numeric value >= 1 (1 is "random" and
-10 is "clustered"). A larger number means a broader size of the clusters
-area. See details.}
+\item{spatial_pattern}{Specifies the spatial pattern of occurrences. It can
+be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
+(1 means random distribution, larger values indicate more clustering).
+The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
+See \code{create_spatial_pattern()}.}
 
-\item{n_time_points}{A positive integer value indicating the number of time
-points to simulate.}
+\item{n_time_points}{A positive integer specifying the number of time points
+to simulate.}
 
-\item{temporal_function}{\code{NA} (default), or a function which generates
-a trend in abundance over time. Only used if \code{n_time_points > 1}. By default,
-the function will sample \code{n_time_points} times from a Poisson
-distribution with average (lambda) \code{initial_average_occurrences}. When a
-function is specified (e.g. the internal \code{simulate_random_walk()} function).}
+\item{temporal_function}{A function generating a trend in number of
+occurrences over time, or \code{NA} (default). If \code{n_time_points} > 1 and a
+function is provided, it defines the temporal pattern of number of
+occurrences.}
 
-\item{...}{Additional argument to be passed to the \code{temporal_function}
-function.}
+\item{...}{Additional arguments to be passed to \code{temporal_function}.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 }
 \value{
 An sf object with POINT geometry containing the locations of the
-simulated occurrences and a \code{time_point} column containing the time point
-associated with each occurrence.
+simulated occurrences, a \code{time_point} column indicating the associated
+time point for each occurrence and a \code{sampling_p1} column indicating the
+sampling probability associated with the spatial pattern (see
+\code{create_spatial_pattern()}).
 }
 \description{
-The function simulates occurrences of a species within a given spatial
-and/or temporal extend.
+This function simulates occurrences of a species within a specified spatial
+and/or temporal extent.
 }
 \examples{
 # Load packages
@@ -60,15 +62,12 @@ library(ggplot2)
 
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-ggplot() +
-  geom_sf(data = plgn) +
-  theme_minimal()
 
-## Random spatial pattern with 4 time points
+# 1. Random spatial pattern with 4 time points
 occ_sf <- simulate_occurrences(
-  plgn,
+  species_range = plgn,
   n_time_points = 4,
-  initial_average_abundance = 100,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +
@@ -76,16 +75,16 @@ ggplot() +
  geom_sf(data = plgn, fill = NA) +
  facet_wrap("time_point") +
  labs(
-      title = "Occurrences with random\nspatial and temporal pattern",
+      title = "Occurrences with random spatial and temporal pattern",
       subtitle = "4 time steps") +
- theme_bw()
+ theme_minimal()
 
-## Clustered spatial pattern with 4 time points
+# 2. Highly clustered spatial pattern with 6 time points
 occ_sf_100 <- simulate_occurrences(
-  plgn,
-  spatial_autocorr = 100,
-  n_time_points = 4,
-  initial_average_abundance = 100,
+  species_range = plgn,
+  spatial_pattern = 100,
+  n_time_points = 6,
+  initial_average_occurrences = 100,
   seed = 123)
 
 ggplot() +
@@ -93,9 +92,9 @@ ggplot() +
   geom_sf(data = plgn, fill = NA) +
   facet_wrap("time_point") +
   labs(
-       title = "Occurrences with structured\nspatial and temporal pattern",
-       subtitle = "4 time steps") +
-  theme_bw()
+       title = "Occurrences with structured spatial and temporal pattern",
+       subtitle = "6 time steps") +
+  theme_minimal()
 }
 \seealso{
 Other main: 

@@ -1,27 +1,24 @@
-#' Simulate timeseries for species abundances
+#' Simulate timeseries for species occurrences
 #'
-#' The function simulates a timeseries for the abundance of a species.
+#' This function simulates a timeseries for the number of occurrences of a
+#' species.
 #'
 #' @param initial_average_occurrences A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extend of `polygon`
-#' at the first time point. This value will be used as mean of a Poisson
-#' distribution (lambda parameter).
-#' @param n_time_points A positive integer value indicating the number of time
-#' points to simulate.
-#' @param temporal_function `NA` (default), or a function which generates
-#' a trend in abundance over time. Only used if `n_time_points > 1`. By default,
-#' the function will sample `n_time_points` times from a Poisson
-#' distribution with average (lambda) `initial_average_occurrences`. When a
-#' function is specified (e.g. the internal `simulate_random_walk()` function)
-#' `n_time_points` average abundances (lambdas) are calculated using
-#' `initial_average_occurrences` and any additional arguments passed.
-#' See examples.
-#' @param ... Additional argument to be passed to the `temporal_function`
-#' function.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' average number of occurrences to be simulated at the first time point. This
+#' value serves as the mean (lambda) of a Poisson distribution.
+#' @param n_time_points A positive integer specifying the number of time points
+#' to simulate.
+#' @param temporal_function A function generating a trend in number of
+#' occurrences over time, or `NA` (default). If `n_time_points` > 1 and a
+#' function is provided, it defines the temporal pattern of number of
+#' occurrences.
+#' @param ... Additional arguments to be passed to `temporal_function`.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
-#' @returns A vector of integers of length n_time_points with the number of
+#' @returns A vector of integers of length `n_time_points` with the number of
 #' occurrences.
 #'
 #' @export
@@ -32,9 +29,7 @@
 #' @family occurrence
 #'
 #' @examples
-#' library(ggplot2)
-#'
-#' ## 1. Use the function simulate_random_walk()
+#' # 1. Use the function simulate_random_walk()
 #' simulate_timeseries(
 #'   initial_average_occurrences = 50,
 #'   n_time_points = 10,
@@ -43,52 +38,7 @@
 #'   seed = 123
 #' )
 #'
-#' ## 2. Visualising multiple draws
-#' # Set seed for reproducibility
-#' set.seed(123)
-#'
-#' # Draw n_sim abundances from Poisson distribution using random walk
-#' n_sim <- 10
-#' n_time_points <- 50
-#' sd_step <- 1
-#' list_abundances <- vector("list", length = n_sim)
-#'
-#' # Loop n_sim times over simulate_timeseries()
-#' for (i in seq_len(n_sim)) {
-#'   abundances <- simulate_timeseries(
-#'     initial_average_occurrences = 50,
-#'     n_time_points = n_time_points,
-#'     temporal_function = simulate_random_walk,
-#'     sd_step = sd_step
-#'   )
-#'
-#'   list_abundances[[i]] <- data.frame(
-#'     time = seq_along(abundances),
-#'     abundance = abundances,
-#'     sim = i
-#'   )
-#' }
-#'
-#' # Combine list of dataframes
-#' data_abundances <- do.call(rbind.data.frame, list_abundances)
-#'
-#' # Plot the simulated abundances over time using ggplot2
-#' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
-#'   geom_line() +
-#'   labs(
-#'     x = "Time", y = "Species abundance",
-#'     title = paste(
-#'       n_sim, "simulated abundances using random walk",
-#'       "with sd =", sd_step
-#'     )
-#'   ) +
-#'   scale_y_continuous(limits = c(0, NA)) +
-#'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
-#'   theme_minimal() +
-#'   theme(legend.position = "")
-#'
-#' ## 3. Using your own function
-#' # You can also specify your own trend function, e.g. this linear function
+#' # 2. Using your own custom function, e.g. this linear function
 #' my_own_linear_function <- function(
 #'     initial_average_occurrences = initial_average_occurrences,
 #'     n_time_points = n_time_points,
@@ -110,10 +60,8 @@
 #'   return(lambdas)
 #' }
 #'
-#' # Set seed for reproducibility
-#' set.seed(123)
-#'
-#' # Draw n_sim abundances from Poisson distribution using our own function
+#' # Draw n_sim number of occurrences from Poisson distribution using
+#' # the custom function
 #' n_sim <- 10
 #' n_time_points <- 50
 #' slope <- 1
@@ -139,12 +87,13 @@
 #' data_abundances <- do.call(rbind.data.frame, list_abundances)
 #'
 #' # Plot the simulated abundances over time using ggplot2
+#' library(ggplot2)
 #' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 #'   geom_line() +
 #'   labs(
 #'     x = "Time", y = "Species abundance",
 #'     title = paste(
-#'       n_sim, "simulated abundances using our own linear function",
+#'       n_sim, "simulated trends using custom linear function",
 #'       "with slope", slope
 #'     )
 #'   ) +
@@ -185,7 +134,11 @@ simulate_timeseries <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Check type of temporal_function
@@ -198,15 +151,14 @@ simulate_timeseries <- function(
     if (length_pars == 0) {
       # Generate timeseries using the provided function
       lambdas <- temporal_function(
-        initial_average_occurrences,
-        n_time_points,
-        seed = seed
+        initial_average_occurrences = initial_average_occurrences,
+        n_time_points = n_time_points
       )
     } else {
       # Generate timeseries using the provided function
       lambdas <- temporal_function(
-        initial_average_occurrences,
-        n_time_points,
+        initial_average_occurrences = initial_average_occurrences,
+        n_time_points = n_time_points,
         ...
       )
     }

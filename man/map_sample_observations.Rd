@@ -2,36 +2,37 @@
 % Please edit documentation in R/map_sample_observations.R
 \name{map_sample_observations}
 \alias{map_sample_observations}
-\title{Map \code{sample_observations()} function over multiple species}
+\title{Map \code{sample_observations()} over multiple species}
 \usage{
 map_sample_observations(df, nested = TRUE, arg_list = NA)
 }
 \arguments{
-\item{df}{A dataframe containing multiple rows. Each row is considered a
+\item{df}{A dataframe containing multiple rows, each representing a
 different species. The columns are function arguments with values used for
-mapping \code{sample_observations()} for each species. \code{df} can have columns that
-are not used by this function. They will be retained in the output.}
+mapping \code{sample_observations()} for each species. Columns not used by this
+function will be retained in the output.}
 
-\item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
-sf objects calculated by \code{sample_observations()}. Otherwise, expand this
+\item{nested}{Logical. If \code{TRUE} (default), retains list-column containing
+sf objects calculated by \code{sample_observations()}. Otherwise, expands this
 list-column into rows and columns.}
 
 \item{arg_list}{A named list or \code{NA}. If \code{NA} (default), the function assumes
 column names in \code{df} are identical to argument names of
-\code{sample_observations()}. If column names are not identical, they need to be
+\code{sample_observations()}. If column names differ, they must be
 specified as a named list where the names are the argument names of
-\code{sample_observations()}.}
+\code{sample_observations()}, and the associated values are the corresponding
+column names in \code{df}.}
 }
 \value{
-In case of \code{nested = TRUE}, a dataframe identical to the input
-dataframe \code{df}, but with an extra list-column called \code{occurrences} containing
-an sf object with POINT geometry for each row computed by
-\code{sample_observations()}. In case of \code{nested = FALSE}, this list-column is
-expanded into additional rows and columns.
+In case of \code{nested = TRUE}, a dataframe identical to \code{df}, with an
+extra list-column called \code{occurrences} containing an sf object with POINT
+geometry for each row computed by \code{sample_observations()}. In case of
+\code{nested = FALSE}, this list-column is expanded into additional rows and
+columns.
 }
 \description{
-The function executes \code{sample_observations()} over multiple rows of a
-dataframe, representing multiple different species, containing potentially
+This function executes \code{sample_observations()} over multiple rows of a
+dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{
@@ -46,12 +47,12 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 # Specify dataframe for 3 species with custom function arguments
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 200),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   seed = 123)
 
@@ -62,22 +63,16 @@ sim_occ1 <- map_simulate_occurrences(df = species_dataset_df)
 samp_obs_nested <- map_sample_observations(df = sim_occ1)
 samp_obs_nested
 
-# Unnest output and create sf object again
-samp_obs_unnested <- map_sample_observations(df = sim_occ1,
-                                             nested = FALSE)
-samp_obs_unnested \%>\%
-   st_sf()
-
 ## Example with deviating column names
 # Specify dataframe for 3 species with custom function arguments
 species_dataset_df2 <- species_dataset_df \%>\%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step,
          det_prob = detection_probability)
 
 # Create named list for argument conversion
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob"
   )

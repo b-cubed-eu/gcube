@@ -4,19 +4,16 @@ n_points <- 4
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 
-## set seed for reproducible observations object
-set.seed(9)
-
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
-  lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2]),
+  lat = c(3110575, 3111577, 3110818, 3111766),
+  long = c(3841940, 3841046, 3841528, 3841892),
   time_point = 1
   ) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## dataset with coordinateUncertaintyInMeters
-coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+coordinate_uncertainty <- c(24.32870, 53.96961, 28.16026, 43.24885)
 observations_sf2 <- observations_sf1 %>%
   dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
 
@@ -52,7 +49,7 @@ test_that("unique ids if id column is provided", {
                      id_col = "id"),
     regexp = paste0(
       "Column 'id' does not contain unique ids for grid cells!\n",
-      "Creating new ids based on row names."
+      "Creating 'cell_code' column with ids based on row names."
     ),
     fixed = TRUE)
 })
@@ -65,7 +62,7 @@ test_that("provided id column present in provided grid", {
                      id_col = "identifier"),
     regexp = paste0(
       "Column name 'identifier' not present in provided grid!\n",
-      "Creating ids based on row names."
+      "Creating 'cell_code' column with ids based on row names."
     ),
     fixed = TRUE)
 })
@@ -105,10 +102,10 @@ test_that("correct column names present", {
   # aggregate = TRUE, randomisation = "uniform"
   suppressWarnings({
     expect_contains(names(grid_designation(observations_sf1, grid = grid_df1)),
-                    c("id", "n", "min_coord_uncertainty", "geometry"))
+                    c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   })
   expect_contains(names(grid_designation(observations_sf2, grid = grid_df1)),
-                  c("id", "n", "min_coord_uncertainty", "geometry"))
+                  c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   expect_contains(
     names(grid_designation(
       observations_sf2,
@@ -121,11 +118,11 @@ test_that("correct column names present", {
   suppressWarnings({
     expect_contains(names(grid_designation(observations_sf1, grid = grid_df1,
                                            randomisation = "normal")),
-                    c("id", "n", "min_coord_uncertainty", "geometry"))
+                    c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   })
   expect_contains(names(grid_designation(observations_sf2, grid = grid_df1,
                                          randomisation = "normal")),
-                  c("id", "n", "min_coord_uncertainty", "geometry"))
+                  c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   expect_contains(
     names(grid_designation(
       observations_sf2,
@@ -139,11 +136,11 @@ test_that("correct column names present", {
   suppressWarnings({
     expect_contains(names(grid_designation(observations_sf1, grid = grid_df1,
                                            aggregate = FALSE)),
-                    c("id", "coordinateUncertaintyInMeters", "geometry"))
+                    c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   })
   expect_contains(names(grid_designation(observations_sf2, grid = grid_df1,
                                          aggregate = FALSE)),
-                  c("id", "coordinateUncertaintyInMeters", "geometry"))
+                  c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   expect_contains(
     names(grid_designation(
       observations_sf2,
@@ -158,12 +155,12 @@ test_that("correct column names present", {
     expect_contains(names(grid_designation(observations_sf1, grid = grid_df1,
                                            aggregate = FALSE,
                                            randomisation = "normal")),
-                    c("id", "coordinateUncertaintyInMeters", "geometry"))
+                    c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   })
   expect_contains(names(grid_designation(observations_sf2, grid = grid_df1,
                                          aggregate = FALSE,
                                          randomisation = "normal")),
-                  c("id", "coordinateUncertaintyInMeters", "geometry"))
+                  c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   expect_contains(
     names(grid_designation(
       observations_sf2,
@@ -325,7 +322,8 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
   })
   expect_equal(grid_designation(observations_sf2, grid = grid_df1,
                                 randomisation = "normal",
-                                aggregate = FALSE) %>%
+                                aggregate = FALSE,
+                                seed = 123) %>%
                  nrow(),
                nrow(observations_sf2))
 })

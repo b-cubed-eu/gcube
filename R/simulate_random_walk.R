@@ -1,17 +1,18 @@
 #' Simulate a random walk over time
 #'
-#' The function simulates occurrences of a species in a temporal extent.
+#' This function simulates a timeseries for the average number of occurrences of
+#' a species using a random walk over time.
 #'
 #' @param initial_average_occurrences A positive numeric value indicating the
-#' average number of occurrences to be simulated within the extend of `polygon`
-#' at time point 1. This value will be used as mean of a Poisson distribution
-#' (lambda parameter).
-#' @param n_time_points A positive integer value indicating the number of time
-#' points to simulate.
+#' average number of occurrences to be simulated at the first time point.
+#' @param n_time_points A positive integer specifying the number of time points
+#' to simulate.
 #' @param sd_step A positive numeric value indicating the standard deviation of
 #' the random steps.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns A vector of integers of length `n_time_points` with the average
 #' number of occurrences.
@@ -20,12 +21,10 @@
 #'
 #' @import assertthat
 #' @importFrom stats rnorm
-#' @importFrom withr local_seed
 #'
 #' @family occurrence
 #'
 #' @examples
-#'
 #' simulate_random_walk(
 #'   initial_average_occurrences = 50,
 #'   n_time_points = 10,
@@ -64,7 +63,11 @@ simulate_random_walk <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
   }
 
   # Initialize an empty vector to store average abundance values

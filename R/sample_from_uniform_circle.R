@@ -1,14 +1,17 @@
 #' Sample from a circle using the Uniform distribution
 #'
-#' The function samples occurrences of a species within the uncertainty circle
-#' around each observation assuming a Uniform distribution.
+#' This function samples a new observations point of a species within the
+#' uncertainty circle around each observation assuming a Uniform distribution.
 #'
 #' @param observations An sf object with POINT geometry and a `time_point` and
-#' `coordinateUncertaintyInMeters` column. If this last column is not present,
-#' the function will assume no (zero meters) uncertainty around the observation
-#' points.
-#' @param seed A positive numeric value. The seed for random number generation
-#' to make results reproducible. If `NA` (the default), no seed is used.
+#' `coordinateUncertaintyInMeters` column. If the former column is not present,
+#' the function will assume a single time point. If the latter column is not
+#' present, the function will assume no uncertainty (zero meters) around the
+#' observation points.
+#' @param seed A positive numeric value setting the seed for random number
+#' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
+#' is not called at all. If not `NA`, then the random number generator state is
+#' reset (to the state before calling this function) upon exiting this function.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled occurrences and a `coordinateUncertaintyInMeters` column containing
@@ -25,8 +28,6 @@
 #'
 #' @examples
 #' library(sf)
-#'
-#' set.seed(123)
 #'
 #' # Create four random points
 #' n_points <- 4
@@ -65,7 +66,21 @@ sample_from_uniform_circle <- function(
 
   # Set seed if provided
   if (!is.na(seed)) {
-    withr::local_seed(seed)
+    if (exists(".Random.seed", envir = .GlobalEnv)) {
+      rng_state_old <- get(".Random.seed", envir = .GlobalEnv)
+      on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
+    }
+    set.seed(seed)
+  }
+
+  # Create time_point column if column not present in data
+  if (!"time_point" %in% names(observations)) {
+    observations$time_point <- 1
+    warning(paste(
+      "No column `time_point` present!",
+      "Assuming only a single time point.",
+      sep = "\n"
+    ))
   }
 
   # Set uncertainty to zero if column not present in data

@@ -5,23 +5,23 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 # Specify dataframe for 3 species with custom function arguments
 # Dataframe with column names equal to arguments
 species_dataset_df <- tibble(
-  plgn = rep(list(plgn), 3),
+  species_range = rep(list(plgn), 3),
   n_time_points = rep(6, 3),
   seed = 123)
 
 species_dataset_df1 <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 
 # Dataframe with custom column names and named list for argument conversion
 species_dataset_df2 <- species_dataset_df1 %>%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step)
 
 
@@ -68,7 +68,7 @@ test_that("map_simulate_occurrences works with simple column names", {
 test_that("map_simulate_occurrences works with arg_list for renaming columns", {
   # Test with arg_list
   arg_conv_list <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd"
     )
 
@@ -97,7 +97,7 @@ test_that("map_simulate_occurrences handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = 123
     )
   expect_error(
@@ -107,7 +107,7 @@ test_that("map_simulate_occurrences handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd",
       detection_probability = "det_prob"
     )

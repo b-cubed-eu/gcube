@@ -4,21 +4,29 @@
 \alias{sample_occurrences_from_raster}
 \title{Sample occurrences from spatial random field}
 \usage{
-sample_occurrences_from_raster(rs, ts, seed = NA)
+sample_occurrences_from_raster(raster, time_series, seed = NA)
 }
 \arguments{
-\item{rs}{A SpatRaster object (terra).}
+\item{raster}{A SpatRaster object (see \code{\link[terra:rast]{terra::rast()}}).}
 
-\item{ts}{A vector with the number of occurrences per time point.}
+\item{time_series}{A vector with the number of occurrences per time point.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 }
 \value{
-An sf object with POINT geometry
+An sf object with POINT geometry containing the locations of the
+simulated occurrences, a \code{time_point} column indicating the associated
+time point for each occurrence and columns used as weights for sampling.
+If the raster is created with \code{create_spatial_pattern()}, the column
+\code{sampling_p1} is used.
 }
 \description{
-Draws occurrences (points) from a spatial random field (raster)
+This function draws point occurrences from a spatial random field represented
+by a raster. Points are sampled based on the values in the raster, with the
+number of occurrences specified for each time step.
 }
 \examples{
 # Load packages
@@ -28,9 +36,6 @@ library(tidyterra)
 
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-ggplot() +
-  geom_sf(data = plgn) +
-  theme_minimal()
 
 ## Medium scale clustering
 # Create the random field
@@ -42,8 +47,8 @@ rs_pattern_clustered <- create_spatial_pattern(
 
 # Sample 200 occurrences from random field
 pts_occ_clustered <- sample_occurrences_from_raster(
-  rs = rs_pattern_clustered,
-  ts = 200,
+  raster = rs_pattern_clustered,
+  time_series = 200,
   seed = 123)
 
 ggplot() +
@@ -62,8 +67,8 @@ rs_pattern_large <- create_spatial_pattern(
 
 # Sample 200 occurrences from random field
 pts_occ_large <- sample_occurrences_from_raster(
-  rs = rs_pattern_large,
-  ts = 200,
+  raster = rs_pattern_large,
+  time_series = 200,
   seed = 123)
 
 ggplot() +

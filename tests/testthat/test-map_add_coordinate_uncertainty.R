@@ -6,12 +6,12 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 # Dataframe with column names equal to arguments for simple polygon
 species_dataset_df1 <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   invert = FALSE,
   coords_uncertainty_meters = c(25, 30, 50),
@@ -20,14 +20,14 @@ species_dataset_df1 <- tibble(
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
 species_dataset_df2 <- species_dataset_df1 %>%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step,
          det_prob = detection_probability,
          inv = invert,
          coord_uncertainty = coords_uncertainty_meters)
 
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob",
     invert = "inv",
@@ -132,7 +132,7 @@ test_that("map_add_coordinate_uncertainty handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd",
       detection_probability = "det_prob",
       invert = "inv",
@@ -145,7 +145,7 @@ test_that("map_add_coordinate_uncertainty handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-      plgn = "polygon",
+      species_range = "polygon",
       sd_step = "sd",
       detection_probability = "det_prob",
       invert = "inv",

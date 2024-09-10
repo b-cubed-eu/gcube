@@ -1,15 +1,20 @@
 #' Add coordinate uncertainty to observations
 #'
-#' Adds a column to the observations sf object with the coordinate uncertainty
-#' in meters.
+#' This function adds a column to the input dataframe or sf object containing
+#' the coordinate uncertainty for each observation, measured in meters.
 #'
-#'
-#' @param observations An sf object with POINT geometry.
+#' @param observations An sf object with POINT geometry or a simple
+#' dataframe representing the observations. This object contains the observation
+#' points to which the coordinate uncertainty will be added.
 #' @param coords_uncertainty_meters A numeric value or a vector of numeric
-#' values indicating the coordinate uncertainty associated with observations.
+#' values representing the coordinate uncertainty (in meters) associated with
+#' each observation. If a single numeric value is provided, it will be applied
+#' to all observations. If a numeric vector is provided, it must be the same
+#' length as the number of observations.
 #'
-#' @return An sf object with POINT geometry with an additional column
-#' `coordinateUncertaintyInMeters`.
+#' @returns The input data frame or an sf object with POINT geometry, with an
+#' additional column named `coordinateUncertaintyInMeters` that contains the
+#' coordinate uncertainty values in meters.
 #'
 #' @export
 #'
@@ -19,31 +24,24 @@
 #' @family main
 #'
 #' @examples
+#' # Create dataframe with sampling status column
+#' observations_data <- data.frame(
+#'     time_point = 1,
+#'     sampling_prob = seq(0.5, 1, 0.1)
+#'   )
 #'
-#' library(sf)
-#' library(dplyr)
-#'
-#' set.seed(123)
-#'
-#' # Create four random points
-#' n_points <- 4
-#' xlim <- c(3841000, 3842000)
-#' ylim <- c(3110000, 3112000)
-#' observations_sf <- data.frame(
-#'   lat = runif(n_points, ylim[1], ylim[2]),
-#'     long = runif(n_points, xlim[1], xlim[2])) %>%
-#'     st_as_sf(coords = c("long", "lat"), crs = 3035)
-#'
-#'  # provide a fixed uncertainty for all points
-#'  add_coordinate_uncertainty(
-#'    observations_sf,
-#'    coords_uncertainty_meters = 1000
-#'    )
+#' # provide a fixed uncertainty for all points
+#' add_coordinate_uncertainty(
+#'   observations_data,
+#'   coords_uncertainty_meters = 1000
+#'  )
 #'
 #' # add variability in uncertainty. For example, using gamma distribution
+#' uncertainty_vec <- seq(50, 100, 10)
+#'
 #' add_coordinate_uncertainty(
-#'   observations_sf,
-#'   coords_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
+#'   observations_data,
+#'   coords_uncertainty_meters = uncertainty_vec
 #' )
 
 add_coordinate_uncertainty <- function(
@@ -52,10 +50,9 @@ add_coordinate_uncertainty <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if observations is an sf object
-  stopifnot("`observations` must be an sf object with POINT geometry." =
-              inherits(observations, "sf") &&
-              sf::st_geometry_type(observations,
-                                   by_geometry = FALSE) == "POINT")
+  stopifnot("`observations` must be an sf object or a dataframe." =
+              inherits(observations, "sf") ||
+              inherits(observations, "data.frame"))
 
   # Check if coords_uncertainty_meters is numeric
   stopifnot("`coords_uncertainty_meters` must be  numeric vector." =

@@ -1,16 +1,19 @@
-#' Filter detected observations
+#' Filter detected occurrences
 #'
-#' The function filters observations from all observations based on a
-#' `sampling_status` column, e.g. created by `sample_observations()`.
+#' This function filters observations from all occurrences based on the
+#' `sampling_status` column, typically created by the `sample_observations()`
+#' function.
 #'
 #' @param observations_total An sf object with POINT geometry or a simple
 #' dataframe with `sampling_status` column containing values `"detected"`.
-#' This format is created by `sample_observations()`.
-#' @param invert Logical. If `FALSE` (default), filter `"detected"`
-#' occurrences. Otherwise, filter all other occurrences.
+#' This format is typically created by the `sample_observations()` function.
+#' @param invert Logical. If `FALSE` (default), the function filters to retain
+#' only `"detected"` occurrences. If `TRUE`, it filters out `"detected"`
+#' occurrences and retains all other occurrences.
 #'
-#' @returns A dataframe or an sf object with POINT geometry containing detected
-#' occurrences (if `invert = FALSE`), or other occurrences (if `invert = TRUE`).
+#' @returns A data frame or an sf object with POINT geometry containing the
+#' filtered observations. If `invert = FALSE`, the function returns detected
+#' occurrences. If `invert = TRUE`, it returns all other occurrences.
 #'
 #' @export
 #'
@@ -19,37 +22,18 @@
 #' @family main
 #'
 #' @examples
-#' # Load packages
-#' library(sf)
-#' library(dplyr)
-#'
-#' # Set seed for reproducibility
-#' set.seed(123)
-#'
-#' # Simulate some occurrence data with coordinates and time points
-#' num_points <- 10
-#' occurrences <- data.frame(
-#'   lon = runif(num_points, min = -180, max = 180),
-#'   lat = runif(num_points, min = -90, max = 90),
-#'   time_point = 0
+#' # Create dataframe with sampling status column
+#' occurrences_data <- data.frame(
+#'     time_point = 1,
+#'     sampling_prob = seq(0.5, 1, 0.1),
+#'     sampling_status = rep(c("undetected", "detected"), each = 3)
 #'   )
 #'
-#' # Convert the occurrence data to an sf object
-#' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+#' # Keep detected occurrences
+#' filter_observations(occurrences_data)
 #'
-#' # Sample observations without sampling bias
-#' observations_total_sf <- sample_observations(
-#'   occurrences_sf,
-#'   detection_probability = 0.8,
-#'   sampling_bias = "no_bias",
-#'   seed = 123
-#'   )
-#'
-#' # Filter detected observations
-#' filter_observations(observations_total_sf)
-#'
-#' # Filter undetected observations
-#' filter_observations(observations_total_sf, invert = TRUE)
+#' # Keep undetected occurrences
+#' filter_observations(occurrences_data, invert = TRUE)
 
 filter_observations <- function(observations_total, invert = FALSE) {
   ### Start checks

@@ -2,37 +2,37 @@
 % Please edit documentation in R/map_add_coordinate_uncertainty.R
 \name{map_add_coordinate_uncertainty}
 \alias{map_add_coordinate_uncertainty}
-\title{Map \code{add_coordinate_uncertainty()} function over multiple species}
+\title{Map \code{add_coordinate_uncertainty()} over multiple species}
 \usage{
 map_add_coordinate_uncertainty(df, nested = TRUE, arg_list = NA)
 }
 \arguments{
-\item{df}{A dataframe containing multiple rows. Each row is considered a
+\item{df}{A dataframe containing multiple rows, each representing a
 different species. The columns are function arguments with values used for
-mapping \code{add_coordinate_uncertainty()} for each species. \code{df} can have
-columns that are not used by this function. They will be retained in the
-output.}
+mapping \code{add_coordinate_uncertainty()} for each species. Columns not used by
+this function will be retained in the output.}
 
-\item{nested}{Logical. If \code{TRUE} (default), retain list-column containing
-sf objects calculated by \code{add_coordinate_uncertainty()}. Otherwise, expand
+\item{nested}{Logical. If \code{TRUE} (default), retains list-column containing
+sf objects calculated by \code{add_coordinate_uncertainty()}. Otherwise, expands
 this list-column into rows and columns.}
 
 \item{arg_list}{A named list or \code{NA}. If \code{NA} (default), the function assumes
 column names in \code{df} are identical to argument names of
-\code{add_coordinate_uncertainty()}. If column names are not identical, they need
+\code{add_coordinate_uncertainty()}. If column names differ, they must
 to be specified as a named list where the names are the argument names of
-\code{add_coordinate_uncertainty()}.}
+\code{add_coordinate_uncertainty()}, and the associated values are the
+corresponding column names in \code{df}.}
 }
 \value{
-In case of \code{nested = TRUE}, a dataframe identical to the input
-dataframe \code{df}, but each sf object with POINT geometry in the list-column
-\code{observations} now has an additional column \code{coordinateUncertaintyInMeters}
-added by \code{add_coordinate_uncertainty()}. In case of \code{nested = FALSE}, this
+In case of \code{nested = TRUE}, a dataframe identical to \code{df}, but each
+sf object with POINT geometry in the list-column \code{observations} now has an
+additional column \code{coordinateUncertaintyInMeters} added by
+\code{add_coordinate_uncertainty()}. In case of \code{nested = FALSE}, this
 list-column is expanded into additional rows and columns.
 }
 \description{
-The function executes \code{add_coordinate_uncertainty()} over multiple rows of a
-dataframe, representing multiple different species, containing potentially
+This function executes \code{add_coordinate_uncertainty()} over multiple rows of a
+dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{
@@ -47,12 +47,12 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 # Specify dataframe for 3 species with custom function arguments
 species_dataset_df <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 200),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   invert = FALSE,
   coords_uncertainty_meters = c(25, 30, 50),
@@ -71,17 +71,11 @@ filter_obs1 <- map_filter_observations(df = samp_obs1)
 obs_uncertainty_nested <- map_add_coordinate_uncertainty(df = filter_obs1)
 obs_uncertainty_nested
 
-# Unnest output and create sf object again
-obs_uncertainty_unnested <- map_add_coordinate_uncertainty(df = filter_obs1,
-                                                           nested = FALSE)
-obs_uncertainty_unnested \%>\%
-   st_sf()
-
 
 ## Example with deviating column names
 # Specify dataframe for 3 species with custom function arguments
 species_dataset_df2 <- species_dataset_df \%>\%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step,
          det_prob = detection_probability,
          inv = invert,
@@ -89,7 +83,7 @@ species_dataset_df2 <- species_dataset_df \%>\%
 
 # Create named list for argument conversion
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob",
     invert = "inv",

@@ -15,33 +15,37 @@ create_spatial_pattern(
 \arguments{
 \item{polygon}{An sf object with POLYGON geometry.}
 
-\item{resolution}{A numeric value defining the resolution of the raster cell}
+\item{resolution}{A numeric value defining the resolution of the raster
+cells.}
 
-\item{spatial_pattern}{Define the spatial pattern. It could be a character
-string \code{"random"} or \code{"clustered"}, in which \code{"random"} is the default.
-The user is able to provide a numeric value >= 1 (1 is "random" and
-10 is "clustered"). A larger number means a broader size of the clusters
-area. See details.}
+\item{spatial_pattern}{Specifies the desired spatial pattern. It can
+be a character string (\code{"random"} or \code{"clustered"}) or a numeric value ≥ 1
+(1 means random distribution, larger values indicate more clustering).
+The default is \code{"random"}. \code{"clustered"} corresponds to a value of 10.
+See Details.}
 
-\item{seed}{The seed for random number generation to make results
-reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 
 \item{n_sim}{Number of simulations. Each simulation is a different layer in
-the raster. Default 1.}
+the raster. Default is 1.}
 }
 \value{
 An object of class SpatRaster with a spatial pattern for the area of
-the given polygon.
+the given polygon with \code{n_sim} layers \verb{sampling_p'n_sim'} containing the
+sampling probabilities from the raster grid for each simulation.
 }
 \description{
-It creates a raster with a spatial pattern for the area of a polygon.
+This function creates a raster with a spatial pattern for the area of a
+polygon.
 }
 \details{
-the \code{spatial_pattern} argument change the range parameter of the
-spherical variogram model. \code{spatial_pattern = 1} means the range has
-the same size of the grid cell, which is defined in \code{resolution}
-argument. We use the function \code{\link[gstat:vgm]{gstat::vgm()}} to implement the
-spherical variogram model
+The \code{spatial_pattern} argument changes the range parameter of the
+spherical variogram model. \code{spatial_pattern = 1} means the range has the same
+size as the grid cell, which is defined in the \code{resolution} argument. The
+function \code{\link[gstat:vgm]{gstat::vgm()}} is used to implement the spherical variogram model.
 }
 \examples{
 # Load packages
@@ -51,11 +55,8 @@ library(tidyterra)
 
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
-ggplot() +
-  geom_sf(data = plgn) +
-  theme_minimal()
 
-# Random spatial pattern
+# 1. Random spatial pattern
 rs_pattern_random <- create_spatial_pattern(
   polygon = plgn,
   resolution = 0.1,
@@ -67,7 +68,7 @@ ggplot() +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
-## Clustered spatial pattern
+# 2. Clustered spatial pattern
 rs_pattern_clustered <- create_spatial_pattern(
   polygon = plgn,
   resolution = 0.1,
@@ -79,31 +80,7 @@ ggplot() +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
-## User defined spatial pattern
-# Small scale clustering
-rs_pattern_small <- create_spatial_pattern(
-  polygon = plgn,
-  resolution = 0.1,
-  spatial_pattern = 5,
-  seed = 123)
-
-ggplot() +
-  geom_spatraster(data = rs_pattern_small) +
-  scale_fill_continuous(type = "viridis") +
-  theme_minimal()
-
-# Medium scale clustering (= the built-in clustered pattern)
-rs_pattern_medium <- create_spatial_pattern(
-  polygon = plgn,
-  resolution = 0.1,
-  spatial_pattern = 10,
-  seed = 123)
-
-ggplot() +
-  geom_spatraster(data = rs_pattern_medium) +
-  scale_fill_continuous(type = "viridis") +
-  theme_minimal()
-
+# 3. User defined spatial pattern
 # Large scale clustering
 rs_pattern_large <- create_spatial_pattern(
   polygon = plgn,

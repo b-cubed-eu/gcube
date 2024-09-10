@@ -32,8 +32,10 @@ library(ggExtra)   # enhance data visualisation
 # Input
 
 The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+
 The user can change these arguments to allow for more flexibility.
 As input, we create a polygon in which we simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -84,12 +86,12 @@ We can for example sample randomly within the polygon over 6 time points were we
 
 ```{r}
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
-  initial_average_abundance = 100,
+  species_range = polygon,
+  initial_average_occurrences = 100,
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 ```
 
@@ -330,7 +332,7 @@ occurrence_cube_df <- grid_designation(
   seed = 123)
 ```
 
-For each grid cell (column `id`) at each time point (column `time_point`), we get the number of observations (column `n`, sampled within uncertainty circle) and the minimal coordinate uncertainty (column `min_coord_uncertainty`).
+For each grid cell (column `cell_code`) at each time point (column `time_point`), we get the number of observations (column `n`, sampled within uncertainty circle) and the minimal coordinate uncertainty (column `min_coord_uncertainty`).
 The latter is 25 for each grid cell since each observation had the same coordinate uncertainty.
 
 ```{r}
@@ -348,6 +350,8 @@ sampled_points <- grid_designation(
 ```
 
 Lets visualise were the samples were taken for time point 1.
+Note that no distinction is made between zeroes and `NA` values!
+Every absence gets a zero value.
 
 ```{r}
 #| fig.alt: >

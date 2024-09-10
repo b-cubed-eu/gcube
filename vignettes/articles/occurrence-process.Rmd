@@ -36,6 +36,7 @@ The user can change these arguments to allow for more flexibility.
 In this tutorial we will demonstrate the different options.
 
 As input, we create a polygon in which we want to simulate occurrences.
+It represents the spatial extend of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -66,7 +67,7 @@ The options for user defined arguments are demonstrated in the next subsections.
 ## Changing number of occurrences over time
 
 Say we want to have 100 occurrences in our plot over 10 years.
-You can change the trend in number of occurrences over time.
+You can change the trend in the average number of occurrences over time.
 We visualise this with the supporting functions used in `simulate_occurrences()`.
 The number of occurrences are always drawn from a Poisson distribution.
 
@@ -305,8 +306,8 @@ If we for example sample 500 occurrences from the last raster, we see the sampli
 #| fig.alt: >
 #|   500 sampled occurrences from highly clustered spatial pattern.
 pts_occ_clustered3 <- sample_occurrences_from_raster(
-  rs = rs_pattern_clustered3,
-  ts = 500,
+  raster = rs_pattern_clustered3,
+  time_series = 500,
   seed = 123)
 
 ggplot() +
@@ -323,12 +324,12 @@ We can for example sample randomly within the polygon over 6 time points were we
 
 ```{r}
 occurrences_df <- simulate_occurrences(
-  plgn = polygon,
-  initial_average_abundance = 100,
+  species_range = polygon,
+  initial_average_occurrences = 100,
   n_time_points = 6,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   seed = 123)
 ```
 

@@ -15,59 +15,72 @@ sample_observations(
 )
 }
 \arguments{
-\item{occurrences}{An sf object with POINT geometry.}
+\item{occurrences}{An sf object with POINT geometry representing the
+occurrences.}
 
-\item{detection_probability}{A numeric value between 0 and 1, corresponding
-to the probability of detection of the species.}
+\item{detection_probability}{A numeric value between 0 and 1 representing the
+probability of detecting the species.}
 
-\item{sampling_bias}{\code{"no_bias"}, \code{"polygon"} or \code{"manual"}. The method used
-to generate a sampling bias. \code{"polygon"}: bias the sampling in a polygon.
-Provide your polygon to \code{bias_area}. Provide bias strength to
-\code{bias_strength}. \code{"manual"}: bias the sampling manually via a raster.
-Provide your raster layer in which each cell contains the probability to be
-sampled to \code{bias_weights}.}
+\item{sampling_bias}{A character string specifying the method to generate a
+sampling bias.
+Options are \code{"no_bias"}, \code{"polygon"}, or \code{"manual"}.
+\describe{
+\item{\code{"no_bias"}}{No bias is applied (default).}
+\item{\code{"polygon"}}{Bias the sampling within a polygon. Provide the polygon
+to \code{bias_area} and the bias strength to \code{bias_strength}.}
+\item{\code{"manual"}}{Bias the sampling manually using a grid. Provide the grid
+layer in which each cell contains the probability of being sampled to
+\code{bias_weights}.}
+}}
 
-\item{bias_area}{\code{NA} or an sf object with POLYGON geometry. Only used if
-\code{sampling_bias = "polygon"}. The area in which the sampling will be biased.}
+\item{bias_area}{An \code{sf} object with POLYGON geometry, or \code{NA}. Only used if
+\code{sampling_bias = "polygon"}. This defines the area in which the sampling will
+be biased.}
 
-\item{bias_strength}{\code{NA} or a positive numeric value. Only used if
-\code{sampling_bias = "polygon"}. The strength of the bias to be applied in the
-biased area (as a multiplier). Above 1, area will be oversampled. Below 1,
-area will be undersampled. For example, a value of 50 will result in a 50
-times sampling probability within the \code{bias_area} than outside. Conversely,
-a value of 0.5 will result in half less samples within the \code{bias_area} than
-outside.}
+\item{bias_strength}{A positive numeric value, or \code{NA}. Only used if
+\code{sampling_bias = "polygon"}. The value represents the strength of
+the bias to be applied within the \code{bias_area}. Values greater than 1 will
+increase the sampling probability within the polygon relative to outside
+(oversampling), while values between 0 and 1 will decrease it
+(undersampling). For instance, a value of 50 will make the probability 50
+times higher within the \code{bias_area} compared to outside, whereas a value of
+0.5 will make it half as likely.}
 
-\item{bias_weights}{\code{NA} or a raster layer (sf object with POLYGON geometry).
-Only used if \code{sampling_bias = "manual"}. The raster of bias weights to be
-applied to the sampling of occurrences. Higher weights mean a higher
-probability of sampling. Weights can be numeric values between 0 and 1 or
-positive integers that will be rescaled to values between 0 and 1.}
+\item{bias_weights}{A grid layer (an sf object with POLYGON geometry), or
+\code{NA}. Only used if \code{sampling_bias = "manual"}. The grid of bias weights to be
+applied. This sf object should contain a \code{bias_weight} column with the
+weights per grid cell. Higher weights increase the probability of sampling.
+Weights can be numeric values between 0 and 1 or positive integers, which
+will be rescaled to values between 0 and 1.}
 
-\item{seed}{A positive numeric value. The seed for random number generation
-to make results reproducible. If \code{NA} (the default), no seed is used.}
+\item{seed}{A positive numeric value setting the seed for random number
+generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
+is not called at all. If not \code{NA}, then the random number generator state is
+reset (to the state before calling this function) upon exiting this function.}
 }
 \value{
 An sf object with POINT geometry containing the locations of the
-sampled observations, a \code{detection_probability} column containing the
-detection probability for each observation (will be the same for all), a
-\code{bias_weight} column containing the sampling probability based on sampling
-bias, a \code{sampling_probability} column containing the combined sampling
-probability from detection probability and sampling bias for each
-observation, and a \code{sampling_status} column indicating whether the
-occurrence was detected (observations) or not (unobserved occurrences).
+occurrence with detection status. The object includes the following columns:
+\describe{
+\item{\code{detection_probability}}{The detection probability for each
+occurrence (will be the same for all).}
+\item{\code{bias_weight}}{The sampling probability based on sampling bias for
+each occurrence.}
+\item{\code{sampling_probability}}{The combined sampling probability from
+detection probability and sampling bias for each occurrence.}
+\item{\code{sampling_status}}{Indicates whether the occurrence was detected
+(\code{"detected"}) or not (\code{"undetected"}). Detected occurrences are called
+observations.}
+}
 }
 \description{
-The function samples observations from occurrences based on detection
+The function computes observations from occurrences based on detection
 probability and sampling bias by implementing a Bernoulli trial.
 }
 \examples{
 # Load packages
 library(sf)
 library(dplyr)
-
-# Set seed for reproducibility
-set.seed(123)
 
 # Simulate some occurrence data with coordinates and time points
 num_points <- 10
@@ -80,7 +93,7 @@ occurrences <- data.frame(
 # Convert the occurrence data to an sf object
 occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-# Sample observations without sampling bias
+# 1. Sample observations without sampling bias
 sample_observations(
   occurrences_sf,
   detection_probability = 0.8,
@@ -88,11 +101,11 @@ sample_observations(
   seed = 123
   )
 
-# Sample observations with sampling bias in a polygon
+# 2. Sample observations with sampling bias in a polygon
 # Create bias_area polygon overlapping two of the points
 selected_observations <- st_union(occurrences_sf[2:3,])
 bias_area <- st_convex_hull(selected_observations) \%>\%
-  st_buffer(dist = 100) \%>\%
+  st_buffer(dist = 50) \%>\%
   st_as_sf()
 
 sample_observations(
@@ -104,7 +117,7 @@ sample_observations(
   seed = 123
   )
 
-# Sample observations with sampling bias given manually in a grid
+# 3. Sample observations with sampling bias given manually in a grid
 # Create raster grid with bias weights between 0 and 1
 grid <- st_make_grid(occurrences_sf) \%>\%
   st_sf() \%>\%

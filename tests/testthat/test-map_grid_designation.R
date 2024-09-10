@@ -13,12 +13,12 @@ cube_grid <- st_make_grid(
 # Dataframe with column names equal to arguments for simple polygon
 species_dataset_df1 <- tibble(
   taxonID = c("species1", "species2", "species3"),
-  plgn = rep(list(plgn), 3),
-  initial_average_abundance = c(50, 100, 500),
+  species_range = rep(list(plgn), 3),
+  initial_average_occurrences = c(50, 100, 500),
   n_time_points = rep(6, 3),
   temporal_function = c(simulate_random_walk, simulate_random_walk, NA),
   sd_step = c(1, 1, NA),
-  spatial_autocorr = "random",
+  spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   invert = FALSE,
   coords_uncertainty_meters = c(25, 30, 50),
@@ -28,7 +28,7 @@ species_dataset_df1 <- tibble(
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
 species_dataset_df2 <- species_dataset_df1 %>%
-  rename(polygon = plgn,
+  rename(polygon = species_range,
          sd = sd_step,
          det_prob = detection_probability,
          inv = invert,
@@ -36,7 +36,7 @@ species_dataset_df2 <- species_dataset_df1 %>%
          raster = grid)
 
 arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob",
     invert = "inv",
@@ -109,7 +109,7 @@ test_that("map_grid_designation works with simple column names", {
 test_that("map_grid_designation works with pipes", {
   occ_cube_piped <- tibble(
       species = c("species1", "species2", "species3"),
-      plgn = rep(list(plgn), 3),
+      species_range = rep(list(plgn), 3),
       grid = rep(list(cube_grid), 3),
       seed = 123
     ) %>%
@@ -124,8 +124,8 @@ test_that("map_grid_designation works with pipes", {
   # Do we have the expected columns?
   expect_equal(
     sort(colnames(occ_cube_piped)),
-    sort(c("species", "plgn", "grid", "seed", "occurrences",
-           "observations_total", "observations", "time_point", "id", "n",
+    sort(c("species", "species_range", "grid", "seed", "occurrences",
+           "observations_total", "observations", "time_point", "cell_code", "n",
            "min_coord_uncertainty", "geometry")))
 })
 
@@ -210,7 +210,7 @@ test_that("map_grid_designation handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = 123,
     detection_probability = "det_prob",
     invert = "inv",
@@ -224,7 +224,7 @@ test_that("map_grid_designation handles invalid inputs", {
   )
 
   invalid_arg_list2 <- arg_conv_list <- list(
-    plgn = "polygon",
+    species_range = "polygon",
     sd_step = "sd",
     detection_probability = "det_prob",
     invert = "inv",

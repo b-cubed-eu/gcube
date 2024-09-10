@@ -1,3 +1,11 @@
+# gcube 0.4.0
+
+*	Consolidate documentation across all functions, README, and vignettes.
+* Update `sample_occurrences_from_raster()`
+  - Use `lapply()` instead of for-loop
+  - Randomise points in raster cells.
+* Fix issues (#37, #70, #76).
+
 # gcube 0.3.0
 
 *	`generate_taxonomy()` also creates species key.
