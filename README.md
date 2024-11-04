@@ -41,10 +41,14 @@ You can install the development version from
 remotes::install_github("b-cubed-eu/gcube")
 ```
 
-## Package name rationale
+## Package name rationale and origin story
 
-The name **gcube** stands for ‘generate cube’ since it can be used to
-generate biodiversity data cubes from minimal input.
+The name **gcube** stands for “generate cube” since it can be used to
+generate biodiversity data cubes from minimal input. It was first
+developed during the hackathon “Hacking Biodiversity Data Cubes for
+Policy”, where it won the first price in the category “Visualization and
+training”. You can read the full story here:
+<https://doi.org/10.37044/osf.io/vcyr7>
 
 ## Example
 
