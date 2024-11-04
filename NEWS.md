@@ -1,3 +1,7 @@
+# gcube 1.0.0
+
+* Add package origin story.
+
 # gcube 0.4.0
 
 *	Consolidate documentation across all functions, README, and vignettes.
