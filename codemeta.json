@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/b-cubed-eu/gcube",
   "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -130,50 +130,113 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "ggExtra",
-      "name": "ggExtra"
+      "name": "ggExtra",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggExtra"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "ggplot2",
-      "name": "ggplot2"
+      "name": "ggplot2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
-      "name": "knitr"
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
-      "name": "rmarkdown"
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
-      "version": ">= 3.0.0"
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "tidyterra",
-      "name": "tidyterra"
+      "name": "tidyterra",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyterra"
     }
   ],
   "softwareRequirements": {
     "1": {
       "@type": "SoftwareApplication",
       "identifier": "assertthat",
-      "name": "assertthat"
+      "name": "assertthat",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=assertthat"
     },
     "2": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
-      "name": "dplyr"
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
     "3": {
       "@type": "SoftwareApplication",
       "identifier": "gstat",
-      "name": "gstat"
+      "name": "gstat",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gstat"
     },
     "4": {
       "@type": "SoftwareApplication",
@@ -183,22 +246,50 @@
     "5": {
       "@type": "SoftwareApplication",
       "identifier": "mnormt",
-      "name": "mnormt"
+      "name": "mnormt",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mnormt"
     },
     "6": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
-      "name": "purrr"
+      "name": "purrr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
     "7": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
-      "name": "rlang"
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
     "8": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
-      "name": "sf"
+      "name": "sf",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sf"
     },
     "9": {
       "@type": "SoftwareApplication",
@@ -208,21 +299,42 @@
     "10": {
       "@type": "SoftwareApplication",
       "identifier": "terra",
-      "name": "terra"
+      "name": "terra",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=terra"
     },
     "11": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
-      "name": "tidyr"
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
     },
     "12": {
       "@type": "SoftwareApplication",
       "identifier": "vegan",
-      "name": "vegan"
+      "name": "vegan",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vegan"
     },
     "SystemRequirements": null
   },
-  "fileSize": "557.326KB",
+  "fileSize": "557.447KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -234,7 +346,7 @@
           "familyName": "Langeraert"
         }
       },
-      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.0.0",
+      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.1.0",
       "url": "https://b-cubed-eu.github.io/gcube/"
     }
   ],

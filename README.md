@@ -12,6 +12,7 @@ status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/
 [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo
 status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![DOI](https://zenodo.org/badge/777812249.svg)](https://doi.org/10.5281/zenodo.14038996)
 
 <!-- badges: end -->
 
