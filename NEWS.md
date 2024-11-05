@@ -1,3 +1,7 @@
+# gcube 1.1.0
+
+* Publish release on Zenodo.
+
 # gcube 1.0.0
 
 * Add package origin story.
