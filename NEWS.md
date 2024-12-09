@@ -2,7 +2,7 @@
 
 * Add more elaborate package description #102.
 * Uniform naming of articles and start headings at h2 #103.
-* Add doi to citation file #104.
+* Add DOI to citation file #104.
 
 # gcube 1.1.0
 
