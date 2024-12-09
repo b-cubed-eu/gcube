@@ -1,0 +1,12 @@
+pandoc: '3.5'
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  articles/detection-process: detection-process.html
+  articles/grid-designation-process: grid-designation-process.html
+  articles/multi-species-approach: multi-species-approach.html
+  articles/occurrence-process: occurrence-process.html
+last_built: 2024-12-09T13:32Z
+urls:
+  reference: https://b-cubed-eu.github.io/gcube/reference
+  article: https://b-cubed-eu.github.io/gcube/articles
