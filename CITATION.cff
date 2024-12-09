@@ -21,9 +21,9 @@ doi: 10.5281/zenodo.14038996
 license: MIT
 repository-code: https://github.com/b-cubed-eu/gcube/
 type: software
-abstract: "gcube is an R package that provides a simulation framework for biodiversity
-  data cubes. This can start from simulating multiple species distributed in a landscape
-  over a temporal scope. In a second phase, the simulation of a variety of observation
+abstract: "This R package provides a simulation framework for biodiversity data cubes.
+  This can start from simulating multiple species distributed in a landscape over
+  a temporal scope. In a second phase, the simulation of a variety of observation
   processes and effort can generate actual occurrence datasets. Based on their (simulated)
   spatial uncertainty, occurrences can then be designated to a grid to form a data
   cube."
