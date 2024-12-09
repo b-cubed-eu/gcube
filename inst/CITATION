@@ -2,12 +2,13 @@ citHeader("To cite `gcube` in publications please use:")
 # begin checklist entry
 bibentry(
   bibtype = "Manual",
-  title = "gcube: Simulating Biodiversity Data Cubes. Version 1.1.0",
+  title = "gcube: Simulating Biodiversity Data Cubes. Version 1.1.1",
   author = c( author = c(person(given = "Ward", family = "Langeraert"))),
   year = 2024,
   url = "https://b-cubed-eu.github.io/gcube/",
-  abstract = "Simulation framework for biodiversity data cubes.",
-  textVersion = "Langeraert, Ward (2024) gcube: Simulating Biodiversity Data Cubes. Version 1.1.0. https://b-cubed-eu.github.io/gcube/",
+  abstract = "This R package provides a simulation framework for biodiversity data cubes. This can start from simulating multiple species distributed in a landscape over a temporal scope. In a second phase, the simulation of a variety of observation processes and effort can generate actual occurrence datasets. Based on their (simulated) spatial uncertainty, occurrences can then be designated to a grid to form a data cube.",
+  textVersion = "Langeraert, Ward (2024) gcube: Simulating Biodiversity Data Cubes. Version 1.1.1. https://b-cubed-eu.github.io/gcube/",
   keywords = "simulation; data cubes; B-Cubed; biodiversity; Monte-Carlo",
+  doi = "10.5281/zenodo.14038996",
 )
 # end checklist entry

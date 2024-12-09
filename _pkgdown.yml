@@ -36,7 +36,7 @@ articles:
     - articles/grid-designation-process
   - title: "Multi-species approach"
     contents:
-    - articles/multi_species_approach
+    - articles/multi-species-approach
 
 reference:
   - title: "Core gcube workflow functions"

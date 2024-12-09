@@ -27,7 +27,7 @@ library(dplyr)     # data wrangling
 library(ggplot2)   # data visualisation
 ```
 
-# Spatial extend
+## Spatial extend
 
 As input, we create a polygon in which we simulate occurrences.
 It represents the spatial extend of the species.
@@ -99,7 +99,7 @@ ggplot() +
   theme_minimal()
 ```
 
-# Input dataframe
+## Input dataframe
 
 To generate cubes for multiple species efficiently, we create a dataframe where each row represents a different species and where we specify all arguments to be used by the main cube simulation functions, viz `simulate_occurrences()`, `sample_observations()`, `filter_observations()`, `add_coordinate_uncertainty()`, and `grid_designation()`, in separate columns.
 The values within these columns can change between species.
@@ -177,7 +177,7 @@ multi_species_dataset2 <- generate_taxonomy(
 identical(multi_species_dataset1, multi_species_dataset2)
 ```
 
-# Mapping the simulation process over each row/species
+## Mapping the simulation process over each row/species
 
 Each cube simulation function has a mapping companion.
 These mapping functions apply the single-species operations for each row using the `purrr::pmap()` strategy.
@@ -298,7 +298,7 @@ map_occ_cube_df3 <- multi_species_dataset2_renamed %>%
 glimpse(map_occ_cube_df3)
 ```
 
-# Visualise examples
+## Visualise examples
 
 Let's visualise the output for two of the six species.
 
