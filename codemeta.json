@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/b-cubed-eu/gcube",
   "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.1 (2024-06-14 ucrt)",
+  "runtimePlatform": "R version 4.4.2 (2024-10-31 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -334,11 +334,11 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "557.447KB",
+  "fileSize": "557.496KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
-      "datePublished": "2024",
+      "datePublished": "2025",
       "author": {
         "author": {
           "@type": "Person",
@@ -346,7 +346,7 @@
           "familyName": "Langeraert"
         }
       },
-      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.1.0",
+      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.1.1",
       "url": "https://b-cubed-eu.github.io/gcube/"
     }
   ],
@@ -354,5 +354,5 @@
   "readme": "https://github.com/b-cubed-eu/gcube/blob/main/README.md",
   "contIntegration": ["https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml", "https://app.codecov.io/gh/b-cubed-eu/gcube/"],
   "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": ["r", "r-package"]
+  "keywords": ["r", "r-package", "biodiversity-informatics", "data-cubes", "simulations"]
 }
