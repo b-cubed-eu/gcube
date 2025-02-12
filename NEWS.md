@@ -1,3 +1,13 @@
+# gcube 1.1.2
+
+* Join the [R-universe](https://b-cubed-eu.r-universe.dev/)!
+
+# gcube 1.1.1
+
+* Add more elaborate package description #102.
+* Uniform naming of articles and start headings at h2 #103.
+* Add DOI to citation file #104.
+
 # gcube 1.1.0
 
 * Publish release on Zenodo.
