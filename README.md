@@ -38,6 +38,12 @@ prevalence, etc.
 
 ## Installation
 
+Install **gcube** in R:
+
+``` r
+install.packages("gcube", repos = "https://b-cubed-eu.r-universe.dev")
+```
+
 You can install the development version from
 [GitHub](https://github.com/) with:
 

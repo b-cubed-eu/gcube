@@ -37,6 +37,12 @@ Simulation studies offer numerous benefits due to their ability to mimic real-wo
 
 ## Installation
 
+Install **gcube** in R:
+
+```r
+install.packages("gcube", repos = "https://b-cubed-eu.r-universe.dev")
+```
+
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
