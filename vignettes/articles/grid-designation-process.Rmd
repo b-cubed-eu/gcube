@@ -29,7 +29,7 @@ library(ggplot2)   # data visualisation
 library(ggExtra)   # enhance data visualisation
 ```
 
-# Input
+## Input
 
 The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
 
@@ -173,7 +173,7 @@ ggplot() +
   theme_minimal()
 ```
 
-# Grid designation
+## Grid designation
 
 Now we can make a data cube from our observations while taking into account the uncertainty.
 We can create the grid using the `grid_designation()` function.
@@ -319,7 +319,7 @@ ggExtra::ggMarginal(scatter_normal, type = "histogram")
 
 If no coordinate uncertainty is provided, the original observation point is used for grid designation.
 
-# Example
+## Example
 
 Now we know how to use the randomisation in `grid_designation()`.
 By default we use uniform randomisation.
