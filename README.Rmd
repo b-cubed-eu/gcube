@@ -20,11 +20,14 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
-[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
-[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml) [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![DOI](https://zenodo.org/badge/777812249.svg)](https://doi.org/10.5281/zenodo.14038996)
+[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
+[![gcube status badge](https://b-cubed-eu.r-universe.dev/gcube/badges/version)](https://b-cubed-eu.r-universe.dev/gcube)
+[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
+[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml)
+[![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14038996.svg)](https://doi.org/10.5281/zenodo.14038996)
+[![name status badge](https://b-cubed-eu.r-universe.dev/badges/:name?color=6CDDB4)](https://b-cubed-eu.r-universe.dev/)
 
 <!-- badges: end -->
 
@@ -33,6 +36,12 @@ The goal of **gcube** is to provide a simulation framework for biodiversity data
 Simulation studies offer numerous benefits due to their ability to mimic real-world scenarios in controlled and customizable environments. Ecosystems and biodiversity data are very complex and involve a multitude of interacting factors. Simulations allow researchers to model and understand the complexity of ecological systems by varying parameters such as spatial and/or temporal clustering, species prevalence, etc.
 
 ## Installation
+
+Install **gcube** in R:
+
+```r
+install.packages("gcube", repos = "https://b-cubed-eu.r-universe.dev")
+```
 
 You can install the development version from [GitHub](https://github.com/) with:
 

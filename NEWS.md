@@ -1,3 +1,7 @@
+# gcube 1.1.2
+
+* Join the [R-universe](https://b-cubed-eu.r-universe.dev/)!
+
 # gcube 1.1.1
 
 * Add more elaborate package description #102.
