@@ -36,7 +36,8 @@ Authors@R: c(
 Description: Simulation framework for biodiversity data cubes.
 License: MIT + file LICENSE
 URL: https://github.com/b-cubed-eu/gcube,
-    https://b-cubed-eu.github.io/gcube/
+    https://b-cubed-eu.github.io/gcube/,
+    https://doi.org/10.5281/zenodo.14038996
 BugReports: https://github.com/b-cubed-eu/gcube/issues
 Imports:
     assertthat,

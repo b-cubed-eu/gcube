@@ -9,5 +9,6 @@ bibentry(
   abstract = "Simulation framework for biodiversity data cubes.",
   textVersion = "Langeraert, Ward (2025) gcube: Simulating Biodiversity Data Cubes. Version 1.1.1. https://b-cubed-eu.github.io/gcube/",
   keywords = "simulation; data cubes; B-Cubed; biodiversity; Monte-Carlo",
+  doi = "10.5281/zenodo.14038996",
 )
 # end checklist entry

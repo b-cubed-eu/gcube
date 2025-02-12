@@ -17,12 +17,14 @@ contact:
   family-names: Langeraert
   affiliation: Research Institute for Nature and Forest (INBO)
   orcid: 0000-0002-5900-8109
-doi: ~
+doi: 10.5281/zenodo.14038996
 license: MIT
 repository-code: https://github.com/b-cubed-eu/gcube/
 type: software
 abstract: "Simulation framework for biodiversity data cubes."
 identifiers:
+- type: doi
+  value: 10.5281/zenodo.14038996
 - type: url
   value: https://b-cubed-eu.github.io/gcube/
 version: 1.1.1
