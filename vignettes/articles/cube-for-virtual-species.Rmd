@@ -48,7 +48,7 @@ wp <- terra::ext(-15, 65, 30, 75)
 worldclim <- terra::crop(worldclim, wp)
 ```
 
-## Step 3: Select Relevant Bioclimatic Variables
+## Step 3: Select relevant bioclimatic variables
 
 We select a subset of bioclimatic variables: bio2, bio5, bio6, bio13, bio14, and bio15.
 
@@ -64,6 +64,8 @@ worldclim_vars <- worldclim[[bio_vars_selected]]
 We create a random virtual species based on the selected bioclimatic variables.
 
 ```{r}
+#| fig.alt: >
+#|   Distribution of random virtual species
 set.seed(123)
 virtual_species <- generateRandomSp(worldclim_vars)
 ```
@@ -73,6 +75,8 @@ virtual_species <- generateRandomSp(worldclim_vars)
 We limit the species distribution to the United Kingdom and Ireland.
 
 ```{r}
+#| fig.alt: >
+#|   Limited distribution of random virtual species
 virtual_distribution <- limitDistribution(
   x = virtual_species,
   geographical.limit = "country",
@@ -81,15 +85,16 @@ virtual_distribution <- limitDistribution(
 
 ## Step 6: Sample occurrences
 
-We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
+We sample 150 occurrences from the restricted distribution using the `virtualspecies::sampleOccurrences()` function.
 Detection probability and sampling bias can be introduced similar to `sample_observations()`.
 See `?virtualspecies::sampleOccurrences` for more options.
 
 ```{r}
+#| fig.alt: >
+#|   Samples of random virtual species
 virtual_sample <- sampleOccurrences(
   virtual_distribution,
-  n = 150,
-  detection.probability = 0.8)
+  n = 150)
 ```
 
 # Grid designation with gcube
@@ -151,6 +156,8 @@ ggplot() +
 
 ## Perform grid designation
 
+We perform grid designation both in aggregated version and not for visualisation purposes.
+
 ```{r}
 occurrence_cube_df <- grid_designation(
   observations_df,
@@ -167,7 +174,7 @@ sampled_points <- grid_designation(
 ```
 
 Lets visualise were the samples were taken.
-Note that no distinction is made between zeroes and `NA` values!
+Note that no distinction is made between zeroes and `NA` values.
 Every absence gets a zero value.
 
 ```{r}
