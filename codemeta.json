@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/b-cubed-eu/gcube",
   "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.2 (2024-10-31 ucrt)",
+  "runtimePlatform": "R version 4.4.3 (2025-02-28 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -129,6 +129,18 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
+      "identifier": "geodata",
+      "name": "geodata",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=geodata"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "ggExtra",
       "name": "ggExtra",
       "provider": {
@@ -199,6 +211,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyterra"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "virtualspecies",
+      "name": "virtualspecies",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=virtualspecies"
     }
   ],
   "softwareRequirements": {
@@ -334,7 +358,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "558.777KB",
+  "fileSize": "559.054KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -346,7 +370,7 @@
           "familyName": "Langeraert"
         }
       },
-      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.1.2",
+      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.2.0",
       "identifier": "10.5281/zenodo.14038996",
       "url": "https://b-cubed-eu.github.io/gcube/",
       "@id": "https://doi.org/10.5281/zenodo.14038996",

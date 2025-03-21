@@ -1,6 +1,11 @@
 
 CMD
+CRS
+EEA
+LAEA
+Palearctic
 SpatRaster
+WorldClim
 codecov
 det
 etc

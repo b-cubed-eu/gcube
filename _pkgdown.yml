@@ -34,9 +34,10 @@ articles:
     - articles/occurrence-process
     - articles/detection-process
     - articles/grid-designation-process
-  - title: "Multi-species approach"
-    contents:
     - articles/multi-species-approach
+  - title: "Other tutorials"
+    contents:
+    - articles/cube-for-virtual-species
 
 reference:
   - title: "Core gcube workflow functions"

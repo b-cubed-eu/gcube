@@ -1,6 +1,6 @@
 Package: gcube
 Title: Simulating Biodiversity Data Cubes
-Version: 1.1.2
+Version: 1.2.0
 Authors@R: c(
     person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Research Institute for Nature and Forest (INBO)")),
@@ -58,16 +58,19 @@ Imports:
     terra,
     tidyr,
     vegan
-Suggests: 
+Suggests:
+    geodata,
     ggExtra,
     ggplot2,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidyterra
+    tidyterra,
+    virtualspecies
 Config/checklist/communities: b3; inbo
 Config/checklist/keywords: simulation; data cubes; B-Cubed; biodiversity;
     Monte-Carlo
+Config/Needs/website: rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB

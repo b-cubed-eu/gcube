@@ -1,3 +1,7 @@
+# gcube 1.2.0
+
+* Add tutorial to work with virtual species.
+
 # gcube 1.1.2
 
 * Join the [R-universe](https://b-cubed-eu.r-universe.dev/)!

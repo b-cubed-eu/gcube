@@ -1,0 +1,221 @@
+---
+title: "Create occurrence cubes for virtual species"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Apart from simulating occurrence cubes from scratch, **gcube** can also be used to create cubes for virtual species generated using bioclimatic variables. This tutorial demonstrates how to generate a virtual species, apply a geographical limit, sample occurrences, and convert them into an occurrence cube.
+
+# Create virtual species
+
+Virtual species can be created using the **virtualspecies** R package (Leroy et al., [2015](https://doi.org/10.1111/ecog.01388)).
+Below is a basic example of how to create a virtual species.
+For additional options and a more comprehensive guide, refer to the [package documentation](https://cran.r-project.org/web/packages/virtualspecies/index.html) and the tutorial available [here](https://borisleroy.com/files/virtualspecies-tutorial.html).
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
+library(gcube)
+
+library(geodata)        # get bioclimatic data
+library(virtualspecies) # generate virtual species
+
+library(sf)             # work with spatial objects
+library(terra)          # work with raster data
+library(ggplot2)        # data visualisation
+```
+
+## Step 1: Download WorldClim Data
+
+We first obtain WorldClim bioclimatic data at a 10-minute resolution.
+
+```{r, message=FALSE}
+# Download bioclimatic data
+worldclim <- worldclim_global(var = "bio", res = 10, path = tempdir())
+```
+
+## Step 2: Define the region of interest
+
+We define the extent for the Western Palearctic and crop the climate data.
+
+```{r}
+# Western Palearctic
+wp <- terra::ext(-15, 65, 30, 75)
+
+# Crop climate data
+worldclim <- terra::crop(worldclim, wp)
+```
+
+## Step 3: Select relevant bioclimatic variables
+
+We select a subset of bioclimatic variables: bio2, bio5, bio6, bio13, bio14, and bio15.
+
+```{r}
+# Specify variables
+bio_vars <- c("bio2", "bio5", "bio6", "bio13", "bio14", "bio15")
+
+# Select variables
+bio_string <- paste0("bio_", sub("bio", "", bio_vars), collapse = "|")
+bio_vars_selected <- names(worldclim)[grepl(bio_string, names(worldclim))]
+
+# Subset climate data
+worldclim_vars <- worldclim[[bio_vars_selected]]
+```
+
+## Step 4: Generate a virtual species
+
+We create a random virtual species based on the selected bioclimatic variables.
+
+```{r}
+#| fig.alt: >
+#|   Distribution of random virtual species
+set.seed(123)
+
+# Generate random virtual species
+virtual_species <- generateRandomSp(worldclim_vars)
+```
+
+## Step 5: Apply a geographical limit
+
+We limit the species distribution to the United Kingdom and Ireland.
+
+```{r}
+#| fig.alt: >
+#|   Limited distribution of random virtual species
+# Limit distribution
+virtual_distribution <- limitDistribution(
+  x = virtual_species,
+  geographical.limit = "country",
+  area = c("United Kingdom", "Ireland"))
+```
+
+## Step 6: Sample occurrences
+
+We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
+Detection probability and sampling bias can be introduced similar to `sample_observations()`.
+
+```{r, eval=FALSE}
+?virtualspecies::sampleOccurrences
+```
+
+```{r}
+#| fig.alt: >
+#|   Samples of random virtual species
+# Sample from virtual species distribution
+virtual_sample <- sampleOccurrences(
+  virtual_distribution,
+  n = 150,
+  detection.probability = 0.8)
+```
+
+# Grid designation with gcube
+
+Now we can create an occurrence cube for this virtual species
+The most important step, is to make the **virtualspecies** output compatible with **gcube** input.
+This is done using the **sf** package.
+For grid designation, see also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
+
+## Step 1: Convert sampled points to sf format
+
+We transform the sample points into an sf object to the LAEA Europe CRS (EPSG:3035).
+
+```{r}
+# Create reference grid
+detections_df_raw <- st_as_sf(
+    virtual_sample$sample.points,
+    coords = c("x", "y"),
+    crs = terra::crs(virtual_sample$original.distribution.raster))
+detections_df_raw <- st_transform(detections_df_raw, crs = 3035)
+```
+
+## Step 2: Add coordinate uncertainty
+
+We only keep the detected occurrences.
+
+```{r}
+detections_df <- detections_df_raw[!is.na(detections_df_raw$Observed), ]
+```
+
+Optionally, we can add coordinate uncertainty using the `add_coordinate_uncertainty()` function.
+See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.github.io/gcube/articles/detection-process.html).
+We add 25 m uncertainty for each observation.
+
+```{r}
+# Add coordinate uncertainty
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = 25)
+```
+
+## Step 3: Specify reference grid
+
+We also need a grid. Each observation will be designated to a grid cell.
+You can provide your own grid (e.g. EEA reference grid for Europe).
+For this example we create a simple grid around the sampled points.
+
+```{r}
+# Create reference grid
+buffered_observations <- st_buffer(observations_df, 25)
+cube_grid <- st_make_grid(
+  buffered_observations,
+  n = c(20, 20),
+  square = TRUE) %>%
+  st_sf()
+```
+
+The grid looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
+ggplot() +
+  geom_sf(data = observations_df) +
+  geom_sf(data = cube_grid, alpha = 0) +
+  coord_sf(datum = 3035) +
+  theme_minimal()
+```
+
+## Step 4: Perform grid designation
+
+We perform grid designation both in aggregated version and not for visualisation purposes.
+
+```{r}
+# Perform grid designation
+occurrence_cube_df <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123)
+```
+
+```{r}
+# Get sampled points from uncertainty circle
+sampled_points <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+Lets visualise were the samples were taken.
+Note that no distinction is made between zeroes and `NA` values.
+Every absence gets a zero value.
+
+```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle
+ggplot() +
+  geom_sf(data = occurrence_cube_df,
+          alpha = 0) +
+  geom_sf_text(data = occurrence_cube_df,
+               aes(label = n)) +
+  geom_sf(data = sampled_points,
+          colour = "blue") +
+  coord_sf(datum = 3035) +
+  theme_minimal()
+```
