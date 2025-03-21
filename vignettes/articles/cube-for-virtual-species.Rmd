@@ -23,10 +23,12 @@ For additional options and a more comprehensive guide, refer to the tutorial ava
 # Load packages
 library(gcube)
 
-library(sf)             # work with spatial objects
-library(terra)          # work with raster data
 library(geodata)        # get bioclimatic data
 library(virtualspecies) # generate virtual species
+
+library(sf)             # work with spatial objects
+library(terra)          # work with raster data
+library(ggplot2)        # data visualisation
 ```
 
 ## Step 1: Download WorldClim Data
@@ -54,7 +56,7 @@ We select a subset of bioclimatic variables: bio2, bio5, bio6, bio13, bio14, and
 bio_vars <- c("bio2", "bio5", "bio6", "bio13", "bio14", "bio15")
 bio_string <- paste0("bio_", sub("bio", "", bio_vars), collapse = "|")
 bio_vars_selected <- names(worldclim)[grepl(bio_string, names(worldclim))]
-worldclim <- worldclim[[bio_vars_selected]]
+worldclim_vars <- worldclim[[bio_vars_selected]]
 ```
 
 ## Step 4: Generate a virtual species
@@ -63,7 +65,7 @@ We create a random virtual species based on the selected bioclimatic variables.
 
 ```{r}
 set.seed(123)
-random_sp <- generateRandomSp(worldclim)
+virtual_species <- generateRandomSp(worldclim_vars)
 ```
 
 ## Step 5: Apply a geographical limit
@@ -71,32 +73,108 @@ random_sp <- generateRandomSp(worldclim)
 We limit the species distribution to the United Kingdom and Ireland.
 
 ```{r}
-case <- limitDistribution(x = random_sp,
-                          geographical.limit = "country",
-                          area = c("United Kingdom", "Ireland"))
+virtual_distribution <- limitDistribution(
+  x = virtual_species,
+  geographical.limit = "country",
+  area = c("United Kingdom", "Ireland"))
 ```
 
 ## Step 6: Sample occurrences
 
 We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
-Detection probability and sampling bias can be introduced similar to `gcube::sample_observations()`.
+Detection probability and sampling bias can be introduced similar to `sample_observations()`.
 See `?virtualspecies::sampleOccurrences` for more options.
 
 ```{r}
-sample <- sampleOccurrences(
-  case,
+virtual_sample <- sampleOccurrences(
+  virtual_distribution,
   n = 150,
   detection.probability = 0.8)
 ```
 
 # Grid designation with gcube
 
+See also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
+
 ## Convert sampled points to sf format
 
 We transform the sample points into an `sf` object:
 
 ```{r}
-sample_sf <- st_as_sf(sample$sample.points,
-                      coords = c("x", "y"),
-                      crs = terra::crs(sample$original.distribution.raster))
+detections_df <- st_as_sf(
+  virtual_sample$sample.points,
+  coords = c("x", "y"),
+  crs = terra::crs(virtual_sample$original.distribution.raster))
+```
+
+## Add coordinate uncertainty
+
+Optionally, we can add coordinate uncertainty using the `add_coordinate_uncertainty()` function.
+See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.github.io/gcube/articles/detection-process.html).
+We add 25 m uncertainty for each observation.
+
+```{r}
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = 25)
+```
+
+## Specify reference grid
+
+We also need a grid. Each observation will be designated to a grid cell.
+You can provide your own grid (e.g. EEA reference grid for Europe).
+For this example we create a simple grid around the sampled points.
+
+```{r}
+buffered_observations <- st_buffer(observations_df, 25)
+cube_grid <- st_make_grid(
+  buffered_observations,
+  n = c(20, 20),
+  square = TRUE) %>%
+  st_sf()
+```
+
+The grid looks like this.
+
+```{r}
+#| fig.alt: >
+#|   Grid used for creating data cube.
+ggplot() +
+  geom_sf(data = observations_df) +
+  geom_sf(data = cube_grid, alpha = 0) +
+  theme_minimal()
+```
+
+## Perform grid designation
+
+```{r}
+occurrence_cube_df <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123)
+```
+
+```{r}
+sampled_points <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+Lets visualise were the samples were taken for time point 1.
+Note that no distinction is made between zeroes and `NA` values!
+Every absence gets a zero value.
+
+```{r}
+#| fig.alt: >
+#|   Distribution of random samples within uncertainty circle
+ggplot() +
+  geom_sf(data = occurrence_cube_df,
+          alpha = 0) +
+  geom_sf_text(data = occurrence_cube_df,
+               aes(label = n)) +
+  geom_sf(data = sampled_points,
+          colour = "blue")
+  theme_minimal()
 ```
