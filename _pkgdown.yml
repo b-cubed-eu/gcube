@@ -37,6 +37,9 @@ articles:
   - title: "Multi-species approach"
     contents:
     - articles/multi-species-approach
+  - title: "Occurrence cubes for virtual species"
+    contents:
+    - articles/cube-for-virtual-species
 
 reference:
   - title: "Core gcube workflow functions"
