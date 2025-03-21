@@ -97,7 +97,7 @@ virtual_distribution <- limitDistribution(
 
 ## Step 6: Sample occurrences
 
-We sample 150 occurrences from the restricted distribution using the `virtualspecies::sampleOccurrences()` function.
+We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
 Detection probability and sampling bias can be introduced similar to `sample_observations()`.
 
 ```{r, eval=FALSE}
@@ -110,7 +110,8 @@ Detection probability and sampling bias can be introduced similar to `sample_obs
 # Sample from virtual species distribution
 virtual_sample <- sampleOccurrences(
   virtual_distribution,
-  n = 150)
+  n = 150,
+  detection.probability = 0.8)
 ```
 
 # Grid designation with gcube
@@ -120,20 +121,26 @@ The most important step, is to make the **virtualspecies** output compatible wit
 This is done using the **sf** package.
 For grid designation, see also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
 
-## Convert sampled points to sf format
+## Step 1: Convert sampled points to sf format
 
 We transform the sample points into an sf object to the LAEA Europe CRS (EPSG:3035).
 
 ```{r}
 # Create reference grid
-detections_df <- st_as_sf(
+detections_df_raw <- st_as_sf(
     virtual_sample$sample.points,
     coords = c("x", "y"),
-    crs = terra::crs(virtual_sample$original.distribution.raster)) %>%
-  st_transform(crs = 3035)
+    crs = terra::crs(virtual_sample$original.distribution.raster))
+detections_df_raw <- st_transform(detections_df_raw, crs = 3035)
 ```
 
-## Add coordinate uncertainty
+## Step 2: Add coordinate uncertainty
+
+We only keep the detected occurrences.
+
+```{r}
+detections_df <- detections_df_raw[!is.na(detections_df_raw$Observed), ]
+```
 
 Optionally, we can add coordinate uncertainty using the `add_coordinate_uncertainty()` function.
 See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.github.io/gcube/articles/detection-process.html).
@@ -146,7 +153,7 @@ observations_df <- add_coordinate_uncertainty(
   coords_uncertainty_meters = 25)
 ```
 
-## Specify reference grid
+## Step 3: Specify reference grid
 
 We also need a grid. Each observation will be designated to a grid cell.
 You can provide your own grid (e.g. EEA reference grid for Europe).
@@ -174,7 +181,7 @@ ggplot() +
   theme_minimal()
 ```
 
-## Perform grid designation
+## Step 4: Perform grid designation
 
 We perform grid designation both in aggregated version and not for visualisation purposes.
 
