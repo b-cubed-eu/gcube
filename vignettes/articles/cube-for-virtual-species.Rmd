@@ -94,17 +94,20 @@ virtual_sample <- sampleOccurrences(
 
 # Grid designation with gcube
 
-See also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
+The most important step, is to make the **virtualspecies** output compatible with **gcube** input.
+This is done using the **sf** package.
+For grid designation, see also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
 
 ## Convert sampled points to sf format
 
-We transform the sample points into an `sf` object:
+We transform the sample points into an `sf` object to the LAEA Europe CRS (EPSG:3035).
 
 ```{r}
 detections_df <- st_as_sf(
-  virtual_sample$sample.points,
-  coords = c("x", "y"),
-  crs = terra::crs(virtual_sample$original.distribution.raster))
+    virtual_sample$sample.points,
+    coords = c("x", "y"),
+    crs = terra::crs(virtual_sample$original.distribution.raster)) %>%
+  st_transform(crs = 3035)
 ```
 
 ## Add coordinate uncertainty
@@ -142,6 +145,7 @@ The grid looks like this.
 ggplot() +
   geom_sf(data = observations_df) +
   geom_sf(data = cube_grid, alpha = 0) +
+  coord_sf(datum = 3035) +
   theme_minimal()
 ```
 
@@ -162,7 +166,7 @@ sampled_points <- grid_designation(
   aggregate = FALSE)
 ```
 
-Lets visualise were the samples were taken for time point 1.
+Lets visualise were the samples were taken.
 Note that no distinction is made between zeroes and `NA` values!
 Every absence gets a zero value.
 
@@ -175,6 +179,7 @@ ggplot() +
   geom_sf_text(data = occurrence_cube_df,
                aes(label = n)) +
   geom_sf(data = sampled_points,
-          colour = "blue")
+          colour = "blue") +
+  coord_sf(datum = 3035) +
   theme_minimal()
 ```
