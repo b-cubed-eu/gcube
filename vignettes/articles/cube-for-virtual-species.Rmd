@@ -99,7 +99,10 @@ virtual_distribution <- limitDistribution(
 
 We sample 150 occurrences from the restricted distribution using the `virtualspecies::sampleOccurrences()` function.
 Detection probability and sampling bias can be introduced similar to `sample_observations()`.
-See `?virtualspecies::sampleOccurrences` for more options.
+
+```{r, eval=FALSE}
+?virtualspecies::sampleOccurrences
+```
 
 ```{r}
 #| fig.alt: >
@@ -112,13 +115,14 @@ virtual_sample <- sampleOccurrences(
 
 # Grid designation with gcube
 
+Now we can create an occurrence cube for this virtual species
 The most important step, is to make the **virtualspecies** output compatible with **gcube** input.
 This is done using the **sf** package.
 For grid designation, see also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
 
 ## Convert sampled points to sf format
 
-We transform the sample points into an `sf` object to the LAEA Europe CRS (EPSG:3035).
+We transform the sample points into an sf object to the LAEA Europe CRS (EPSG:3035).
 
 ```{r}
 # Create reference grid
