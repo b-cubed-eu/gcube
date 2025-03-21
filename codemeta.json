@@ -129,6 +129,18 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
+      "identifier": "geodata",
+      "name": "geodata",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=geodata"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "ggExtra",
       "name": "ggExtra",
       "provider": {
@@ -199,6 +211,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyterra"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "virtualspecies",
+      "name": "virtualspecies",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=virtualspecies"
     }
   ],
   "softwareRequirements": {
@@ -334,7 +358,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "559.022KB",
+  "fileSize": "559.054KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
