@@ -17,7 +17,7 @@ Apart from simulating occurrence cubes from scratch, **gcube** can also be used 
 
 Virtual species can be created using the **virtualspecies** R package (Leroy et al., [2015](https://doi.org/10.1111/ecog.01388)).
 Below is a basic example of how to create a virtual species.
-For additional options and a more comprehensive guide, refer to the tutorial available [here](https://borisleroy.com/files/virtualspecies-tutorial.html).
+For additional options and a more comprehensive guide, refer to the [package documentation](https://cran.r-project.org/web/packages/virtualspecies/index.html) and the tutorial available [here](https://borisleroy.com/files/virtualspecies-tutorial.html).
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages
@@ -36,6 +36,7 @@ library(ggplot2)        # data visualisation
 We first obtain WorldClim bioclimatic data at a 10-minute resolution.
 
 ```{r, message=FALSE}
+# Download bioclimatic data
 worldclim <- worldclim_global(var = "bio", res = 10, path = tempdir())
 ```
 
@@ -44,7 +45,10 @@ worldclim <- worldclim_global(var = "bio", res = 10, path = tempdir())
 We define the extent for the Western Palearctic and crop the climate data.
 
 ```{r}
+# Western Palearctic
 wp <- terra::ext(-15, 65, 30, 75)
+
+# Crop climate data
 worldclim <- terra::crop(worldclim, wp)
 ```
 
@@ -53,9 +57,14 @@ worldclim <- terra::crop(worldclim, wp)
 We select a subset of bioclimatic variables: bio2, bio5, bio6, bio13, bio14, and bio15.
 
 ```{r}
+# Specify variables
 bio_vars <- c("bio2", "bio5", "bio6", "bio13", "bio14", "bio15")
+
+# Select variables
 bio_string <- paste0("bio_", sub("bio", "", bio_vars), collapse = "|")
 bio_vars_selected <- names(worldclim)[grepl(bio_string, names(worldclim))]
+
+# Subset climate data
 worldclim_vars <- worldclim[[bio_vars_selected]]
 ```
 
@@ -67,6 +76,8 @@ We create a random virtual species based on the selected bioclimatic variables.
 #| fig.alt: >
 #|   Distribution of random virtual species
 set.seed(123)
+
+# Generate random virtual species
 virtual_species <- generateRandomSp(worldclim_vars)
 ```
 
@@ -77,6 +88,7 @@ We limit the species distribution to the United Kingdom and Ireland.
 ```{r}
 #| fig.alt: >
 #|   Limited distribution of random virtual species
+# Limit distribution
 virtual_distribution <- limitDistribution(
   x = virtual_species,
   geographical.limit = "country",
@@ -92,6 +104,7 @@ See `?virtualspecies::sampleOccurrences` for more options.
 ```{r}
 #| fig.alt: >
 #|   Samples of random virtual species
+# Sample from virtual species distribution
 virtual_sample <- sampleOccurrences(
   virtual_distribution,
   n = 150)
@@ -108,6 +121,7 @@ For grid designation, see also the tutorial [3. Specifying the grid designation 
 We transform the sample points into an `sf` object to the LAEA Europe CRS (EPSG:3035).
 
 ```{r}
+# Create reference grid
 detections_df <- st_as_sf(
     virtual_sample$sample.points,
     coords = c("x", "y"),
@@ -122,6 +136,7 @@ See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.g
 We add 25 m uncertainty for each observation.
 
 ```{r}
+# Add coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(
   observations = detections_df,
   coords_uncertainty_meters = 25)
@@ -134,6 +149,7 @@ You can provide your own grid (e.g. EEA reference grid for Europe).
 For this example we create a simple grid around the sampled points.
 
 ```{r}
+# Create reference grid
 buffered_observations <- st_buffer(observations_df, 25)
 cube_grid <- st_make_grid(
   buffered_observations,
@@ -159,6 +175,7 @@ ggplot() +
 We perform grid designation both in aggregated version and not for visualisation purposes.
 
 ```{r}
+# Perform grid designation
 occurrence_cube_df <- grid_designation(
   observations_df,
   cube_grid,
@@ -166,6 +183,7 @@ occurrence_cube_df <- grid_designation(
 ```
 
 ```{r}
+# Get sampled points from uncertainty circle
 sampled_points <- grid_designation(
   observations_df,
   cube_grid,
