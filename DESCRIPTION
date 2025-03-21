@@ -68,9 +68,9 @@ Suggests:
 Config/checklist/communities: b3; inbo
 Config/checklist/keywords: simulation; data cubes; B-Cubed; biodiversity;
     Monte-Carlo
+Config/Needs/website: rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Config/Needs/website: rmarkdown
