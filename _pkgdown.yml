@@ -34,10 +34,8 @@ articles:
     - articles/occurrence-process
     - articles/detection-process
     - articles/grid-designation-process
-  - title: "Multi-species approach"
-    contents:
     - articles/multi-species-approach
-  - title: "Occurrence cubes for virtual species"
+  - title: "Other tutorials"
     contents:
     - articles/cube-for-virtual-species
 
