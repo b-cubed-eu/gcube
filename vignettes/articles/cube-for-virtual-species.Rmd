@@ -1,0 +1,102 @@
+---
+title: "Create occurrence cubes for virtual species"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Apart from simulating occurrence cubes from scratch, **gcube** can also be used to create cubes for virtual species generated using bioclimatic variables. This tutorial demonstrates how to generate a virtual species, apply a geographical limit, sample occurrences, and convert them into an occurrence cube.
+
+# Create virtual species
+
+Virtual species can be created using the **virtualspecies** R package (Leroy et al., [2015](https://doi.org/10.1111/ecog.01388)).
+Below is a basic example of how to create a virtual species.
+For additional options and a more comprehensive guide, refer to the tutorial available [here](https://borisleroy.com/files/virtualspecies-tutorial.html).
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
+library(gcube)
+
+library(sf)             # work with spatial objects
+library(terra)          # work with raster data
+library(geodata)        # get bioclimatic data
+library(virtualspecies) # generate virtual species
+```
+
+## Step 1: Download WorldClim Data
+
+We first obtain WorldClim bioclimatic data at a 10-minute resolution.
+
+```{r, message=FALSE}
+worldclim <- worldclim_global(var = "bio", res = 10, path = tempdir())
+```
+
+## Step 2: Define the region of interest
+
+We define the extent for the Western Palearctic and crop the climate data.
+
+```{r}
+wp <- terra::ext(-15, 65, 30, 75)
+worldclim <- terra::crop(worldclim, wp)
+```
+
+## Step 3: Select Relevant Bioclimatic Variables
+
+We select a subset of bioclimatic variables: bio2, bio5, bio6, bio13, bio14, and bio15.
+
+```{r}
+bio_vars <- c("bio2", "bio5", "bio6", "bio13", "bio14", "bio15")
+bio_string <- paste0("bio_", sub("bio", "", bio_vars), collapse = "|")
+bio_vars_selected <- names(worldclim)[grepl(bio_string, names(worldclim))]
+worldclim <- worldclim[[bio_vars_selected]]
+```
+
+## Step 4: Generate a virtual species
+
+We create a random virtual species based on the selected bioclimatic variables.
+
+```{r}
+set.seed(123)
+random_sp <- generateRandomSp(worldclim)
+```
+
+## Step 5: Apply a geographical limit
+
+We limit the species distribution to the United Kingdom and Ireland.
+
+```{r}
+case <- limitDistribution(x = random_sp,
+                          geographical.limit = "country",
+                          area = c("United Kingdom", "Ireland"))
+```
+
+## Step 6: Sample occurrences
+
+We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
+Detection probability and sampling bias can be introduced similar to `gcube::sample_observations()`.
+See `?virtualspecies::sampleOccurrences` for more options.
+
+```{r}
+sample <- sampleOccurrences(
+  case,
+  n = 150,
+  detection.probability = 0.8)
+```
+
+# Grid designation with gcube
+
+## Convert sampled points to sf format
+
+We transform the sample points into an `sf` object:
+
+```{r}
+sample_sf <- st_as_sf(sample$sample.points,
+                      coords = c("x", "y"),
+                      crs = terra::crs(sample$original.distribution.raster))
+```
