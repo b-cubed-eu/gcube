@@ -131,7 +131,7 @@ detections_df_raw <- st_as_sf(
     virtual_sample$sample.points,
     coords = c("x", "y"),
     crs = terra::crs(virtual_sample$original.distribution.raster))
-detections_df_raw <- st_transform(detections_df_raw, crs = 3035)
+#detections_df_raw <- st_transform(detections_df_raw, crs = 3035)
 ```
 
 ## Step 2: Add coordinate uncertainty
@@ -177,7 +177,7 @@ The grid looks like this.
 ggplot() +
   geom_sf(data = observations_df) +
   geom_sf(data = cube_grid, alpha = 0) +
-  coord_sf(datum = 3035) +
+  #coord_sf(datum = 3035) +
   theme_minimal()
 ```
 
@@ -216,6 +216,6 @@ ggplot() +
                aes(label = n)) +
   geom_sf(data = sampled_points,
           colour = "blue") +
-  coord_sf(datum = 3035) +
+  #coord_sf(datum = 3035) +
   theme_minimal()
 ```

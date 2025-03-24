@@ -94,10 +94,13 @@ sample_from_uniform_circle <- function(
   }
 
   # Get random angle and radius
+  is_degree <- sf::st_crs(observations)$units_gdal == "degree"
+
   uncertainty_points <-
     observations %>%
     dplyr::mutate(
-      random_angle = stats::runif(nrow(observations), 0, 2 * pi),
+      random_angle = stats::runif(nrow(observations), 0,
+                                  ifelse(is_degree, 360, 2 * pi)),
       random_r = sqrt(stats::runif(nrow(observations), 0, 1)) *
         .data$coordinateUncertaintyInMeters
     )
