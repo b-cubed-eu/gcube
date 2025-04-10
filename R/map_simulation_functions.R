@@ -16,6 +16,8 @@
 #' @param nested Logical. If `TRUE` (default), retains list-column containing
 #' dataframes calculated by `f`. Otherwise, expands this list-column into rows
 #' and columns.
+#' @param progress Logical. Whether to show a progress bar. Set
+#' to `TRUE` to display a progress bar, `FALSE` (default) to suppress it.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to `df`, with an
 #' extra list-column called `mapped_col` containing an sf object for each row
@@ -119,7 +121,7 @@ map_simulation_functions <- function(
   mapped_df <- df %>%
     dplyr::mutate(mapped_col = purrr::pmap(.l = analysis_df,
                                            .f = purrr::quietly(f),
-                                           .progress = TRUE))
+                                           .progress = progress))
 
   # Handle potential warnings
   out_df <- handle_mapped_warnings(mapped_df)
