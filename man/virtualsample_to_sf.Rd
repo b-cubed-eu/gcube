@@ -19,10 +19,15 @@ or probability of occurrence rasters.}
 \value{
 An \code{sf} object (point geometry) with the following columns:
 \describe{
-\item{id}{A character ID for each sample point (based on row names of \code{sample.points}).}
-\item{observed}{Logical value indicating if the sample was observed (\code{TRUE}) or a non-detection (\code{FALSE}), based on the \code{Observed} column.}
-\item{...}{Any additional columns from \code{sample.points} or extracted from the raster layer(s).}
-\item{geometry}{Point geometry in the coordinate reference system of the original distribution raster.}
+\item{id}{A character ID for each sample point (based on row names of
+\code{sample.points}).}
+\item{observed}{Logical value indicating if the sample was observed
+(\code{TRUE}) or a non-detection (\code{FALSE}), based on the
+\code{Observed} column.}
+\item{...}{Any additional columns from \code{sample.points} or extracted from
+the raster layer(s).}
+\item{geometry}{Point geometry in the coordinate reference system of the
+original distribution raster.}
 }
 }
 \description{
@@ -32,11 +37,14 @@ Optionally extracts values from raster layers (e.g.habitat suitability or
 probability of occurrence) at the sample locations.
 }
 \details{
-This function is typically used as the first step after sampling from a virtual species distribution
-before applying functions like \code{\link[=filter_observations]{filter_observations()}}, \code{\link[=add_coordinate_uncertainty]{add_coordinate_uncertainty()}},
-and \code{\link[=grid_designation]{grid_designation()}}. See the vignette "Create occurrence cubes for virtual species" for a full workflow example.
+This function is typically used as the first step after sampling from a
+virtual species distribution before applying functions like
+\code{\link[=filter_observations]{filter_observations()}}, \code{\link[=add_coordinate_uncertainty]{add_coordinate_uncertainty()}},
+and \code{\link[=grid_designation]{grid_designation()}}. See the vignette "Create occurrence cubes
+for virtual species" for a full workflow example.
 
-If raster layers are provided through \code{raster_lyr}, the values at each point are extracted using \code{\link[terra:extract]{terra::extract()}} and appended to the output.
+If raster layers are provided through \code{raster_lyr}, the values at each point
+are extracted using \code{\link[terra:extract]{terra::extract()}} and appended to the output.
 }
 \examples{
 \dontrun{

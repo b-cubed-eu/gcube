@@ -15,18 +15,26 @@
 #'
 #' @return An `sf` object (point geometry) with the following columns:
 #' \describe{
-#'   \item{id}{A character ID for each sample point (based on row names of `sample.points`).}
-#'   \item{observed}{Logical value indicating if the sample was observed (`TRUE`) or a non-detection (`FALSE`), based on the `Observed` column.}
-#'   \item{...}{Any additional columns from `sample.points` or extracted from the raster layer(s).}
-#'   \item{geometry}{Point geometry in the coordinate reference system of the original distribution raster.}
+#'   \item{id}{A character ID for each sample point (based on row names of
+#'             `sample.points`).}
+#'   \item{observed}{Logical value indicating if the sample was observed
+#'                   (`TRUE`) or a non-detection (`FALSE`), based on the
+#'                   `Observed` column.}
+#'   \item{...}{Any additional columns from `sample.points` or extracted from
+#'              the raster layer(s).}
+#'   \item{geometry}{Point geometry in the coordinate reference system of the
+#'                   original distribution raster.}
 #' }
 #'
 #' @details
-#' This function is typically used as the first step after sampling from a virtual species distribution
-#' before applying functions like [gcube::filter_observations()], [gcube::add_coordinate_uncertainty()],
-#' and [gcube::grid_designation()]. See the vignette "Create occurrence cubes for virtual species" for a full workflow example.
+#' This function is typically used as the first step after sampling from a
+#' virtual species distribution before applying functions like
+#' [gcube::filter_observations()], [gcube::add_coordinate_uncertainty()],
+#' and [gcube::grid_designation()]. See the vignette "Create occurrence cubes
+#' for virtual species" for a full workflow example.
 #'
-#' If raster layers are provided through `raster_lyr`, the values at each point are extracted using [terra::extract()] and appended to the output.
+#' If raster layers are provided through `raster_lyr`, the values at each point
+#' are extracted using [terra::extract()] and appended to the output.
 #'
 #' @examples
 #' \dontrun{
