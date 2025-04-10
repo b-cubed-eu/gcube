@@ -3,7 +3,7 @@
 * Fix mistake in multispecies vignette #108
 * Add `progress` argument to `map_*` functions #109
 * Add default value for missing `coordinateUncertaintyInMeters` in grid
-designation #114
+  designation #114
 
 # gcube 1.2.0
 
