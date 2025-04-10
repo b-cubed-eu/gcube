@@ -114,7 +114,7 @@ map_simulation_functions <- function(
   selection_names <- intersect(names(df), col_arg_names)
 
   # Select correct data for mapping
-  analysis_df <- dplyr::select(df, all_of(selection_names))
+  analysis_df <- dplyr::select(df, dplyr::all_of(selection_names))
 
   ## Create output dataframe
   # Iterate function over rows and catch warnings
