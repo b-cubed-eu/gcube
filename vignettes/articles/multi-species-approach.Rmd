@@ -235,7 +235,7 @@ identical(map_occ_cube_df1, map_occ_cube_df2)
 
 Each mapping function also has an argument `nested`.
 If `nested = TRUE` (default), they retain the list-column containing calculated sf objects calculated by simulate_occurrences().
-If `nested = TRUE`, this list-column is expanded into rows and columns.
+If `nested = FALSE`, this list-column is expanded into rows and columns.
 
 If we do this for example for `map_grid_designation()`, we can recognise the columns produced by `grid_designation()`.
 Nested list-columns are useful for calculation in the simulation workflow as shown above.
