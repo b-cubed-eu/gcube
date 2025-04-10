@@ -1,3 +1,8 @@
+# gcube 1.3.0
+
+* Fix mistake in multispecies vignette #108
+* Add `progress` argument to `map_*` functions #109
+
 # gcube 1.2.0
 
 * Add tutorial to work with virtual species.
