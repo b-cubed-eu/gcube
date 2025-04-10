@@ -294,7 +294,7 @@ test_that("number of observations should equal numbers in grid", {
                  nrow(observations_sf1))
   })
   expect_equal(grid_designation(observations_sf2, grid = grid_df1,
-                                randomisation = "normal") %>%
+                                randomisation = "normal", p_norm = 0.999) %>%
                  dplyr::pull(n) %>%
                  sum(),
                nrow(observations_sf2))
