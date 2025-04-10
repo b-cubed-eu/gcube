@@ -27,7 +27,7 @@ test_that("Function samples observations without sampling bias correctly", {
     sampling_bias = "no_bias",
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -40,7 +40,7 @@ test_that("Function samples observations with polygon sampling bias", {
     bias_strength = 2,
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -52,7 +52,7 @@ test_that("Function samples observations with manual sampling bias correctly", {
     bias_weights = grid,
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -109,7 +109,7 @@ test_that("Function returns the correct columns", {
     all(c("detection_probability",
           "bias_weight",
           "sampling_probability",
-          "sampling_status",
+          "observed",
           "geometry") %in% colnames(result)))
 })
 

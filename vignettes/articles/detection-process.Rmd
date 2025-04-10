@@ -239,7 +239,7 @@ ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   geom_sf(data = detections_df_raw,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   scale_colour_manual(values = c("blue", "red")) +
   facet_wrap(~time_point, nrow = 2) +
   labs(title = "Distribution of occurrences for each time point") +
@@ -254,7 +254,7 @@ We can filter with `dplyr::filter()`.
 
 ```{r}
 detections_df1 <- detections_df_raw %>%
-  dplyr::filter(sampling_status == "detected")
+  dplyr::filter(observed == TRUE)
 ```
 
 Or we can use the function `filter_observations()`.

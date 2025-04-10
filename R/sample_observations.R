@@ -55,8 +55,8 @@
 #'   each occurrence.}
 #'   \item{`sampling_probability`}{The combined sampling probability from
 #'   detection probability and sampling bias for each occurrence.}
-#'   \item{`sampling_status`}{Indicates whether the occurrence was detected
-#'   (`"detected"`) or not (`"undetected"`). Detected occurrences are called
+#'   \item{`observed`}{Indicates whether the occurrence was detected
+#'   (`TRUE`) or not (`FALSE`). Detected occurrences are called
 #'   observations.}
 #' }
 #'
@@ -193,13 +193,12 @@ sample_observations <- function(
       sampling_probability = .data$detection_probability * .data$bias_weight
     ) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(sampling_status = stats::rbinom(1, 1,
-                                                  .data$sampling_probability),
-                  sampling_status = ifelse(.data$sampling_status == 1,
-                                           "detected", "undetected")) %>%
+    dplyr::mutate(
+      sampling_status = stats::rbinom(1, 1, .data$sampling_probability),
+      observed = .data$sampling_status == 1) %>%
     dplyr::ungroup() %>%
     dplyr::select("time_point", "detection_probability", "bias_weight",
-                  "sampling_probability", "sampling_status", "geometry")
+                  "sampling_probability", "observed", "geometry")
 
   # Return the observed occurrences
   return(occurrences_combi)

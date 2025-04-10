@@ -130,7 +130,7 @@ ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   geom_sf(data = detections_df_raw,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   scale_colour_manual(values = c("blue", "red")) +
   facet_wrap(~time_point, nrow = 2) +
   labs(title = "Distribution of occurrences for each time point") +
