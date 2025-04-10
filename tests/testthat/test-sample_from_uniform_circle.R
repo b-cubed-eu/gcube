@@ -193,3 +193,15 @@ test_that("distance to new point falls within coordinate uncertainty", {
   expect_true(test_smaller_distances(observations_sf2, seed = 123))
   expect_true(test_smaller_distances(observations_sf2, seed = 456))
 })
+
+## test missing_uncertainty argument
+test_that("missing_uncertainty argument works correctly", {
+  observations_sf2[2, 3] <- NA
+  result <- sample_from_uniform_circle(
+    observations_sf2, missing_uncertainty = 500)
+
+  expect_s3_class(result, class = "sf")
+  expect_s3_class(result, class = "data.frame")
+
+  expect_true(result[[2, "coordinateUncertaintyInMeters"]] == 500)
+})
