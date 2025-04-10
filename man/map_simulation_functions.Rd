@@ -4,7 +4,7 @@
 \alias{map_simulation_functions}
 \title{Map a cube simulation function over multiple rows of a dataframe}
 \usage{
-map_simulation_functions(f, df, nested = TRUE)
+map_simulation_functions(f, df, nested = TRUE, progress = FALSE)
 }
 \arguments{
 \item{f}{One of five cube simulation functions: \code{simulate_occurrences()},
