@@ -4,6 +4,8 @@
 * Add `progress` argument to `map_*` functions #109
 * Add default value for missing `coordinateUncertaintyInMeters` in grid
   designation #114
+* Change `sampling_status` column in output `sample_observations()` to logical
+  output column called `observed`
 
 # gcube 1.2.0
 

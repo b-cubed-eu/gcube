@@ -144,7 +144,7 @@ detections_df_raw <- sample_observations(
 ggplot() + 
   geom_sf(data = polygon) +
   geom_sf(data = detections_df_raw,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   theme_minimal()
 ```
 

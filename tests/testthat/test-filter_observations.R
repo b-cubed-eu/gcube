@@ -28,24 +28,24 @@ test_that("filter_observations works with sf object", {
   # Test case 1: Filter detected observations (default behavior)
   detected_observations <- filter_observations(observations_total_sf)
   expect_true(nrow(observations_total_sf) >= nrow(detected_observations))
-  expect_true(all(detected_observations$sampling_status == "detected"))
+  expect_true(all(detected_observations$observed == TRUE))
 
   # Test case 2: Filter undetected observations (invert = TRUE)
   undetected_observations <- filter_observations(occurrences_sf,
                                                  invert = TRUE)
-  expect_true(all(undetected_observations$sampling_status != "detected"))
+  expect_true(all(undetected_observations$observed != TRUE))
 })
 
 test_that("filter_observations works with dataframe", {
   # Test case 1: Filter detected observations (default behavior)
   detected_observations <- filter_observations(observations_total_df)
   expect_true(nrow(observations_total_df) >= nrow(detected_observations))
-  expect_true(all(detected_observations$sampling_status == "detected"))
+  expect_true(all(detected_observations$observed == TRUE))
 
   # Test case 2: Filter undetected observations (invert = TRUE)
   undetected_observations <- filter_observations(observations_total_df,
                                                  invert = TRUE)
-  expect_true(all(undetected_observations$sampling_status != "detected"))
+  expect_true(all(undetected_observations$observed != TRUE))
 })
 
 test_that("filter_observations handles invalid inputs", {
