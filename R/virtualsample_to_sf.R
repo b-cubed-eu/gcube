@@ -40,9 +40,10 @@
 #'                  virtual_species$probability.of.occurrence))
 #' }
 #'
-#' @importFrom sf st_as_sf
+#' @import dplyr
+#' @import sf
 #' @importFrom terra crs extract
-#' @importFrom dplyr mutate select everything
+#' @importFrom rlang .data
 #'
 #' @export
 
