@@ -72,7 +72,8 @@
 map_simulation_functions <- function(
     f,
     df,
-    nested = TRUE) {
+    nested = TRUE,
+    progress = FALSE) {
   ### Start checks
   # 1. Check input type and length
   # Check if f is a function
