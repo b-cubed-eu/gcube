@@ -1,3 +1,4 @@
+# nolint start: line_length_linter.
 #' Convert virtualspecies sample to `sf` format
 #'
 #' Converts virtual species samples generated with the \pkg{virtualspecies}
@@ -58,6 +59,7 @@
 #'   raster_lyr = c(virtual_species$suitab.raster,
 #'                  virtual_species$probability.of.occurrence))
 #' }
+# nolint end
 
 virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
   # Virtual samples to sf object
