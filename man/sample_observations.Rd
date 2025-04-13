@@ -136,6 +136,7 @@ Other main:
 \code{\link{add_coordinate_uncertainty}()},
 \code{\link{filter_observations}()},
 \code{\link{grid_designation}()},
-\code{\link{simulate_occurrences}()}
+\code{\link{simulate_occurrences}()},
+\code{\link{virtualsample_to_sf}()}
 }
 \concept{main}
