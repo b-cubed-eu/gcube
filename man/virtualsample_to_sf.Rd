@@ -8,8 +8,8 @@ virtualsample_to_sf(virtual_sample, raster_lyr = NULL)
 }
 \arguments{
 \item{virtual_sample}{A list output from
-\code{virtualspecies::sampleOccurrences()}, containing \code{sample.points}
-(a data frame with columns \code{x} and \code{y}) and \code{original.distribution.raster},
+\code{virtualspecies::sampleOccurrences()}, containing \code{sample.points},
+a data frame with columns \code{x} and \code{y}, and \code{original.distribution.raster},
 a \code{terra::SpatRaster} object.}
 
 \item{raster_lyr}{Optional. A \code{terra::SpatRaster} (or list of rasters) from
@@ -33,8 +33,7 @@ original distribution raster.}
 \description{
 Converts virtual species samples generated with the \pkg{virtualspecies}
 package into a spatial (\code{sf}) object compatible with \pkg{gcube} workflows.
-Optionally extracts values from raster layers (e.g.habitat suitability or
-probability of occurrence) at the sample locations.
+Optionally extracts values from raster layers at the sample locations.
 }
 \details{
 This function is typically used as the first step after sampling from a

@@ -2,12 +2,11 @@
 #'
 #' Converts virtual species samples generated with the \pkg{virtualspecies}
 #' package into a spatial (`sf`) object compatible with \pkg{gcube} workflows.
-#' Optionally extracts values from raster layers (e.g.habitat suitability or
-#' probability of occurrence) at the sample locations.
+#' Optionally extracts values from raster layers at the sample locations.
 #'
 #' @param virtual_sample A list output from
-#' `virtualspecies::sampleOccurrences()`, containing `sample.points`
-#' (a data frame with columns `x` and `y`) and `original.distribution.raster`,
+#' `virtualspecies::sampleOccurrences()`, containing `sample.points`,
+#' a data frame with columns `x` and `y`, and `original.distribution.raster`,
 #' a `terra::SpatRaster` object.
 #' @param raster_lyr Optional. A `terra::SpatRaster` (or list of rasters) from
 #' which to extract values at sample locations. For example, habitat suitability
