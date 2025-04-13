@@ -96,15 +96,15 @@ map_simulation_functions <- function(
   # 2. Other checks
   # Function f must be one of three cube simulation functions
   do.call(stopifnot, stats::setNames(
-        list(
-          identical(f, simulate_occurrences) ||
-           identical(f, sample_observations) ||
-           identical(f, filter_observations) ||
-           identical(f, add_coordinate_uncertainty) ||
-           identical(f, grid_designation)),
-        function_message
-      )
-    )
+    list(
+      identical(f, simulate_occurrences) ||
+        identical(f, sample_observations) ||
+        identical(f, filter_observations) ||
+        identical(f, add_coordinate_uncertainty) ||
+        identical(f, grid_designation)
+    ),
+    function_message
+  ))
   ### End checks
 
   ## Select data to map function

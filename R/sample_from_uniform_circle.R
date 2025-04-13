@@ -67,7 +67,7 @@ sample_from_uniform_circle <- function(
   # Check if missing_uncertainty is a number
   stopifnot("`missing_uncertainty` must be a numeric vector of length 1." =
               is.numeric(missing_uncertainty) &
-                length(missing_uncertainty) == 1)
+              length(missing_uncertainty) == 1)
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =

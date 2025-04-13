@@ -9,7 +9,7 @@ observations_sf1 <- data.frame(
   lat = c(3110575, 3111577, 3110818, 3111766),
   long = c(3841940, 3841046, 3841528, 3841892),
   time_point = 1
-  ) %>%
+) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## dataset with coordinateUncertaintyInMeters
@@ -30,7 +30,7 @@ grid_df1 <- sf::st_make_grid(
   observations_sf2_buffered,
   square = TRUE,
   cellsize = c(200, 200)
-  ) %>%
+) %>%
   sf::st_sf()
 
 grid_df2 <- grid_df1 %>%
@@ -51,7 +51,8 @@ test_that("unique ids if id column is provided", {
       "Column 'id' does not contain unique ids for grid cells!\n",
       "Creating 'cell_code' column with ids based on row names."
     ),
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 test_that("provided id column present in provided grid", {
@@ -64,7 +65,8 @@ test_that("provided id column present in provided grid", {
       "Column name 'identifier' not present in provided grid!\n",
       "Creating 'cell_code' column with ids based on row names."
     ),
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 ## expected outputs
@@ -107,12 +109,16 @@ test_that("correct column names present", {
   expect_contains(names(grid_designation(observations_sf2, grid = grid_df1)),
                   c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   expect_contains(
-    names(grid_designation(
-      observations_sf2,
-      grid = grid_df1 %>%
-        dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
-      id_col = "identifier")),
-    c("identifier", "n", "min_coord_uncertainty", "geometry"))
+    names(
+      grid_designation(
+        observations_sf2,
+        grid = grid_df1 %>%
+          dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
+        id_col = "identifier"
+      )
+    ),
+    c("identifier", "n", "min_coord_uncertainty", "geometry")
+  )
 
   # aggregate = TRUE, randomisation = "normal"
   suppressWarnings({
@@ -124,13 +130,17 @@ test_that("correct column names present", {
                                          randomisation = "normal")),
                   c("cell_code", "n", "min_coord_uncertainty", "geometry"))
   expect_contains(
-    names(grid_designation(
-      observations_sf2,
-      grid = grid_df1 %>%
-        dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
-      id_col = "identifier",
-      randomisation = "normal")),
-    c("identifier", "n", "min_coord_uncertainty", "geometry"))
+    names(
+      grid_designation(
+        observations_sf2,
+        grid = grid_df1 %>%
+          dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
+        id_col = "identifier",
+        randomisation = "normal"
+      )
+    ),
+    c("identifier", "n", "min_coord_uncertainty", "geometry")
+  )
 
   # aggregate = FALSE, randomisation = "uniform"
   suppressWarnings({
@@ -142,13 +152,17 @@ test_that("correct column names present", {
                                          aggregate = FALSE)),
                   c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   expect_contains(
-    names(grid_designation(
-      observations_sf2,
-      grid = grid_df1 %>%
-        dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
-      id_col = "identifier",
-      aggregate = FALSE)),
-    c("identifier", "coordinateUncertaintyInMeters", "geometry"))
+    names(
+      grid_designation(
+        observations_sf2,
+        grid = grid_df1 %>%
+          dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
+        id_col = "identifier",
+        aggregate = FALSE
+      )
+    ),
+    c("identifier", "coordinateUncertaintyInMeters", "geometry")
+  )
 
   # aggregate = FALSE, randomisation = "normal"
   suppressWarnings({
@@ -162,30 +176,33 @@ test_that("correct column names present", {
                                          randomisation = "normal")),
                   c("cell_code", "coordinateUncertaintyInMeters", "geometry"))
   expect_contains(
-    names(grid_designation(
-      observations_sf2,
-      grid = grid_df1 %>%
-        dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
-      id_col = "identifier",
-      aggregate = FALSE,
-      randomisation = "normal")),
-    c("identifier", "coordinateUncertaintyInMeters", "geometry"))
+    names(
+      grid_designation(
+        observations_sf2,
+        grid = grid_df1 %>%
+          dplyr::mutate(identifier = seq_len(nrow(grid_df1))),
+        id_col = "identifier",
+        aggregate = FALSE,
+        randomisation = "normal"
+      )
+    ),
+    c("identifier", "coordinateUncertaintyInMeters", "geometry")
+  )
 })
 
 test_that("no minimal coordinate uncertainty for empty grid cells", {
   suppressWarnings({
-  grid_designation_df1 <- grid_designation(observations_sf1, grid = grid_df1)
-  grid_designation_df2 <- grid_designation(observations_sf2, grid = grid_df1)
-  grid_designation_df3 <- grid_designation(observations_sf1, grid = grid_df1,
-                                           randomisation = "normal")
-  grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
-                                           randomisation = "normal")
+    grid_designation_df1 <- grid_designation(observations_sf1, grid = grid_df1)
+    grid_designation_df2 <- grid_designation(observations_sf2, grid = grid_df1)
+    grid_designation_df3 <- grid_designation(observations_sf1, grid = grid_df1,
+                                             randomisation = "normal")
+    grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
+                                             randomisation = "normal")
   })
 
   # randomisation is "uniform"
   expect_equal(sum(grid_designation_df1$n == 0),
-               sum(is.na(grid_designation_df1$min_coord_uncertainty))
-               )
+               sum(is.na(grid_designation_df1$min_coord_uncertainty)))
 
   expect_equal(sum(grid_designation_df2$n == 0),
     sum(is.na(grid_designation_df2$min_coord_uncertainty))
@@ -209,8 +226,10 @@ sf::st_agr(grid_df2) <- "constant"
 potential_gridcells_sf1 <- sf::st_intersection(grid_df2, observations_sf1) %>%
   dplyr::pull(id)
 # With uncertainty
-potential_gridcells_sf2 <- sf::st_intersection(grid_df2,
-                                           observations_sf2_buffered) %>%
+potential_gridcells_sf2 <- sf::st_intersection(
+  grid_df2,
+  observations_sf2_buffered
+) %>%
   dplyr::pull(id)
 
 test_that("check possible outcomes for grid cell designation", {
@@ -249,7 +268,7 @@ test_that("check possible outcomes for grid cell designation", {
                     grid_designation(observations_sf1, grid = grid_df2,
                                      id_col = "id",
                                      aggregate = FALSE) %>%
-                     dplyr::pull(id))
+                      dplyr::pull(id))
   })
   expect_contains(potential_gridcells_sf2,
                   grid_designation(observations_sf2, grid = grid_df2,
@@ -364,7 +383,8 @@ test_that("grid_designation raises an error for incorrect id_col type", {
 test_that("grid_designation raises an error for incorrect aggregate type", {
   expect_error(
     grid_designation(observations_sf2, grid_df1, aggregate = "not_logical"),
-    "`aggregate` must be a logical vector of length 1.")
+    "`aggregate` must be a logical vector of length 1."
+  )
 })
 
 test_that("grid_designation raises an error for different CRS", {
@@ -376,5 +396,6 @@ test_that("grid_designation raises an error for different CRS", {
 test_that("grid_designation raises an error for invalid randomisation value", {
   expect_error(
     grid_designation(observations_sf2, grid_df1, randomisation = "invalid"),
-    "`randomisation` must be one of 'uniform', 'normal'.")
+    "`randomisation` must be one of 'uniform', 'normal'."
+  )
 })

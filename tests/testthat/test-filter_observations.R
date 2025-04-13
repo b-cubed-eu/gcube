@@ -17,7 +17,7 @@ observations_total_sf <- sample_observations(
   detection_probability = 0.8,
   sampling_bias = "no_bias",
   seed = 123
-  )
+)
 
 observations_total_df <- sf::st_drop_geometry(observations_total_sf)
 

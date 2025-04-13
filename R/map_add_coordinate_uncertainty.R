@@ -157,7 +157,8 @@ map_add_coordinate_uncertainty <- function(
     f = add_coordinate_uncertainty,
     df = df,
     nested = nested,
-    progress = progress)
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

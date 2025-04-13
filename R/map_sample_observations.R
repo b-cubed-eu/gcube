@@ -134,7 +134,8 @@ map_sample_observations <- function(
     f = sample_observations,
     df = df,
     nested = nested,
-    progress = progress)
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

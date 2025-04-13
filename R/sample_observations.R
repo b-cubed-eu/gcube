@@ -140,10 +140,9 @@ sample_observations <- function(
                                    by_geometry = FALSE) == "POINT")
 
   # detection_probability should be numeric between 0 and 1
-  stopifnot(
-    "`detection_probability` must be a numeric value between 0 and 1." =
-      assertthat::is.number(detection_probability) &
-      (detection_probability >= 0 & detection_probability <= 1))
+  stopifnot("`detection_probability` must be a numeric value between 0 and 1." =
+              assertthat::is.number(detection_probability) &
+              (detection_probability >= 0 & detection_probability <= 1))
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
@@ -154,9 +153,10 @@ sample_observations <- function(
   # sampling_bias arguments must match
   sampling_bias <- tryCatch({
     match.arg(sampling_bias, c("no_bias", "polygon", "manual"))
-    }, error = function(e) {
-      stop("`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.",
-           call. = FALSE)
+  },
+  error = function(e) {
+    stop("`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.",
+         call. = FALSE)
   })
   ### End checks
 
@@ -177,7 +177,8 @@ sample_observations <- function(
     occurrences <- apply_polygon_sampling_bias(
       occurrences_sf = occurrences,
       bias_area = bias_area,
-      bias_strength = bias_strength)
+      bias_strength = bias_strength
+    )
   } else if (sampling_bias == "manual") {
     occurrences <- apply_manual_sampling_bias(
       occurrences_sf = occurrences,
@@ -195,7 +196,8 @@ sample_observations <- function(
     dplyr::rowwise() %>%
     dplyr::mutate(
       sampling_status = stats::rbinom(1, 1, .data$sampling_probability),
-      observed = .data$sampling_status == 1) %>%
+      observed = .data$sampling_status == 1
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::select("time_point", "detection_probability", "bias_weight",
                   "sampling_probability", "observed", "geometry")

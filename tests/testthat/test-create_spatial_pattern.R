@@ -105,10 +105,12 @@ test_that("create_spatial_pattern handles CRS correctly", {
 test_that("create_spatial_pattern throws errors for invalid inputs", {
   expect_error(
     create_spatial_pattern(polygon = "not_a_polygon", resolution = 0.1),
-    "`polygon` must be an sf object with POLYGON geometry.")
+    "`polygon` must be an sf object with POLYGON geometry."
+  )
   expect_error(
     create_spatial_pattern(polygon = plgn, resolution = -1),
-    "`resolution` must be a single positive number.")
+    "`resolution` must be a single positive number."
+  )
   expect_error(
     create_spatial_pattern(polygon = plgn,
                            resolution = 0.1,
@@ -118,8 +120,10 @@ test_that("create_spatial_pattern throws errors for invalid inputs", {
   )
   expect_error(
     create_spatial_pattern(polygon = plgn, resolution = 0.1, seed = "string"),
-    "`seed` must be a numeric vector of length 1 or NA.")
+    "`seed` must be a numeric vector of length 1 or NA."
+  )
   expect_error(
     create_spatial_pattern(polygon = plgn, resolution = 0.1, n_sim = 0),
-    "`n_sim` must be a single positive integer.")
+    "`n_sim` must be a single positive integer."
+  )
 })

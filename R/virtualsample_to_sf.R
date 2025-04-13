@@ -64,10 +64,10 @@
 virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
   # Virtual samples to sf object
   sample_sf <- sf::st_as_sf(
-      virtual_sample$sample.points,
-      coords = c("x", "y"),
-      crs = terra::crs(virtual_sample$original.distribution.raster)
-    )
+    virtual_sample$sample.points,
+    coords = c("x", "y"),
+    crs = terra::crs(virtual_sample$original.distribution.raster)
+  )
 
   # Extract raster values if provided
   if (!is.null(raster_lyr)) {

@@ -126,9 +126,9 @@ grid_designation <- function(
   # Check if randomisation is uniform or normal
   randomisation <- tryCatch({
     match.arg(randomisation, c("uniform", "normal"))
-    }, error = function(e) {
-      stop("`randomisation` must be one of 'uniform', 'normal'.",
-           call. = FALSE)
+  }, error = function(e) {
+    stop("`randomisation` must be one of 'uniform', 'normal'.",
+         call. = FALSE)
   })
 
   # 2. Other checks
@@ -143,8 +143,8 @@ grid_designation <- function(
         paste0(
           "Column name '",  id_col, "' not present in provided grid!\n",
           "Creating 'cell_code' column with ids based on row names."
-          )
         )
+      )
       id_col <- "row_names"
     } else if (length(unique(grid[[id_col]])) != nrow(grid)) {
       warning(
@@ -163,13 +163,15 @@ grid_designation <- function(
     new_points <- sample_from_uniform_circle(
       observations = observations,
       missing_uncertainty = missing_uncertainty,
-      seed = seed)
+      seed = seed
+    )
   } else {
     new_points <- sample_from_binormal_circle(
       observations = observations,
       p_norm = p_norm,
       missing_uncertainty = missing_uncertainty,
-      seed = seed)
+      seed = seed
+    )
   }
 
   # We assign each occurrence to a grid cell

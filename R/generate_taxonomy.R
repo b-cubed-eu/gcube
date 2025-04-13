@@ -110,22 +110,28 @@ generate_taxonomy <- function(
   # number of families ...
   stopifnot(
     "Number of genera should be smaller or equal to number of species." =
-      num_species >= num_genera)
+      num_species >= num_genera
+  )
   stopifnot(
     "Number of families should be smaller or equal to number of genera." =
-      num_genera >= num_families)
+      num_genera >= num_families
+  )
   stopifnot(
     "Number of orders should be smaller or equal to number of families." =
-      num_families >= num_orders)
+      num_families >= num_orders
+  )
   stopifnot(
     "Number of classes should be smaller or equal to number of orders." =
-      num_orders >= num_classes)
+      num_orders >= num_classes
+  )
   stopifnot(
     "Number of phyla should be smaller or equal to number of classes." =
-      num_classes >= num_phyla)
+      num_classes >= num_phyla
+  )
   stopifnot(
     "Number of kingdoms should be smaller or equal to number of phyla." =
-      num_phyla >= num_kingdoms)
+      num_phyla >= num_kingdoms
+  )
   ### End checks
 
   # Set seed if provided
@@ -145,31 +151,36 @@ generate_taxonomy <- function(
   families <- paste0("family", seq_len(num_families))
   genera_to_families <- data.frame(
     genus = genera,
-    family = sample(families, num_genera, replace = TRUE))
+    family = sample(families, num_genera, replace = TRUE)
+  )
 
   # Assign families to orders
   orders <- paste0("order", seq_len(num_orders))
   families_to_orders <- data.frame(
     family = families,
-    order = sample(orders, num_families, replace = TRUE))
+    order = sample(orders, num_families, replace = TRUE)
+  )
 
   # Assign orders to classes
   classes <- paste0("class", seq_len(num_classes))
   orders_to_classes <- data.frame(
     order = orders,
-    class = sample(classes, num_orders, replace = TRUE))
+    class = sample(classes, num_orders, replace = TRUE)
+  )
 
   # Assign classes to phyla
   phyla <- paste0("phylum", seq_len(num_phyla))
   classes_to_phyla <- data.frame(
     class = classes,
-    phylum = sample(phyla, num_classes, replace = TRUE))
+    phylum = sample(phyla, num_classes, replace = TRUE)
+  )
 
   # Assign phyla to kingdoms
   kingdoms <- paste0("kingdom", seq_len(num_kingdoms))
   phyla_to_kingdoms <- data.frame(
     phylum = phyla,
-    kingdom = sample(kingdoms, num_phyla, replace = TRUE))
+    kingdom = sample(kingdoms, num_phyla, replace = TRUE)
+  )
 
   # Create a data frame to store the taxonomy
   taxonomy <- species_df %>%

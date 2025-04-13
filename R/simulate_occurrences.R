@@ -91,17 +91,20 @@ simulate_occurrences <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if species_range is an sf object
-  stopifnot("`species_range` must be an sf object with POLYGON geometry." =
-              inherits(species_range, "POLYGON") |
-              inherits(species_range, "sfc_POLYGON") |
-              (inherits(species_range, "sf") &&
-                 sf::st_geometry_type(species_range) == "POLYGON"))
+  stopifnot(
+    "`species_range` must be an sf object with POLYGON geometry." =
+      inherits(species_range, "POLYGON") |
+      inherits(species_range, "sfc_POLYGON") |
+      (inherits(species_range, "sf") &&
+       sf::st_geometry_type(species_range) == "POLYGON")
+  )
 
   # Check if initial_average_occurrences is a positive number
   stopifnot(
     "`initial_average_occurrences` must be a single positive number." =
       assertthat::is.number(initial_average_occurrences) &
-      initial_average_occurrences >= 0)
+      initial_average_occurrences >= 0
+  )
 
   if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
     # Check if spatial_pattern is random or clustered
@@ -115,9 +118,8 @@ simulate_occurrences <- function(
   }
 
   # Check if n_time_points is a positive integer
-  stopifnot(
-    "`n_time_points` must be a single positive integer." =
-      assertthat::is.count(n_time_points))
+  stopifnot("`n_time_points` must be a single positive integer." =
+              assertthat::is.count(n_time_points))
 
   # Check if temporal_function is NA or a function
   stopifnot("`temporal_function` must be `NA` or a function." =
@@ -136,7 +138,8 @@ simulate_occurrences <- function(
     n_time_points = n_time_points,
     temporal_function = temporal_function,
     ...,
-    seed = seed)
+    seed = seed
+  )
 
   # Create the random field
   box_plgn <- sf::st_bbox(species_range)
@@ -149,13 +152,15 @@ simulate_occurrences <- function(
     resolution = res,
     spatial_pattern = spatial_pattern,
     seed = seed,
-    n_sim = 1)
+    n_sim = 1
+  )
 
   # Sample occurrences from raster
   occ <- sample_occurrences_from_raster(
     raster = rs_pattern,
     time_series = ts,
-    seed = seed)
+    seed = seed
+  )
 
   # Return the occurences (sf point geometry)
   return(occ)

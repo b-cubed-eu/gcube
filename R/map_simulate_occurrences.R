@@ -96,11 +96,11 @@ map_simulate_occurrences <- function(
   if (assertthat::noNA(arg_list)) {
     # Check if arg_list is a named list with single strings
     stopifnot(
-        "`arg_list` must be named list containing one string for each value." =
+      "`arg_list` must be named list containing one string for each value." =
         is.list(arg_list) &&
         !is.null(names(arg_list)) &&
         all(sapply(arg_list, assertthat::is.string))
-      )
+    )
 
     # Check if arg_list is a named list with single strings
     arg_list_message <- paste("You have provided column names in `arg_list`",
@@ -125,7 +125,8 @@ map_simulate_occurrences <- function(
     f = simulate_occurrences,
     df = df,
     nested = nested,
-    progress = progress)
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

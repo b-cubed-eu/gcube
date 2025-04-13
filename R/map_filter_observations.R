@@ -145,7 +145,8 @@ map_filter_observations <- function(
     f = filter_observations,
     df = df,
     nested = nested,
-    progress = progress)
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

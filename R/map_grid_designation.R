@@ -174,7 +174,8 @@ map_grid_designation <- function(
     f = grid_designation,
     df = df,
     nested = nested,
-    progress = progress)
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

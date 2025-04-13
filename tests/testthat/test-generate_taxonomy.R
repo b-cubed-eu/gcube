@@ -7,7 +7,7 @@ colnames_tax <- c("species", "species_key", "genus", "family", "order", "class",
 existing_df <- data.frame(
   count = c(1, 2, 5, 4, 8, 9, 3),
   det_prob = c(0.9, 0.9, 0.9, 0.8, 0.5, 0.2, 0.2)
-  )
+)
 
 
 ## Unit tests
@@ -33,7 +33,7 @@ test_that("generate_taxonomy function works correctly", {
   # Correct column names?
   expect_true(
     all(colnames(taxonomy2) == c(colnames_tax, colnames(existing_df)))
-    )
+  )
 
   # Check if seed makes results reproducible
   # Generate taxonomy with seed 123 twice
@@ -57,8 +57,10 @@ test_that("generate_taxonomy handles invalid inputs", {
   # Validating number logic
   expect_error(
     generate_taxonomy(10, 50, 4, 2),
-    "Number of genera should be smaller or equal to number of species.")
+    "Number of genera should be smaller or equal to number of species."
+  )
   expect_error(
     generate_taxonomy(5, 3, 2, 3),
-    "Number of orders should be smaller or equal to number of families.")
+    "Number of orders should be smaller or equal to number of families."
+  )
 })
