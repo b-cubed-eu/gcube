@@ -30,16 +30,28 @@
 #' This function is typically used as the first step after sampling from a
 #' virtual species distribution before applying functions like
 #' [gcube::filter_observations()], [gcube::add_coordinate_uncertainty()],
-#' and [gcube::grid_designation()]. See the vignette "Create occurrence cubes
-#' for virtual species" for a full workflow example.
+#' and [gcube::grid_designation()]. See the tutorial \emph{\href{https://b-cubed-eu.github.io/gcube/articles/cube-for-virtual-species.html}{
+#' "Create occurrence cubes for virtual species"}} for a full workflow example.
 #'
 #' If raster layers are provided through `raster_lyr`, the values at each point
 #' are extracted using [terra::extract()] and appended to the output.
+#'
+#' @export
+#'
+#' @import dplyr
+#' @import sf
+#' @importFrom terra crs extract
+#' @importFrom rlang .data
+#'
+#' @family main
 #'
 #' @examples
 #' \dontrun{
 #' # After generating a virtual species and sampling occurrences:
 #' detections_df_raw <- virtualsample_to_sf(virtual_sample)
+#'
+#' # Transform virtual sample to sf object
+#' virtualsample_to_sf(virtual_sample)
 #'
 #' # Optionally extract suitability and occurrence probability
 #' virtualsample_to_sf(
@@ -47,13 +59,6 @@
 #'   raster_lyr = c(virtual_species$suitab.raster,
 #'                  virtual_species$probability.of.occurrence))
 #' }
-#'
-#' @import dplyr
-#' @import sf
-#' @importFrom terra crs extract
-#' @importFrom rlang .data
-#'
-#' @export
 
 virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
   # Virtual samples to sf object
