@@ -6,6 +6,8 @@
   designation #114
 * Change `sampling_status` column in output `sample_observations()` to logical
   output column called `observed`
+* Create `virtualsample_to_sf()` function to work with virtual species #75
+* Check package with `lintr::indentation_linter()`
 
 # gcube 1.2.0
 
