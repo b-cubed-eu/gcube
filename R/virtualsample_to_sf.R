@@ -9,9 +9,9 @@
 #' `virtualspecies::sampleOccurrences()`, containing `sample.points`,
 #' a data frame with columns `x` and `y`, and `original.distribution.raster`,
 #' a `terra::SpatRaster` object.
-#' @param raster_lyr Optional. A `terra::SpatRaster` (or list of rasters) from
-#' which to extract values at sample locations. For example, habitat suitability
-#' or probability of occurrence rasters.
+#' @param raster_lyr Optional. A `terra::SpatRaster` from which to extract
+#' values at sample locations. For example, habitat suitability or probability
+#' of occurrence rasters.
 #'
 #' @return An `sf` object (point geometry) with the following columns:
 #' \describe{
@@ -61,6 +61,34 @@
 # nolint end
 
 virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
+  ### Start checks
+  error_message <- paste(
+    "`virtual_sample` must a list output from",
+    "`virtualspecies::sampleOccurrences()`,\ncontaining `sample.points` and",
+    "`original.distribution.raster`."
+  )
+
+  # Check virtual_sample object
+  do.call(stopifnot, stats::setNames(
+    list(
+      inherits(virtual_sample, "VSSampledPoints"),
+      inherits(virtual_sample, "list")
+    ),
+    error_message
+  ))
+
+  # Check virtual_sample content
+  do.call(stopifnot, stats::setNames(
+    list(
+      "sample.points" %in% names(virtual_sample),
+      inherits(virtual_sample$sample.points, "data.frame"),
+      "original.distribution.raster" %in% names(virtual_sample),
+      inherits(virtual_sample$original.distribution.raster, "SpatRaster")
+    ),
+    error_message
+  ))
+  ### End checks
+
   # Virtual samples to sf object
   sample_sf <- sf::st_as_sf(
     virtual_sample$sample.points,
@@ -70,6 +98,9 @@ virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
 
   # Extract raster values if provided
   if (!is.null(raster_lyr)) {
+    stopifnot("`raster_lyr` must a `terra::SpatRaster` object." =
+                inherits(raster_lyr, "SpatRaster"))
+
     extracted_values <- terra::extract(raster_lyr, sample_sf, ID = FALSE)
     sample_sf <- cbind(sample_sf, extracted_values)
   }
