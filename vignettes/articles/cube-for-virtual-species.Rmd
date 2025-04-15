@@ -92,7 +92,8 @@ We limit the species distribution to the United Kingdom and Ireland.
 virtual_distribution <- limitDistribution(
   x = virtual_species,
   geographical.limit = "country",
-  area = c("United Kingdom", "Ireland"))
+  area = c("United Kingdom", "Ireland")
+)
 ```
 
 ## Step 6: Sample occurrences
@@ -111,7 +112,8 @@ Detection probability and sampling bias can be introduced similar to `sample_obs
 virtual_sample <- sampleOccurrences(
   virtual_distribution,
   n = 150,
-  detection.probability = 0.8)
+  detection.probability = 0.8
+)
 ```
 
 # Grid designation with gcube
@@ -151,7 +153,8 @@ names(virtual_species$probability.of.occurrence) <- "occ_prob"
 virtualsample_to_sf(
   virtual_sample,
   raster_lyr = c(virtual_species$suitab.raster,
-                 virtual_species$probability.of.occurrence))
+                 virtual_species$probability.of.occurrence)
+)
 ```
 
 ---
@@ -180,7 +183,8 @@ We add 25 m uncertainty for each observation.
 # Add coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(
   observations = detections_df,
-  coords_uncertainty_meters = 25)
+  coords_uncertainty_meters = 25
+)
 ```
 
 ## Step 3: Specify reference grid
@@ -195,7 +199,8 @@ buffered_observations <- st_buffer(observations_df, 25)
 cube_grid <- st_make_grid(
   buffered_observations,
   n = c(20, 20),
-  square = TRUE) %>%
+  square = TRUE
+) %>%
   st_sf()
 ```
 
@@ -220,7 +225,8 @@ We perform grid designation both in aggregated version and not for visualisation
 occurrence_cube_df <- grid_designation(
   observations_df,
   cube_grid,
-  seed = 123)
+  seed = 123
+)
 ```
 
 ```{r}
@@ -229,7 +235,8 @@ sampled_points <- grid_designation(
   observations_df,
   cube_grid,
   seed = 123,
-  aggregate = FALSE)
+  aggregate = FALSE
+)
 ```
 
 Lets visualise were the samples were taken.

@@ -61,7 +61,8 @@ occurrences_df <- simulate_occurrences(
   temporal_function = simulate_random_walk,
   sd_step = 1,
   spatial_pattern = "random",
-  seed = 123)
+  seed = 123
+)
 ```
 
 This is the spatial distribution of the occurrences for each time point
@@ -141,7 +142,8 @@ We can say that occurrences on the road have 2x larger probability to be detecte
 occurrence_bias_df1 <- apply_polygon_sampling_bias(
   occurrences_df,
   bias_area = road_polygon,
-  bias_strength = 2)
+  bias_strength = 2
+)
 ```
 
 We see that occurrences on the road have twice the bias weights as the other occurrences.
@@ -171,9 +173,10 @@ Lets create a grid and give random bias weights to each cell.
 
 ```{r}
 grid <- st_make_grid(
-    polygon,
-    n = c(10, 10),
-    square = TRUE) %>%
+  polygon,
+  n = c(10, 10),
+  square = TRUE
+) %>%
   st_sf()
 set.seed(123)
 grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
@@ -196,7 +199,8 @@ We use the supporting function. We only use time point 1.
 ```{r}
 occurrence_bias_df2 <- apply_manual_sampling_bias(
   occurrences_df %>% dplyr::filter(time_point == 1),
-  bias_weights = grid)
+  bias_weights = grid
+)
 ```
 
 We indeed see higher bias weights for occurrences where with higher values in the grid cells.
@@ -226,7 +230,8 @@ detections_df_raw <- sample_observations(
   sampling_bias = "polygon",
   bias_area = road_polygon,
   bias_strength = 0.1,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We see that a lot of occurrences are detected due to the high detection probability, but this is not the case on the road where few are detected.
@@ -265,7 +270,8 @@ Or we can use the function `filter_observations()`.
 
 ```{r}
 detections_df2 <- filter_observations(
-  observations_total = detections_df_raw)
+  observations_total = detections_df_raw
+)
 
 # Do we get the same result?
 identical(detections_df1, detections_df2)
@@ -283,7 +289,8 @@ Lets add 25 meters of uncertainty to each observation.
 ```{r}
 observations_df <- add_coordinate_uncertainty(
   observations = detections_df2,
-  coords_uncertainty_meters = 25)
+  coords_uncertainty_meters = 25
+)
 ```
 
 Created and sf object with uncertainty circles to visualise this.
@@ -294,7 +301,8 @@ Created and sf object with uncertainty circles to visualise this.
 #|   for each time point.
 buffered_observations <- st_buffer(
   observations_df,
-  observations_df$coordinateUncertaintyInMeters)
+  observations_df$coordinateUncertaintyInMeters
+)
 
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +

@@ -5,10 +5,12 @@ test_that("virtualsample_to_sf returns sf object with expected structure", {
   # Set up reproducible virtual species sample
   set.seed(1)
   bio <- terra::rast(
-    system.file("external/bio.tif", package = "virtualspecies"))
+    system.file("external/bio.tif", package = "virtualspecies")
+  )
   vs <- virtualspecies::generateRandomSp(bio)
   vs_limited <- virtualspecies::limitDistribution(
-    vs, geographical.limit = "continent", area = "Europe")
+    vs, geographical.limit = "continent", area = "Europe"
+  )
   virtual_sample <- virtualspecies::sampleOccurrences(vs_limited, n = 10)
 
   # Add required original.distribution.raster
@@ -33,10 +35,12 @@ test_that("virtualsample_to_sf extracts raster values correctly", {
 
   set.seed(1)
   bio <- terra::rast(
-    system.file("external/bio.tif", package = "virtualspecies"))
+    system.file("external/bio.tif", package = "virtualspecies")
+  )
   vs <- virtualspecies::generateRandomSp(bio)
   vs_limited <- virtualspecies::limitDistribution(
-    vs, geographical.limit = "continent", area = "Europe")
+    vs, geographical.limit = "continent", area = "Europe"
+  )
   virtual_sample <- virtualspecies::sampleOccurrences(vs_limited, n = 10)
   env_layers <- vs$details$parameters$environmental.layers
   virtual_sample$original.distribution.raster <- env_layers
@@ -65,7 +69,8 @@ test_that("virtualsample_to_sf handles missing raster_lyr argument", {
 
   virtual_sample <- list(
     sample.points = pts,
-    original.distribution.raster = rast)
+    original.distribution.raster = rast
+  )
 
   out <- virtualsample_to_sf(virtual_sample)
 
@@ -87,7 +92,8 @@ test_that("virtualsample_to_sf removes Real and Observed columns", {
 
   virtual_sample <- list(
     sample.points = sample_data,
-    original.distribution.raster = rast)
+    original.distribution.raster = rast
+  )
 
   out <- virtualsample_to_sf(virtual_sample)
 
