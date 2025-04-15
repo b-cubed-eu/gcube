@@ -12,9 +12,9 @@ virtualsample_to_sf(virtual_sample, raster_lyr = NULL)
 a data frame with columns \code{x} and \code{y}, and \code{original.distribution.raster},
 a \code{terra::SpatRaster} object.}
 
-\item{raster_lyr}{Optional. A \code{terra::SpatRaster} (or list of rasters) from
-which to extract values at sample locations. For example, habitat suitability
-or probability of occurrence rasters.}
+\item{raster_lyr}{Optional. A \code{terra::SpatRaster} from which to extract
+values at sample locations. For example, habitat suitability or probability
+of occurrence rasters.}
 }
 \value{
 An \code{sf} object (point geometry) with the following columns:
