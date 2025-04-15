@@ -40,20 +40,17 @@ simulate_random_walk <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if initial_average_occurrences is a positive number
-  stopifnot(
-    "`initial_average_occurrences` must be a single positive number." =
-      assertthat::is.number(initial_average_occurrences) &
-      initial_average_occurrences >= 0)
+  stopifnot("`initial_average_occurrences` must be a single positive number." =
+              assertthat::is.number(initial_average_occurrences) &
+              initial_average_occurrences >= 0)
 
   # Check if n_time_points is a positive integer
-  stopifnot(
-    "`n_time_points` must be a single positive integer." =
-      assertthat::is.count(n_time_points))
+  stopifnot("`n_time_points` must be a single positive integer." =
+              assertthat::is.count(n_time_points))
 
   # Check if sd_step is a positive number
-  stopifnot(
-    "`sd_step` must be a single positive number." =
-      assertthat::is.number(sd_step) & sd_step >= 0)
+  stopifnot("`sd_step` must be a single positive number." =
+              assertthat::is.number(sd_step) & sd_step >= 0)
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =

@@ -92,7 +92,8 @@ occurrences_df <- simulate_occurrences(
   temporal_function = simulate_random_walk,
   sd_step = 1,
   spatial_pattern = "random",
-  seed = 123)
+  seed = 123
+)
 ```
 
 This is the spatial distribution of the occurrences for each time point
@@ -117,7 +118,8 @@ detections_df_raw <- sample_observations(
   sampling_bias = "polygon",
   bias_area = road_polygon,
   bias_strength = 0.1,
-  seed = 123)
+  seed = 123
+)
 ```
 
 This is the spatial distribution of the occurrences for each time point
@@ -130,7 +132,7 @@ ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   geom_sf(data = detections_df_raw,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   scale_colour_manual(values = c("blue", "red")) +
   facet_wrap(~time_point, nrow = 2) +
   labs(title = "Distribution of occurrences for each time point") +
@@ -142,12 +144,14 @@ We only keep the detected occurrences and add 25 meters of uncertainty to each o
 ```{r}
 # Keep detected occurrences
 detections_df <- filter_observations(
-  observations_total = detections_df_raw)
+  observations_total = detections_df_raw
+)
 
 # Add 25 m coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(
   observations = detections_df,
-  coords_uncertainty_meters = 25)
+  coords_uncertainty_meters = 25
+)
 ```
 
 The final observations with uncertainty circles look like this.
@@ -159,7 +163,8 @@ The final observations with uncertainty circles look like this.
 # Create sf object with uncertainty circles
 buffered_observations <- st_buffer(
   observations_df,
-  observations_df$coordinateUncertaintyInMeters)
+  observations_df$coordinateUncertaintyInMeters
+)
 
 # Visualise
 ggplot() +
@@ -189,7 +194,8 @@ Each observation will be designated to a grid cell.
 cube_grid <- st_make_grid(
   st_buffer(polygon, 25),
   n = c(20, 20),
-  square = TRUE) %>%
+  square = TRUE
+) %>%
   st_sf()
 ```
 
@@ -224,7 +230,8 @@ point_df <- tibble(
   x = 200,
   y = 500,
   time_point = 1,
-  coordinateUncertaintyInMeters = 25) %>%
+  coordinateUncertaintyInMeters = 25
+) %>%
   st_as_sf(coords = c("x", "y"))
 
 # Number of simulations
@@ -271,7 +278,7 @@ scatter_uniform <- ggplot() +
                    y = Y, yend = Y),
                linewidth = 1.5, colour = "darkgreen") +
   geom_label(aes(y = 503, x = 212.5, label = "25 m"), colour = "black",
-            size = 5) +
+             size = 5) +
   geom_point(data = coordinates_point_df,
              aes(x = X, y = Y),
              color = "firebrick", size = 2) +
@@ -329,7 +336,8 @@ We create an occurrence cube for time point 1.
 occurrence_cube_df <- grid_designation(
   observations_df,
   cube_grid,
-  seed = 123)
+  seed = 123
+)
 ```
 
 For each grid cell (column `cell_code`) at each time point (column `time_point`), we get the number of observations (column `n`, sampled within uncertainty circle) and the minimal coordinate uncertainty (column `min_coord_uncertainty`).
@@ -346,7 +354,8 @@ sampled_points <- grid_designation(
   observations_df,
   cube_grid,
   seed = 123,
-  aggregate = FALSE)
+  aggregate = FALSE
+)
 ```
 
 Lets visualise were the samples were taken for time point 1.

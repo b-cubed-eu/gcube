@@ -1,3 +1,14 @@
+# gcube 1.3.0
+
+* Fix mistake in multispecies vignette #108
+* Add `progress` argument to `map_*` functions #109
+* Add default value for missing `coordinateUncertaintyInMeters` in grid
+  designation #114
+* Change `sampling_status` column in output `sample_observations()` to logical
+  output column called `observed`
+* Create `virtualsample_to_sf()` function to work with virtual species #75
+* Check package with `lintr::indentation_linter()`
+
 # gcube 1.2.0
 
 * Add tutorial to work with virtual species.

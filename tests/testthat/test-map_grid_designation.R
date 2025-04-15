@@ -4,9 +4,10 @@ plgn <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7, 9, 5, 2))))
 
 # Create grid
 cube_grid <- st_make_grid(
-    st_buffer(plgn, 50),
-    n = c(20, 20),
-    square = TRUE) %>%
+  st_buffer(plgn, 50),
+  n = c(20, 20),
+  square = TRUE
+) %>%
   st_sf()
 
 # Specify dataframe for 3 species with custom function arguments
@@ -23,7 +24,8 @@ species_dataset_df1 <- tibble(
   invert = FALSE,
   coords_uncertainty_meters = c(25, 30, 50),
   grid = rep(list(cube_grid), 3),
-  seed = 123)
+  seed = 123
+)
 
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
@@ -36,41 +38,49 @@ species_dataset_df2 <- species_dataset_df1 %>%
          raster = grid)
 
 arg_conv_list <- list(
-    species_range = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob",
-    invert = "inv",
-    coords_uncertainty_meters = "coord_uncertainty",
-    grid = "raster"
-  )
+  species_range = "polygon",
+  sd_step = "sd",
+  detection_probability = "det_prob",
+  invert = "inv",
+  coords_uncertainty_meters = "coord_uncertainty",
+  grid = "raster"
+)
 
 # Map simulate occurrences
 sim_occ1 <- map_simulate_occurrences(
-  df = species_dataset_df1)
+  df = species_dataset_df1
+)
 sim_occ2 <- map_simulate_occurrences(
   df = species_dataset_df2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 # Map sample observations
 samp_obs1 <- map_sample_observations(
-  df = sim_occ1)
+  df = sim_occ1
+)
 samp_obs2 <- map_sample_observations(
   df = sim_occ2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 # Map sample observations
 filter_obs1 <- map_filter_observations(
-  df = samp_obs1)
+  df = samp_obs1
+)
 filter_obs2 <- map_filter_observations(
   df = samp_obs2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 # Add coordinate uncertainty
 obs_uncertainty1 <- map_add_coordinate_uncertainty(
-  df = filter_obs1)
+  df = filter_obs1
+)
 obs_uncertainty2 <- map_add_coordinate_uncertainty(
   df = filter_obs2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 
 ## Unit tests
@@ -99,7 +109,8 @@ test_that("map_grid_designation works with simple column names", {
   occ_cube_unnested_test <- tidyr::unnest(
     occ_cube_nested,
     cols = "occurrence_cube_df",
-    names_repair = "minimal")
+    names_repair = "minimal"
+  )
   occ_cube_unnested_test <- occ_cube_unnested_test[
     , !duplicated(t(occ_cube_unnested_test))
   ]
@@ -108,11 +119,11 @@ test_that("map_grid_designation works with simple column names", {
 
 test_that("map_grid_designation works with pipes", {
   occ_cube_piped <- tibble(
-      species = c("species1", "species2", "species3"),
-      species_range = rep(list(plgn), 3),
-      grid = rep(list(cube_grid), 3),
-      seed = 123
-    ) %>%
+    species = c("species1", "species2", "species3"),
+    species_range = rep(list(plgn), 3),
+    grid = rep(list(cube_grid), 3),
+    seed = 123
+  ) %>%
     map_simulate_occurrences() %>%
     map_sample_observations() %>%
     map_filter_observations() %>%
@@ -126,7 +137,8 @@ test_that("map_grid_designation works with pipes", {
     sort(colnames(occ_cube_piped)),
     sort(c("species", "species_range", "grid", "seed", "occurrences",
            "observations_total", "observations", "time_point", "cell_code", "n",
-           "min_coord_uncertainty", "geometry")))
+           "min_coord_uncertainty", "geometry"))
+  )
 })
 
 test_that("map_grid_designation works with arg_list for renaming columns", {
@@ -156,7 +168,8 @@ test_that("map_grid_designation without coordinate uncertainty", {
   expect_match(
     w[2],
     "No column `coordinateUncertaintyInMeters` present!.+\\[3 times\\]",
-    all = FALSE)
+    all = FALSE
+  )
 
 
   # Are previous column names retained and one extra column name created?
@@ -170,19 +183,21 @@ test_that("map_grid_designation without coordinate uncertainty", {
 
   # Test with nested is FALSE
   suppressWarnings({
-  occ_cube_unnested <- map_grid_designation(df = filter_obs1,
-                                            nested = FALSE)
+    occ_cube_unnested <- map_grid_designation(df = filter_obs1,
+                                              nested = FALSE)
   })
 
   # Test warning handling
   w_unnested <- testthat::capture_warnings(
     map_grid_designation(df = filter_obs1,
-                         nested = FALSE))
+                         nested = FALSE)
+  )
   expect_match(w_unnested[1], "3 warnings during mapping:", all = FALSE)
   expect_match(
-      w_unnested[2],
-      "No column `coordinateUncertaintyInMeters` present!.+\\[3 times\\]",
-      all = FALSE)
+    w_unnested[2],
+    "No column `coordinateUncertaintyInMeters` present!.+\\[3 times\\]",
+    all = FALSE
+  )
 
   # Is the occurrence_cube_df column removed?
   expect_false("occurrence_cube_df" %in% colnames(occ_cube_unnested))
@@ -191,7 +206,8 @@ test_that("map_grid_designation without coordinate uncertainty", {
   occ_cube_unnested_test <- tidyr::unnest(
     occ_cube_nested,
     cols = "occurrence_cube_df",
-    names_repair = "minimal")
+    names_repair = "minimal"
+  )
   occ_cube_unnested_test <- occ_cube_unnested_test[
     , !duplicated(t(occ_cube_unnested_test))
   ]

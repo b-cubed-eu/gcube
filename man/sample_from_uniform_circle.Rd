@@ -4,7 +4,7 @@
 \alias{sample_from_uniform_circle}
 \title{Sample from a circle using the Uniform distribution}
 \usage{
-sample_from_uniform_circle(observations, seed = NA)
+sample_from_uniform_circle(observations, missing_uncertainty = 1000, seed = NA)
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
@@ -12,6 +12,12 @@ sample_from_uniform_circle(observations, seed = NA)
 the function will assume a single time point. If the latter column is not
 present, the function will assume no uncertainty (zero meters) around the
 observation points.}
+
+\item{missing_uncertainty}{A positive numeric value (default: 1000 m) used to
+replace missing (\code{NA}) values in the \code{coordinateUncertaintyInMeters} column.
+This ensures that all observations have a defined uncertainty radius for
+sampling. Only applied when the column is present but contains \code{NA} values;
+if the column itself is absent, a value of 0 is assumed instead.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}

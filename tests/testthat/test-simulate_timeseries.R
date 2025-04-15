@@ -67,14 +67,18 @@ test_that("simulate_timeseries respects seed for reproducibility", {
 test_that("simulate_timeseries throws errors for invalid inputs", {
   expect_error(
     simulate_timeseries(initial_average_occurrences = -1),
-    "`initial_average_occurrences` must be a single positive number.")
+    "`initial_average_occurrences` must be a single positive number."
+  )
   expect_error(
     simulate_timeseries(n_time_points = 0),
-    "`n_time_points` must be a single positive integer.")
+    "`n_time_points` must be a single positive integer."
+  )
   expect_error(
     simulate_timeseries(temporal_function = "string"),
-    "`temporal_function` must be `NA` or a function.")
+    "`temporal_function` must be `NA` or a function."
+  )
   expect_error(
     simulate_timeseries(seed = "string"),
-    "`seed` must be a numeric vector of length 1 or NA.")
+    "`seed` must be a numeric vector of length 1 or NA."
+  )
 })

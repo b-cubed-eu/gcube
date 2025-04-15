@@ -13,6 +13,11 @@
 #' samples from a bivariate Normal distribution that fall within the uncertainty
 #' circle. Default is 0.95.
 #' See Details.
+#' @param missing_uncertainty A positive numeric value (default: 1000 m) used to
+#' replace missing (`NA`) values in the `coordinateUncertaintyInMeters` column.
+#' This ensures that all observations have a defined uncertainty radius for
+#' sampling. Only applied when the column is present but contains `NA` values;
+#' if the column itself is absent, a value of 0 is assumed instead.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
@@ -67,6 +72,7 @@
 sample_from_binormal_circle <- function(
     observations,
     p_norm = 0.95,
+    missing_uncertainty = 1000,
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
@@ -78,6 +84,11 @@ sample_from_binormal_circle <- function(
   stopifnot("`pnorm` must be a numeric value between 0 and 1." =
               assertthat::is.number(p_norm) &
               (p_norm > 0 & p_norm < 1))
+
+  # Check if missing_uncertainty is a number
+  stopifnot("`missing_uncertainty` must be a numeric vector of length 1." =
+              is.numeric(missing_uncertainty) &
+              length(missing_uncertainty) == 1)
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
@@ -117,6 +128,11 @@ sample_from_binormal_circle <- function(
     new_points <- observations %>%
       dplyr::select("time_point", "coordinateUncertaintyInMeters")
   } else {
+    # Fill in potential missing coordinate uncertainty
+    observations$coordinateUncertaintyInMeters <-
+      dplyr::coalesce(observations$coordinateUncertaintyInMeters,
+                      missing_uncertainty)
+
     # Calculate 2-dimensional means and variance-covariance matrices
     means <- sf::st_coordinates(observations$geometry)
     variances <- (-observations$coordinateUncertaintyInMeters^2) /

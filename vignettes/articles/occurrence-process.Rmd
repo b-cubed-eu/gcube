@@ -84,7 +84,8 @@ n_occurrences_indep <- simulate_timeseries(
   initial_average_occurrences = 100,
   n_time_points = 10,
   temporal_function = NA,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We plot the simulated number of occurrences over time.
@@ -98,11 +99,11 @@ Using a different seed will result in different numbers but the average will be 
 tibble(
   n_occurrences = n_occurrences_indep,
   time_point = seq_along(n_occurrences_indep)
-  ) %>%
+) %>%
   ggplot(aes(x = time_point, y = n_occurrences)) +
-    geom_point() +
-    geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
-    theme_minimal()
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
+  theme_minimal()
 ```
 
 **Option 2**
@@ -118,7 +119,8 @@ n_occurrences_walk <- simulate_timeseries(
   n_time_points = 10,
   temporal_function = simulate_random_walk,
   sd_step = 1,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We plot the simulated number of occurrences over time which follow a random walk.
@@ -130,10 +132,10 @@ Using a different seed will result in a different random pattern.
 tibble(
   n_occurrences = n_occurrences_walk,
   time_point = seq_along(n_occurrences_walk)
-  ) %>%
+) %>%
   ggplot(aes(x = time_point, y = n_occurrences)) +
-    geom_point() +
-    theme_minimal()
+  geom_point() +
+  theme_minimal()
 ```
 
 **Option 3**
@@ -172,7 +174,8 @@ n_occurrences_linear <- simulate_timeseries(
   n_time_points = 10,
   temporal_function = my_own_linear_function,
   coef = 1,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We plot the simulated number of occurrences over time.
@@ -185,11 +188,11 @@ Using a different seed will result in different numbers but the average slope wi
 tibble(
   n_occurrences = n_occurrences_linear,
   time_point = seq_along(n_occurrences_linear)
-  ) %>%
+) %>%
   ggplot(aes(x = time_point, y = n_occurrences)) +
-    geom_point() +
-    geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
-    theme_minimal()
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
+  theme_minimal()
 ```
 
 ### Changing the degree of spatial clustering
@@ -211,7 +214,8 @@ rs_pattern_random <- create_spatial_pattern(
   polygon = polygon,
   resolution = 10,
   spatial_pattern = "random",
-  seed = 123)
+  seed = 123
+)
 ```
 
 We see values of high sampling probability randomly distributed.
@@ -234,7 +238,8 @@ rs_pattern_clustered <- create_spatial_pattern(
   polygon = polygon,
   resolution = 10,
   spatial_pattern = "clustered",
-  seed = 123)
+  seed = 123
+)
 ```
 
 We see values of high sampling probability clustered together.
@@ -259,7 +264,8 @@ rs_pattern_clustered2 <- create_spatial_pattern(
   polygon = polygon,
   resolution = 10,
   spatial_pattern = 5,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We see values of high sampling probability in multiple, smaller clusters.
@@ -280,7 +286,8 @@ rs_pattern_clustered3 <- create_spatial_pattern(
   polygon = polygon,
   resolution = 10,
   spatial_pattern = 100,
-  seed = 123)
+  seed = 123
+)
 ```
 
 We see values of high sampling probability in fewer, larger clusters.
@@ -308,7 +315,8 @@ If we for example sample 500 occurrences from the last raster, we see the sampli
 pts_occ_clustered3 <- sample_occurrences_from_raster(
   raster = rs_pattern_clustered3,
   time_series = 500,
-  seed = 123)
+  seed = 123
+)
 
 ggplot() +
   geom_spatraster(data = rs_pattern_clustered3) +
@@ -330,7 +338,8 @@ occurrences_df <- simulate_occurrences(
   temporal_function = simulate_random_walk,
   sd_step = 1,
   spatial_pattern = "random",
-  seed = 123)
+  seed = 123
+)
 ```
 
 This is the number of occurrences we have for each time point.
@@ -342,8 +351,8 @@ occurrences_df %>%
   st_drop_geometry() %>%
   count(time_point) %>%
   ggplot(aes(x =  time_point, y = n)) +
-    geom_point() +
-    theme_minimal()
+  geom_point() +
+  theme_minimal()
 ```
 
 This is the spatial distribution of the occurrences for each time point.

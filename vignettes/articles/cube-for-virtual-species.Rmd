@@ -92,7 +92,8 @@ We limit the species distribution to the United Kingdom and Ireland.
 virtual_distribution <- limitDistribution(
   x = virtual_species,
   geographical.limit = "country",
-  area = c("United Kingdom", "Ireland"))
+  area = c("United Kingdom", "Ireland")
+)
 ```
 
 ## Step 6: Sample occurrences
@@ -100,7 +101,7 @@ virtual_distribution <- limitDistribution(
 We sample 150 occurrences from the restricted distribution with a detection probability of 0.8 using the `virtualspecies::sampleOccurrences()` function.
 Detection probability and sampling bias can be introduced similar to `sample_observations()`.
 
-```{r, eval=FALSE}
+```r
 ?virtualspecies::sampleOccurrences
 ```
 
@@ -111,46 +112,79 @@ Detection probability and sampling bias can be introduced similar to `sample_obs
 virtual_sample <- sampleOccurrences(
   virtual_distribution,
   n = 150,
-  detection.probability = 0.8)
+  detection.probability = 0.8
+)
 ```
 
 # Grid designation with gcube
 
 Now we can create an occurrence cube for this virtual species
 The most important step, is to make the **virtualspecies** output compatible with **gcube** input.
-This is done using the **sf** package.
+This is done using the `virtualsample_to_sf()` function.
+
 For grid designation, see also the tutorial [3. Specifying the grid designation process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.html).
 
 ## Step 1: Convert sampled points to sf format
 
-We transform the sample points into an sf object to the LAEA Europe CRS (EPSG:3035).
+We transform the sampled points from a **virtualspecies** object so that it can be used by **gcube** with the `virtualsample_to_sf()` function.
+
+```r
+?virtualsample_to_sf
+```
 
 ```{r}
-# Create reference grid
-detections_df_raw <- st_as_sf(
-    virtual_sample$sample.points,
-    coords = c("x", "y"),
-    crs = terra::crs(virtual_sample$original.distribution.raster))
-detections_df_raw <- st_transform(detections_df_raw, crs = 3035)
+# Transform virtual samples to sf object
+detections_df_raw <- virtualsample_to_sf(virtual_sample)
+detections_df_raw
+```
+
+---
+
+*Optional: Extract values from a raster*
+
+> You can also extract raster values when transforming the sample data. For instance, extracting suitability or occurrence probability can be helpful for downstream analysis.
+
+```{r}
+# Rename raster layers for clear output
+names(virtual_species$suitab.raster) <- "suitability"
+names(virtual_species$probability.of.occurrence) <- "occ_prob"
+
+# Transform virtual samples and extract values
+virtualsample_to_sf(
+  virtual_sample,
+  raster_lyr = c(virtual_species$suitab.raster,
+                 virtual_species$probability.of.occurrence)
+)
+```
+
+---
+
+We transform the detected points into an sf object to the LAEA Europe CRS (EPSG:3035).
+
+```{r}
+# Transform CRS
+detections_df_transformed <- st_transform(detections_df_raw, crs = 3035)
 ```
 
 ## Step 2: Add coordinate uncertainty
 
-We only keep the detected occurrences.
+See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.github.io/gcube/articles/detection-process.html).
+
+We only keep the detected occurrences using the `filter_observations()` function.
 
 ```{r}
-detections_df <- detections_df_raw[!is.na(detections_df_raw$Observed), ]
+detections_df <- filter_observations(detections_df_transformed)
 ```
 
 Optionally, we can add coordinate uncertainty using the `add_coordinate_uncertainty()` function.
-See also the tutorial [2. Simulating the detection process](https://b-cubed-eu.github.io/gcube/articles/detection-process.html).
 We add 25 m uncertainty for each observation.
 
 ```{r}
 # Add coordinate uncertainty
 observations_df <- add_coordinate_uncertainty(
   observations = detections_df,
-  coords_uncertainty_meters = 25)
+  coords_uncertainty_meters = 25
+)
 ```
 
 ## Step 3: Specify reference grid
@@ -165,7 +199,8 @@ buffered_observations <- st_buffer(observations_df, 25)
 cube_grid <- st_make_grid(
   buffered_observations,
   n = c(20, 20),
-  square = TRUE) %>%
+  square = TRUE
+) %>%
   st_sf()
 ```
 
@@ -190,7 +225,8 @@ We perform grid designation both in aggregated version and not for visualisation
 occurrence_cube_df <- grid_designation(
   observations_df,
   cube_grid,
-  seed = 123)
+  seed = 123
+)
 ```
 
 ```{r}
@@ -199,7 +235,8 @@ sampled_points <- grid_designation(
   observations_df,
   cube_grid,
   seed = 123,
-  aggregate = FALSE)
+  aggregate = FALSE
+)
 ```
 
 Lets visualise were the samples were taken.

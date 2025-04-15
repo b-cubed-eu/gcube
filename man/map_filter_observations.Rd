@@ -4,7 +4,7 @@
 \alias{map_filter_observations}
 \title{Map \code{filter_observations()} over multiple species}
 \usage{
-map_filter_observations(df, nested = TRUE, arg_list = NA)
+map_filter_observations(df, nested = TRUE, arg_list = NA, progress = FALSE)
 }
 \arguments{
 \item{df}{A dataframe containing multiple rows, each representing a
@@ -22,6 +22,9 @@ column names in \code{df} are identical to argument names of
 specified as a named list where the names are the argument names of
 \code{filter_observations()}, and the associated values are the corresponding
 column names in \code{df}.}
+
+\item{progress}{Logical. Whether to show a progress bar. Set
+to \code{TRUE} to display a progress bar, \code{FALSE} (default) to suppress it.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to \code{df}, with an

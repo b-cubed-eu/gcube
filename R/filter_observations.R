@@ -1,19 +1,19 @@
 #' Filter detected occurrences
 #'
 #' This function filters observations from all occurrences based on the
-#' `sampling_status` column, typically created by the `sample_observations()`
+#' `observed` column, typically created by the `sample_observations()`
 #' function.
 #'
 #' @param observations_total An sf object with POINT geometry or a simple
-#' dataframe with `sampling_status` column containing values `"detected"`.
+#' dataframe with `observed` column containing logical values (`TRUE`/`FALSE`).
 #' This format is typically created by the `sample_observations()` function.
 #' @param invert Logical. If `FALSE` (default), the function filters to retain
-#' only `"detected"` occurrences. If `TRUE`, it filters out `"detected"`
-#' occurrences and retains all other occurrences.
+#' only observed occurrences. If `TRUE`, it filters out unobserved
+#' occurrences.
 #'
 #' @returns A data frame or an sf object with POINT geometry containing the
-#' filtered observations. If `invert = FALSE`, the function returns detected
-#' occurrences. If `invert = TRUE`, it returns all other occurrences.
+#' filtered observations. If `invert = FALSE`, the function returns observed
+#' occurrences. If `invert = TRUE`, it returns unobserved occurrences.
 #'
 #' @export
 #'
@@ -26,7 +26,7 @@
 #' occurrences_data <- data.frame(
 #'     time_point = 1,
 #'     sampling_prob = seq(0.5, 1, 0.1),
-#'     sampling_status = rep(c("undetected", "detected"), each = 3)
+#'     observed = rep(c(FALSE, TRUE), each = 3)
 #'   )
 #'
 #' # Keep detected occurrences
@@ -50,8 +50,8 @@ filter_observations <- function(observations_total, invert = FALSE) {
 
   # Filter dataframe
   if (invert) {
-    observations_total[observations_total$sampling_status != "detected", ]
+    observations_total[observations_total$observed != TRUE, ]
   } else {
-    observations_total[observations_total$sampling_status == "detected", ]
+    observations_total[observations_total$observed == TRUE, ]
   }
 }
