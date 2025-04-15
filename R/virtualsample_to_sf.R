@@ -68,24 +68,18 @@ virtualsample_to_sf <- function(virtual_sample, raster_lyr = NULL) {
     "`original.distribution.raster`."
   )
 
-  # Check virtual_sample object
   do.call(stopifnot, stats::setNames(
     list(
+      # Check virtual_sample object
       inherits(virtual_sample, "VSSampledPoints"),
-      inherits(virtual_sample, "list")
-    ),
-    error_message
-  ))
-
-  # Check virtual_sample content
-  do.call(stopifnot, stats::setNames(
-    list(
+      inherits(virtual_sample, "list"),
+      # Check virtual_sample content
       "sample.points" %in% names(virtual_sample),
       inherits(virtual_sample$sample.points, "data.frame"),
       "original.distribution.raster" %in% names(virtual_sample),
       inherits(virtual_sample$original.distribution.raster, "SpatRaster")
     ),
-    error_message
+    rep(error_message, 6)
   ))
   ### End checks
 
