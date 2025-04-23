@@ -1,3 +1,8 @@
+# gcube 1.3.1
+
+* Allow grid designation for CRS in degrees #113
+* Create tutorial on grid designation of own data #115
+
 # gcube 1.3.0
 
 * Fix mistake in multispecies vignette #108
