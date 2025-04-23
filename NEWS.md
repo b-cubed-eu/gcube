@@ -1,3 +1,7 @@
+# gcube 1.3.2
+
+* Add **frictionless** package to suggests
+
 # gcube 1.3.1
 
 * Allow grid designation for CRS in degrees #113
