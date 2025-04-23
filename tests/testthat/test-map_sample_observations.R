@@ -27,7 +27,8 @@ species_dataset_df1 <- tibble(
   sd_step = c(1, 1, NA),
   spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
-  seed = 123)
+  seed = 123
+)
 
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
@@ -37,10 +38,10 @@ species_dataset_df2 <- species_dataset_df1 %>%
          det_prob = detection_probability)
 
 arg_conv_list <- list(
-    species_range = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob"
-  )
+  species_range = "polygon",
+  sd_step = "sd",
+  detection_probability = "det_prob"
+)
 
 # Dataframe with column names equal to arguments for road polygon
 species_dataset_df3 <- tibble(
@@ -55,17 +56,21 @@ species_dataset_df3 <- tibble(
   sampling_bias = "polygon",
   bias_area = rep(list(road_polygon), 3),
   bias_strength = c(0.1, 0.2, 0.3),
-  seed = 123)
+  seed = 123
+)
 
 
 # Map simulate occurrences
 sim_occ1 <- map_simulate_occurrences(
-  df = species_dataset_df1)
+  df = species_dataset_df1
+)
 sim_occ2 <- map_simulate_occurrences(
   df = species_dataset_df2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 sim_occ3 <- map_simulate_occurrences(
-  df = species_dataset_df3)
+  df = species_dataset_df3
+)
 
 ## Unit tests
 
@@ -92,10 +97,11 @@ test_that("map_sample_observations works with simple column names and plgn", {
   sample_obs_unnested_test <- tidyr::unnest(
     sample_obs_nested,
     cols = "observations_total",
-    names_repair = "minimal")
+    names_repair = "minimal"
+  )
   sample_obs_unnested_test <- sample_obs_unnested_test[
-      , !duplicated(t(sample_obs_unnested_test))
-    ]
+    , !duplicated(t(sample_obs_unnested_test))
+  ]
   expect_equal(sample_obs_unnested_test, sample_obs_unnested)
 })
 
@@ -137,7 +143,8 @@ test_that("map_sample_observations works with complex arguments", {
   sample_obs_unnested_test <- tidyr::unnest(
     sample_obs_nested,
     cols = "observations_total",
-    names_repair = "minimal")
+    names_repair = "minimal"
+  )
   sample_obs_unnested_test <- sample_obs_unnested_test[
     , !duplicated(t(sample_obs_unnested_test))
   ]
@@ -156,10 +163,10 @@ test_that("map_sample_observations handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-      species_range = "polygon",
-      sd_step = "sd",
-      detection_probability = TRUE
-    )
+    species_range = "polygon",
+    sd_step = "sd",
+    detection_probability = TRUE
+  )
   expect_error(
     map_sample_observations(df = sim_occ2,
                             arg_list = invalid_arg_list),
@@ -167,10 +174,10 @@ test_that("map_sample_observations handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-      species_range = "polygon",
-      sd_step = "sd",
-      detection_probability = "det_probab"
-    )
+    species_range = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_probab"
+  )
   expect_error(
     map_simulate_occurrences(df = sim_occ2,
                              arg_list = invalid_arg_list2),

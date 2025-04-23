@@ -1,0 +1,226 @@
+---
+title: "Grid designation for custom datasets"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This tutorial provides a theoretical explanation of grid designation is performed and how **gcube** can be used to for uniform grid designation on any ecological dataset (not only simulated datasets). The method differs between projected (planar) and geographic (degree-based) coordinate reference systems (CRS).
+
+## Method
+
+To generate a point within a circle of radius $r$ around a central coordinate $(x_0, y_0)$, we use polar coordinates and convert to Cartesian coordinates.
+
+1. Sample a **random angle** from the uniform distribution $\mathcal{U}$:
+   
+$$
+\theta \sim \mathcal{U}(0, 2\pi)
+$$
+
+2. Sample a **random radius** scaled by square root to ensure uniform point density:
+
+$$
+r' = \sqrt{\mathcal{U}(0, 1)} \cdot r
+$$
+
+3. Convert to Cartesian coordinates:
+
+$$
+x = x_0 + r' \cos(\theta)
+$$
+
+$$
+y = y_0 + r' \sin(\theta)
+$$
+
+## Coordinate Reference System Considerations
+
+The method of applying the above formula depends on the unit system of your CRS.
+
+### Projected CRS (e.g., UTM)
+
+Projected systems use **meters** or other linear units, so the polar formula can be applied directly.
+
+| Quantity | Formula |
+|----------|---------|
+| $x$ offset | $x = x_0 + r \cos(\theta)$ |
+| $y$ offset | $y = y_0 + r \sin(\theta)$ |
+
+This is the most accurate and straightforward method and should be used whenever your data are in a projected CRS.
+
+### Geographic CRS (e.g., WGS84)
+
+Geographic systems use **degrees**, not meters. Therefore, the uncertainty radius in meters must be converted to degrees using approximations based on latitude:
+
+- 1 degree of latitude ≈ 111,320 meters
+- 1 degree of longitude ≈ $111{,}320 \cdot \cos(\text{latitude})$ meters
+
+Use these formulas to convert meters to degrees:
+
+| Quantity | Formula |
+|----------|---------|
+| Latitude offset | $\Delta \text{lat} = \dfrac{r \sin(\theta)}{111320}$ |
+| Longitude offset | $\Delta \text{lon} = \dfrac{r \cos(\theta)}{111320 \cdot \cos(\text{lat})}$ |
+
+These are **approximations** and may introduce distortion, especially at high latitudes.
+
+## Getting started with gcube
+
+In this example, we show how **gcube** can be used to perform grid designation on a custom ecological dataset.
+
+```{r, message=FALSE, warning=FALSE}
+# Load packages
+library(gcube)
+
+
+library(frictionless) # Load example dataset
+library(ggplot2)      # Data visualisation
+library(dplyr)        # Data wrangling
+library(sf)           # Working with spatial data
+```
+
+### Get example data
+
+As reference grid, we load the the MGRS grid at 10 km scale from the **b3data** data package.
+
+```{r}
+# Read data from repository
+mgrs10_belgium <- st_read(
+  "https://zenodo.org/records/15211029/files/mgrs10_refgrid_belgium.gpkg",
+  quiet = TRUE
+)
+head(mgrs10_belgium)
+```
+
+Consider the following synthetic observation dataset with three species observed across three different years. Each row represents a record with spatial coordinates and an associated uncertainty in meters.
+
+```{r}
+# Simulate 9 observation records: 3 species x 3 years
+example_data <- data.frame(
+  species = rep(c("species1", "species2", "species3"), each = 3),
+  time_point = rep(2020:2022, times = 3),
+  lat = c(
+    5683521, 5613261, 5533663,
+    5672768, 5559184, 5670045,
+    5628962, 5651001, 5587280
+  ),
+  long = c(
+    512309.4, 560722.6, 700880.4,
+    649960.8, 688510.1, 641283.4,
+    502044.7, 568593.9, 566011.5
+  ),
+  coordinateUncertaintyInMeters = c(
+    1000, 2500, 5000,
+    1500, 10000, 8000,
+    4000, 2500, 3500
+  )
+) %>%
+  st_as_sf(coords = c("long", "lat"), crs = st_crs(mgrs10_belgium))
+
+example_data
+```
+
+We visualise the data with uncertainty circles.
+
+```{r}
+#| fig.alt: >
+#|   Visualisation of example dataset
+# Create sf object with uncertainty circles
+buffered_observations <- st_buffer(
+  example_data,
+  example_data$coordinateUncertaintyInMeters
+)
+
+# Visualise
+ggplot() +
+  geom_sf(data = mgrs10_belgium) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = example_data, aes(colour = species))
+```
+
+### Grid designation
+
+To perform grid designation, we loop over each species while using `grid_designation()`.
+Opt for `lapply()` or `purrr::map()` functions to improve computation time.
+
+```{r}
+# Get species
+taxa <- sort(unique(example_data$species))
+
+# Create empty list
+occurrence_cube_list <- vector(mode = "list", length = length(taxa))
+
+# Loop over species
+for (i in seq_along(taxa)) {
+  # Get species
+  taxon <- taxa[i]
+  
+  # Filter data
+  taxon_data <- example_data %>%
+    filter(taxon %in% species)
+  
+  # Perform grid designation
+  taxon_cube <- grid_designation(
+    observations = example_data,
+    grid = mgrs10_belgium,
+    seed = 123
+  )
+  
+  # Add species cube to list
+  occurrence_cube_list[[i]] <- taxon_cube
+}
+
+# Combine species cubes
+occurrence_cube_full <- bind_rows(occurrence_cube_list)
+```
+
+This will however result in many duplicate rows for grid cells where no species were seen.
+They can be removed by filtering or unique rows can be retained using the `dplyr::distinct()` function.
+
+```{r}
+start_time <- Sys.time()
+
+occurrence_cube_df1 <- distinct(occurrence_cube_full)
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+This is slow in case of big datasets due to the geometry column.
+A faster option is to drop the geometry and join it again with the grid after retaining unique columns.
+
+```{r}
+start_time <- Sys.time()
+
+occurrence_cube_df2 <- occurrence_cube_full %>%
+  st_drop_geometry() %>%
+  distinct() %>%
+  left_join(mgrs10_belgium, by = join_by(mgrscode)) %>%
+  st_sf(crs = st_crs(mgrs10_belgium))
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+```{r}
+identical(occurrence_cube_df1, occurrence_cube_df2)
+```
+
+We visualise the final occurrence cube.
+Since we have only three species occurrences per year spread over the whole grid, we see three occupied grid cells per year.
+
+```{r}
+#| fig.alt: >
+#|   Visualisation of example data cube
+ggplot(occurrence_cube_df1) +
+  geom_sf(aes(fill = factor(n))) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(fill = "number of\nobservations")
+```

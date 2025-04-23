@@ -30,7 +30,7 @@ get_function_arguments <- function(f, df) {
 
   # Also get argument names of temporal_function if necessary
   if (identical(f, simulate_occurrences) &&
-      "temporal_function" %in% colnames(df)) {
+        "temporal_function" %in% colnames(df)) {
     temp_f_args <- sapply(df$temporal_function, function(f) {
       if (is.function(f)) methods::formalArgs(f)
     })
@@ -96,4 +96,28 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
   df$mapped_col <- lapply(df[[mapped_col]], function(val) val$result)
 
   return(df)
+}
+
+
+#' Convert Meters to Degrees Based on Latitude
+#'
+#' Converts a distance in meters to approximate degrees of latitude and
+#' longitude, using the standard approximation that 1 degree of latitude is
+#' approximately 111,320 meters. The longitude conversion accounts for the
+#' cosine of the latitude (in degrees).
+#'
+#' @param meters Numeric. Distance in meters to be converted.
+#' @param latitude Numeric. Latitude in degrees at which the conversion is made.
+#'
+#' @return A list with two elements:
+#'   - lat: Approximate latitude offset in degrees.
+#'   - lon: Approximate longitude offset in degrees, adjusted for the input
+#'          latitude.
+#'
+#' @noRd
+
+meters_to_degrees <- function(meters, latitude) {
+  lat_degree = meters / 111320
+  lon_degree = meters / (111320 * cos(latitude * pi / 180))
+  return(list(lat = lat_degree, lon = lon_degree))
 }

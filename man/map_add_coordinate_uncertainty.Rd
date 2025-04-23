@@ -4,7 +4,12 @@
 \alias{map_add_coordinate_uncertainty}
 \title{Map \code{add_coordinate_uncertainty()} over multiple species}
 \usage{
-map_add_coordinate_uncertainty(df, nested = TRUE, arg_list = NA)
+map_add_coordinate_uncertainty(
+  df,
+  nested = TRUE,
+  arg_list = NA,
+  progress = FALSE
+)
 }
 \arguments{
 \item{df}{A dataframe containing multiple rows, each representing a
@@ -22,6 +27,9 @@ column names in \code{df} are identical to argument names of
 to be specified as a named list where the names are the argument names of
 \code{add_coordinate_uncertainty()}, and the associated values are the
 corresponding column names in \code{df}.}
+
+\item{progress}{Logical. Whether to show a progress bar. Set
+to \code{TRUE} to display a progress bar, \code{FALSE} (default) to suppress it.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to \code{df}, but each

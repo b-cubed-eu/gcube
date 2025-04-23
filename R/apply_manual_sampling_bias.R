@@ -78,22 +78,26 @@ apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   # Check if the values of bias_weights$bias_weight are positive values
   error_message <- paste("The column `bias_weight` must consist of numeric",
                          "values between 0 and 1, or positive integers.")
-  do.call(stopifnot,
-          stats::setNames(
-            list(is.numeric(bias_weights$bias_weight),
-                 all(bias_weights$bias_weight >= 0)
-                 ),
-                 rep(error_message, 2)
-            )
-          )
+  do.call(
+    stopifnot,
+    stats::setNames(
+      list(
+        is.numeric(bias_weights$bias_weight),
+        all(bias_weights$bias_weight >= 0)
+      ),
+      rep(error_message, 2)
+    )
+  )
 
   # Check if the values of bias_weights$bias_weight are positive integers
   if (max(bias_weights$bias_weight) > 1) {
-    do.call(stopifnot,
-            stats::setNames(
-              list(all(bias_weights$bias_weight %% 1 == 0)), error_message
-              )
-            )
+    do.call(
+      stopifnot,
+      stats::setNames(
+        list(all(bias_weights$bias_weight %% 1 == 0)),
+        error_message
+      )
+    )
   }
 
   # CRS of sf objects

@@ -84,7 +84,8 @@ Each observation will be designated to a grid cell.
 cube_grid <- st_make_grid(
   st_buffer(polygon, 50),
   n = c(20, 20),
-  square = TRUE) %>%
+  square = TRUE
+) %>%
   st_sf()
 ```
 
@@ -146,7 +147,8 @@ taxonomy <- generate_taxonomy(
   num_species = n_specs,
   num_genera = 4,
   num_families = 2,
-  seed = 123)
+  seed = 123
+)
 
 # How does the taxonomic hierarchy look like?
 taxonomy
@@ -171,7 +173,8 @@ multi_species_dataset2 <- generate_taxonomy(
   num_species = multi_species_args,
   num_genera = 4,
   num_families = 2,
-  seed = 123)
+  seed = 123
+)
 
 # Do we get the same result?
 identical(multi_species_dataset1, multi_species_dataset2)
@@ -184,17 +187,17 @@ These mapping functions apply the single-species operations for each row using t
 
 ```{r, echo=FALSE}
 data.frame(
-    single_species = c("simulate_occurrences()",
-                       "sample_observations()",
-                       "filter_observations()",
-                       "add_coordinate_uncertainty()",
-                       "grid_designation()"),
-    multi_species  = c("map_simulate_occurrences()",
-                       "map_sample_observations()",
-                       "map_filter_observations()",
-                       "map_add_coordinate_uncertainty()",
-                       "map_grid_designation()")
-  ) %>% knitr::kable()
+  single_species = c("simulate_occurrences()",
+                     "sample_observations()",
+                     "filter_observations()",
+                     "add_coordinate_uncertainty()",
+                     "grid_designation()"),
+  multi_species  = c("map_simulate_occurrences()",
+                     "map_sample_observations()",
+                     "map_filter_observations()",
+                     "map_add_coordinate_uncertainty()",
+                     "map_grid_designation()")
+) %>% knitr::kable()
 ```
 
 The output of the mapping functions is stored as a list-column by default to ensure efficient transition between simulation functions.
@@ -235,7 +238,7 @@ identical(map_occ_cube_df1, map_occ_cube_df2)
 
 Each mapping function also has an argument `nested`.
 If `nested = TRUE` (default), they retain the list-column containing calculated sf objects calculated by simulate_occurrences().
-If `nested = TRUE`, this list-column is expanded into rows and columns.
+If `nested = FALSE`, this list-column is expanded into rows and columns.
 
 If we do this for example for `map_grid_designation()`, we can recognise the columns produced by `grid_designation()`.
 Nested list-columns are useful for calculation in the simulation workflow as shown above.
@@ -245,7 +248,8 @@ Calculation and visualisation of the output is more easily performed on unnested
 # Unnest list-column
 map_occ_cube_df_unnested <- map_grid_designation(
   df = map_obs_uncertainty_df,
-  nested = FALSE)
+  nested = FALSE
+)
 
 # How does the dataset look like?
 glimpse(map_occ_cube_df_unnested)
@@ -275,10 +279,10 @@ The names are the argument names of the single-species functions and the values 
 ```{r}
 # Create named list for argument conversion
 arg_conv_list <- list(
-    species_range = "polygon",
-    detection_probability = "det_prob",
-    grid = "raster"
-  )
+  species_range = "polygon",
+  detection_probability = "det_prob",
+  grid = "raster"
+)
 
 arg_conv_list
 ```
@@ -325,7 +329,7 @@ ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   geom_sf(data = detections_df_raw1,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   scale_colour_manual(values = c("blue", "red")) +
   facet_wrap(~time_point, nrow = 2) +
   labs(title = "Distribution of occurrences for each time point") +
@@ -349,7 +353,7 @@ ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
   geom_sf(data = detections_df_raw6,
-          aes(colour = sampling_status)) +
+          aes(colour = observed)) +
   scale_colour_manual(values = c("blue", "red")) +
   facet_wrap(~time_point, nrow = 2) +
   labs(title = "Distribution of occurrences for each time point") +

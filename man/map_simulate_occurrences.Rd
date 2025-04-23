@@ -4,7 +4,7 @@
 \alias{map_simulate_occurrences}
 \title{Map \code{simulate_occurrences()} over multiple species}
 \usage{
-map_simulate_occurrences(df, nested = TRUE, arg_list = NA)
+map_simulate_occurrences(df, nested = TRUE, arg_list = NA, progress = FALSE)
 }
 \arguments{
 \item{df}{A dataframe containing multiple rows, each representing a
@@ -24,6 +24,9 @@ be specified as a named list where the names are the argument names of
 \code{simulate_occurrences()} or the function specified in its \code{temporal_function}
 argument, and the associated values are the corresponding column
 names in \code{df}.}
+
+\item{progress}{Logical. Whether to show a progress bar. Set
+to \code{TRUE} to display a progress bar, \code{FALSE} (default) to suppress it.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to \code{df}, with an

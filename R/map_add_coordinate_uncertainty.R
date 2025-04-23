@@ -17,6 +17,8 @@
 #' to be specified as a named list where the names are the argument names of
 #' `add_coordinate_uncertainty()`, and the associated values are the
 #' corresponding column names in `df`.
+#' @param progress Logical. Whether to show a progress bar. Set
+#' to `TRUE` to display a progress bar, `FALSE` (default) to suppress it.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to `df`, but each
 #' sf object with POINT geometry in the list-column `observations` now has an
@@ -110,7 +112,8 @@
 map_add_coordinate_uncertainty <- function(
     df,
     nested = TRUE,
-    arg_list = NA) {
+    arg_list = NA,
+    progress = FALSE) {
   ### Start checks
   # 1. Check input type and length
   # Check if df is a dataframe
@@ -153,7 +156,9 @@ map_add_coordinate_uncertainty <- function(
   out_df <- map_simulation_functions(
     f = add_coordinate_uncertainty,
     df = df,
-    nested = nested)
+    nested = nested,
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

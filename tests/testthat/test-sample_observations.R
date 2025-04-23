@@ -27,7 +27,7 @@ test_that("Function samples observations without sampling bias correctly", {
     sampling_bias = "no_bias",
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -40,7 +40,7 @@ test_that("Function samples observations with polygon sampling bias", {
     bias_strength = 2,
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -52,7 +52,7 @@ test_that("Function samples observations with manual sampling bias correctly", {
     bias_weights = grid,
     seed = 123
   )
-  expect_true("sampling_status" %in% colnames(result))
+  expect_true("observed" %in% colnames(result))
   expect_equal(nrow(result), num_points)
 })
 
@@ -65,7 +65,8 @@ test_that("Function throws an error if occurrences is not an sf object", {
     sample_observations(non_sf_data,
                         detection_probability = 0.8,
                         sampling_bias = "no_bias"),
-    "`occurrences` must be an sf object.")
+    "`occurrences` must be an sf object."
+  )
 })
 
 test_that("Function throws an error if detection_probability is not correct", {
@@ -73,12 +74,14 @@ test_that("Function throws an error if detection_probability is not correct", {
     sample_observations(occurrences_sf,
                         detection_probability = -0.5,
                         sampling_bias = "no_bias"),
-    "`detection_probability` must be a numeric value between 0 and 1.")
+    "`detection_probability` must be a numeric value between 0 and 1."
+  )
   expect_error(
     sample_observations(occurrences_sf,
                         detection_probability = 1.5,
                         sampling_bias = "no_bias"),
-    "`detection_probability` must be a numeric value between 0 and 1.")
+    "`detection_probability` must be a numeric value between 0 and 1."
+  )
 })
 
 test_that("Function throws an error if seed is not a number or NA", {
@@ -87,7 +90,8 @@ test_that("Function throws an error if seed is not a number or NA", {
                         detection_probability = 0.8,
                         sampling_bias = "no_bias",
                         seed = "not_a_number"),
-    "`seed` must be a numeric vector of length 1 or NA.")
+    "`seed` must be a numeric vector of length 1 or NA."
+  )
 })
 
 test_that("Function throws an error if sampling_bias is invalid", {
@@ -95,7 +99,8 @@ test_that("Function throws an error if sampling_bias is invalid", {
     sample_observations(occurrences_sf,
                         detection_probability = 0.8,
                         sampling_bias = "invalid_bias"),
-    "`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'.")
+    "`sampling_bias` must be one of 'no_bias', 'polygon', 'manual'."
+  )
 })
 
 test_that("Function returns the correct columns", {
@@ -109,8 +114,9 @@ test_that("Function returns the correct columns", {
     all(c("detection_probability",
           "bias_weight",
           "sampling_probability",
-          "sampling_status",
-          "geometry") %in% colnames(result)))
+          "observed",
+          "geometry") %in% colnames(result))
+  )
 })
 
 test_that("Function samples observations reproducibly with seed", {

@@ -19,6 +19,8 @@
 #' `simulate_occurrences()` or the function specified in its `temporal_function`
 #' argument, and the associated values are the corresponding column
 #' names in `df`.
+#' @param progress Logical. Whether to show a progress bar. Set
+#' to `TRUE` to display a progress bar, `FALSE` (default) to suppress it.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to `df`, with an
 #' extra list-column called `occurrences` containing an sf object with POINT
@@ -78,7 +80,8 @@
 map_simulate_occurrences <- function(
     df,
     nested = TRUE,
-    arg_list = NA) {
+    arg_list = NA,
+    progress = FALSE) {
   ### Start checks
   # 1. Check input type and length
   # Check if df is a dataframe
@@ -93,11 +96,11 @@ map_simulate_occurrences <- function(
   if (assertthat::noNA(arg_list)) {
     # Check if arg_list is a named list with single strings
     stopifnot(
-        "`arg_list` must be named list containing one string for each value." =
+      "`arg_list` must be named list containing one string for each value." =
         is.list(arg_list) &&
         !is.null(names(arg_list)) &&
         all(sapply(arg_list, assertthat::is.string))
-      )
+    )
 
     # Check if arg_list is a named list with single strings
     arg_list_message <- paste("You have provided column names in `arg_list`",
@@ -121,7 +124,9 @@ map_simulate_occurrences <- function(
   out_df <- map_simulation_functions(
     f = simulate_occurrences,
     df = df,
-    nested = nested)
+    nested = nested,
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

@@ -38,6 +38,7 @@ articles:
   - title: "Other tutorials"
     contents:
     - articles/cube-for-virtual-species
+    - articles/custom-grid-designation
 
 reference:
   - title: "Core gcube workflow functions"

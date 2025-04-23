@@ -16,6 +16,8 @@
 #' @param nested Logical. If `TRUE` (default), retains list-column containing
 #' dataframes calculated by `f`. Otherwise, expands this list-column into rows
 #' and columns.
+#' @param progress Logical. Whether to show a progress bar. Set
+#' to `TRUE` to display a progress bar, `FALSE` (default) to suppress it.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to `df`, with an
 #' extra list-column called `mapped_col` containing an sf object for each row
@@ -70,7 +72,8 @@
 map_simulation_functions <- function(
     f,
     df,
-    nested = TRUE) {
+    nested = TRUE,
+    progress = FALSE) {
   ### Start checks
   # 1. Check input type and length
   # Check if f is a function
@@ -93,15 +96,15 @@ map_simulation_functions <- function(
   # 2. Other checks
   # Function f must be one of three cube simulation functions
   do.call(stopifnot, stats::setNames(
-        list(
-          identical(f, simulate_occurrences) ||
-           identical(f, sample_observations) ||
-           identical(f, filter_observations) ||
-           identical(f, add_coordinate_uncertainty) ||
-           identical(f, grid_designation)),
-        function_message
-      )
-    )
+    list(
+      identical(f, simulate_occurrences) ||
+        identical(f, sample_observations) ||
+        identical(f, filter_observations) ||
+        identical(f, add_coordinate_uncertainty) ||
+        identical(f, grid_designation)
+    ),
+    function_message
+  ))
   ### End checks
 
   ## Select data to map function
@@ -112,14 +115,14 @@ map_simulation_functions <- function(
   selection_names <- intersect(names(df), col_arg_names)
 
   # Select correct data for mapping
-  analysis_df <- dplyr::select(df, all_of(selection_names))
+  analysis_df <- dplyr::select(df, dplyr::all_of(selection_names))
 
   ## Create output dataframe
   # Iterate function over rows and catch warnings
   mapped_df <- df %>%
     dplyr::mutate(mapped_col = purrr::pmap(.l = analysis_df,
                                            .f = purrr::quietly(f),
-                                           .progress = TRUE))
+                                           .progress = progress))
 
   # Handle potential warnings
   out_df <- handle_mapped_warnings(mapped_df)

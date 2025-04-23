@@ -68,8 +68,8 @@ occurrence (will be the same for all).}
 each occurrence.}
 \item{\code{sampling_probability}}{The combined sampling probability from
 detection probability and sampling bias for each occurrence.}
-\item{\code{sampling_status}}{Indicates whether the occurrence was detected
-(\code{"detected"}) or not (\code{"undetected"}). Detected occurrences are called
+\item{\code{observed}}{Indicates whether the occurrence was detected
+(\code{TRUE}) or not (\code{FALSE}). Detected occurrences are called
 observations.}
 }
 }
@@ -136,6 +136,7 @@ Other main:
 \code{\link{add_coordinate_uncertainty}()},
 \code{\link{filter_observations}()},
 \code{\link{grid_designation}()},
-\code{\link{simulate_occurrences}()}
+\code{\link{simulate_occurrences}()},
+\code{\link{virtualsample_to_sf}()}
 }
 \concept{main}

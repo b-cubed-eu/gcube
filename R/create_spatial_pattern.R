@@ -92,15 +92,16 @@ create_spatial_pattern <- function(
     resolution,
     spatial_pattern = c("random", "clustered"),
     seed = NA,
-    n_sim = 1
-  ) {
+    n_sim = 1) {
   ### Start checks
   # 1. Check input type and length
   # Check if polygon is an sf object
-  stopifnot("`polygon` must be an sf object with POLYGON geometry." =
-              inherits(polygon, "POLYGON") | inherits(polygon, "sfc_POLYGON") |
-              (inherits(polygon, "sf") &&
-                 sf::st_geometry_type(polygon) == "POLYGON"))
+  stopifnot(
+    "`polygon` must be an sf object with POLYGON geometry." =
+      inherits(polygon, "POLYGON") | inherits(polygon, "sfc_POLYGON") |
+      (inherits(polygon, "sf") &&
+       sf::st_geometry_type(polygon) == "POLYGON")
+  )
 
   if (!(assertthat::is.number(spatial_pattern) && spatial_pattern >= 1)) {
     # Check if spatial_pattern is random or clustered
@@ -123,9 +124,8 @@ create_spatial_pattern <- function(
               length(seed) == 1)
 
   # Check if n_sim is a positive integer
-  stopifnot(
-    "`n_sim` must be a single positive integer." =
-      assertthat::is.count(n_sim))
+  stopifnot("`n_sim` must be a single positive integer." =
+              assertthat::is.count(n_sim))
   ### End checks
 
   # Create a reference raster with same extent as the polygon and user defined
@@ -169,8 +169,10 @@ create_spatial_pattern <- function(
       psill = 0.5,
       model = "Sph",
       range = range_size,
-      nugget = 0),
-    nmax = 2)
+      nugget = 0
+    ),
+    nmax = 2
+  )
 
   # Predict pattern based on vgm model
   dfxy_pred <- stats::predict(gstat_model, newdata = dfxy, nsim = n_sim)
@@ -181,7 +183,7 @@ create_spatial_pattern <- function(
       dplyr::across(
         dplyr::starts_with("sim"),
         ~vegan::decostand(.x, "range")
-        )
+      )
     ) %>%
     dplyr::rename_with(~ gsub("sim", "sampling_p", .x))
 

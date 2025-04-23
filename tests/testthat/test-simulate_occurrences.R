@@ -74,8 +74,10 @@ test_that("simulate_occurrences raises an error for non-numeric abundance", {
   expect_error(
     simulate_occurrences(
       plgn,
-      initial_average_occurrences = "not_numeric"),
-    "`initial_average_occurrences` must be a single positive number.")
+      initial_average_occurrences = "not_numeric"
+    ),
+    "`initial_average_occurrences` must be a single positive number."
+  )
 })
 
 test_that("simulate_occurrences raises an error for invalid spatial_pattern", {
@@ -89,7 +91,8 @@ test_that("simulate_occurrences raises an error for invalid spatial_pattern", {
 test_that("simulate_occurrences raises an error for non-integer time points", {
   expect_error(
     simulate_occurrences(plgn, n_time_points = "not_integer"),
-    "`n_time_points` must be a single positive integer.")
+    "`n_time_points` must be a single positive integer."
+  )
 })
 
 test_that("simulate_occurrences raises an error for non-function", {

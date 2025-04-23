@@ -8,6 +8,11 @@
 #' the function will assume a single time point. If the latter column is not
 #' present, the function will assume no uncertainty (zero meters) around the
 #' observation points.
+#' @param missing_uncertainty A positive numeric value (default: 1000 m) used to
+#' replace missing (`NA`) values in the `coordinateUncertaintyInMeters` column.
+#' This ensures that all observations have a defined uncertainty radius for
+#' sampling. Only applied when the column is present but contains `NA` values;
+#' if the column itself is absent, a value of 0 is assumed instead.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
@@ -28,6 +33,7 @@
 #'
 #' @examples
 #' library(sf)
+#' library(dplyr)
 #'
 #' # Create four random points
 #' n_points <- 4
@@ -51,12 +57,18 @@
 
 sample_from_uniform_circle <- function(
     observations,
+    missing_uncertainty = 1000,
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
   # Check if observations is an sf object
   stopifnot("`observations` must be an sf object." =
               inherits(observations, "sf"))
+
+  # Check if missing_uncertainty is a number
+  stopifnot("`missing_uncertainty` must be a numeric vector of length 1." =
+              is.numeric(missing_uncertainty) &
+              length(missing_uncertainty) == 1)
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
@@ -91,6 +103,11 @@ sample_from_uniform_circle <- function(
       "Assuming no uncertainty around observations.",
       sep = "\n"
     ))
+  } else {
+    # Fill in potential missing coordinate uncertainty
+    observations$coordinateUncertaintyInMeters <-
+      dplyr::coalesce(observations$coordinateUncertaintyInMeters,
+                      missing_uncertainty)
   }
 
   # Get random angle and radius
@@ -99,8 +116,7 @@ sample_from_uniform_circle <- function(
   uncertainty_points <-
     observations %>%
     dplyr::mutate(
-      random_angle = stats::runif(nrow(observations), 0,
-                                  ifelse(is_degree, 360, 2 * pi)),
+      random_angle = stats::runif(nrow(observations), 0, 2 * pi),
       random_r = sqrt(stats::runif(nrow(observations), 0, 1)) *
         .data$coordinateUncertaintyInMeters
     )
@@ -108,11 +124,17 @@ sample_from_uniform_circle <- function(
   # Calculate new point
   new_points <-
     uncertainty_points %>%
+    dplyr::rowwise() %>%
     dplyr::mutate(
-      x_new = sf::st_coordinates(.data$geometry)[, 1] +
-        .data$random_r * cos(.data$random_angle),
-      y_new = sf::st_coordinates(.data$geometry)[, 2] +
-        .data$random_r * sin(.data$random_angle)
+      lat = sf::st_coordinates(.data$geometry)[2],
+      lon = sf::st_coordinates(.data$geometry)[1],
+      displacement = ifelse(
+        is_degree,
+        list(meters_to_degrees(.data$random_r, .data$lat)),
+        list(list(lat = .data$random_r, lon = .data$random_r))
+      ),
+      x_new = .data$lon + .data$displacement$lon * cos(.data$random_angle),
+      y_new = .data$lat + .data$displacement$lat * sin(.data$random_angle)
     ) %>%
     sf::st_drop_geometry() %>%
     sf::st_as_sf(

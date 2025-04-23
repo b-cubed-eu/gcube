@@ -132,13 +132,13 @@ sample_occurrences_from_raster <- function(
     # Random shift within raster cells
     # Assuming coordinates are in two dimensions (x and y)
     occ_sf$geometry <- sf::st_sfc(purrr::map(occ_sf$geometry, function(pt) {
-        shift_x <- stats::runif(1, -0.5 * cell_size[1], 0.5 * cell_size[1])
-        shift_y <- stats::runif(1, -0.5 * cell_size[2], 0.5 * cell_size[2])
+      shift_x <- stats::runif(1, -0.5 * cell_size[1], 0.5 * cell_size[1])
+      shift_y <- stats::runif(1, -0.5 * cell_size[2], 0.5 * cell_size[2])
 
-        sf::st_point(c(sf::st_coordinates(pt)[1] + shift_x,
-                       sf::st_coordinates(pt)[2] + shift_y))
-      }),
-      crs = sf::st_crs(occ_sf))
+      sf::st_point(c(sf::st_coordinates(pt)[1] + shift_x,
+                     sf::st_coordinates(pt)[2] + shift_y))
+    }),
+    crs = sf::st_crs(occ_sf))
 
     # Add time_point column
     occ_sf$time_point <- t
