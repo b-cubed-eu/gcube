@@ -129,6 +129,8 @@ example_data
 We visualise the data with uncertainty circles.
 
 ```{r}
+#| fig.alt: >
+#|   Visualisation of example dataset
 # Create sf object with uncertainty circles
 buffered_observations <- st_buffer(
   example_data,
@@ -215,6 +217,8 @@ We visualise the final occurrence cube.
 Since we have only three species occurrences per year spread over the whole grid, we see three occupied grid cells per year.
 
 ```{r}
+#| fig.alt: >
+#|   Visualisation of example data cube
 ggplot(occurrence_cube_df1) +
   geom_sf(aes(fill = factor(n))) +
   facet_wrap(~time_point, nrow = 2) +
