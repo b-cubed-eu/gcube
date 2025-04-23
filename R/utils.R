@@ -117,7 +117,7 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
 #' @noRd
 
 meters_to_degrees <- function(meters, latitude) {
-  lat_degree = meters / 111320
-  lon_degree = meters / (111320 * cos(latitude * pi / 180))
+  lat_degree <- meters / 111320
+  lon_degree <- meters / (111320 * cos(latitude * pi / 180))
   return(list(lat = lat_degree, lon = lon_degree))
 }

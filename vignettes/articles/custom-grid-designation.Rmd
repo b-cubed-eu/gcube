@@ -164,18 +164,18 @@ occurrence_cube_list <- vector(mode = "list", length = length(taxa))
 for (i in seq_along(taxa)) {
   # Get species
   taxon <- taxa[i]
-  
+
   # Filter data
   taxon_data <- example_data %>%
     filter(taxon == species)
-  
+
   # Perform grid designation
   taxon_cube <- grid_designation(
     observations = example_data,
     grid = mgrs10_belgium,
     seed = 123
   )
-  
+
   # Add species cube to list
   occurrence_cube_list[[i]] <- taxon_cube
 }
