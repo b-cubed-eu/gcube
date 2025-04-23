@@ -1,5 +1,9 @@
 # gcube 1.3.2
 
+* Update tutorial grid designation own data
+
+# gcube 1.3.2
+
 * Add **frictionless** package to suggests
 
 # gcube 1.3.1

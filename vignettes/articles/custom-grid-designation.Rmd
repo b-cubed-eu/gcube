@@ -176,6 +176,9 @@ for (i in seq_along(taxa)) {
     seed = 123
   )
 
+  # Add species column
+  taxon_cube$species <- taxon
+
   # Add species cube to list
   occurrence_cube_list[[i]] <- taxon_cube
 }

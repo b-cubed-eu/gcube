@@ -32,4 +32,4 @@ identifiers:
   value: 10.5281/zenodo.14038996
 - type: url
   value: https://b-cubed-eu.github.io/gcube/
-version: 1.3.2
+version: 1.3.3
