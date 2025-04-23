@@ -96,11 +96,17 @@ sample_from_uniform_circle <- function(
   # Get random angle and radius
   is_degree <- sf::st_crs(observations)$units_gdal == "degree"
 
+  # Function to convert meters to degrees
+  meters_to_degrees <- function(meters, latitude) {
+    lat_degree = meters / 111320
+    lon_degree = meters / (111320 * cos(latitude * pi / 180))
+    return(list(lat = lat_degree, lon = lon_degree))
+  }
+
   uncertainty_points <-
     observations %>%
     dplyr::mutate(
-      random_angle = stats::runif(nrow(observations), 0,
-                                  ifelse(is_degree, 360, 2 * pi)),
+      random_angle = stats::runif(nrow(observations), 0, 2 * pi),
       random_r = sqrt(stats::runif(nrow(observations), 0, 1)) *
         .data$coordinateUncertaintyInMeters
     )
