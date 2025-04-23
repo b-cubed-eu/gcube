@@ -1,0 +1,73 @@
+---
+title: "Grid designation for custom datasets"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This tutorial provides a theoretical explanation of grid designation is performed and how **gcube** can be used to for grid designation on any dataset (not only simulated datasets.) The method differs between projected (planar) and geographic (degree-based) coordinate reference systems (CRS).
+
+## Method
+
+To generate a point within a circle of radius $r$ around a central coordinate $(x_0, y_0)$, we use polar coordinates and convert to Cartesian coordinates.
+
+### Step-by-step:
+
+1. Sample a **random angle**:
+   
+$$
+\theta \sim \mathcal{U}(0, 2\pi)
+$$
+
+2. Sample a **random radius** scaled by square root to ensure uniform point density:
+
+$$
+r' = \sqrt{\mathcal{U}(0, 1)} \cdot r
+$$
+
+3. Convert to Cartesian coordinates:
+
+$$
+x = x_0 + r' \cos(\theta)
+$$
+
+$$
+y = y_0 + r' \sin(\theta)
+$$
+
+
+## Coordinate Reference System Considerations
+
+The method of applying the above formula depends on the unit system of your CRS.
+
+### Projected CRS (e.g., UTM)
+
+Projected systems use **meters** or other linear units, so the polar formula can be applied directly.
+
+| Quantity | Formula |
+|----------|---------|
+| $x$ offset | $x = x_0 + r \cos(\theta)$ |
+| $y$ offset | $y = y_0 + r \sin(\theta)$ |
+
+This is the most accurate and straightforward method and should be used whenever your data are in a projected CRS.
+
+
+### Geographic CRS (e.g., WGS84)
+
+Geographic systems use **degrees**, not meters. Therefore, the uncertainty radius in meters must be converted to degrees using approximations based on latitude:
+
+- 1 degree of latitude ≈ 111,320 meters
+- 1 degree of longitude ≈ $111{,}320 \cdot \cos(\text{latitude})$ meters
+
+Use these formulas to convert meters to degrees:
+
+| Quantity | Formula |
+|----------|---------|
+| Latitude offset | $\Delta \text{lat} = \dfrac{r \sin(\theta)}{111320}$ |
+| Longitude offset | $\Delta \text{lon} = \dfrac{r \cos(\theta)}{111320 \cdot \cos(\text{lat})}$ |
+
+These are **approximations** and may introduce distortion, especially at high latitudes.
