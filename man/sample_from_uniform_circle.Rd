@@ -35,6 +35,7 @@ uncertainty circle around each observation assuming a Uniform distribution.
 }
 \examples{
 library(sf)
+library(dplyr)
 
 # Create four random points
 n_points <- 4

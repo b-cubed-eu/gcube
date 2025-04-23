@@ -33,6 +33,7 @@
 #'
 #' @examples
 #' library(sf)
+#' library(dplyr)
 #'
 #' # Create four random points
 #' n_points <- 4
@@ -110,6 +111,8 @@ sample_from_uniform_circle <- function(
   }
 
   # Get random angle and radius
+  is_degree <- isTRUE(sf::st_crs(observations)$units_gdal == "degree")
+
   uncertainty_points <-
     observations %>%
     dplyr::mutate(
@@ -121,11 +124,17 @@ sample_from_uniform_circle <- function(
   # Calculate new point
   new_points <-
     uncertainty_points %>%
+    dplyr::rowwise() %>%
     dplyr::mutate(
-      x_new = sf::st_coordinates(.data$geometry)[, 1] +
-        .data$random_r * cos(.data$random_angle),
-      y_new = sf::st_coordinates(.data$geometry)[, 2] +
-        .data$random_r * sin(.data$random_angle)
+      lat = sf::st_coordinates(.data$geometry)[2],
+      lon = sf::st_coordinates(.data$geometry)[1],
+      displacement = ifelse(
+        is_degree,
+        list(meters_to_degrees(.data$random_r, .data$lat)),
+        list(list(lat = .data$random_r, lon = .data$random_r))
+      ),
+      x_new = .data$lon + .data$displacement$lon * cos(.data$random_angle),
+      y_new = .data$lat + .data$displacement$lat * sin(.data$random_angle)
     ) %>%
     sf::st_drop_geometry() %>%
     sf::st_as_sf(
