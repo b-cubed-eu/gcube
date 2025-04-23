@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This tutorial provides a theoretical explanation of grid designation is performed and how **gcube** can be used to for uniform grid designation on any ecological dataset (not only simulated datasets). The method differs between projected (planar) and geographic (degree-based) coordinate reference systems (CRS).
+This tutorial explains how spatial grid designation is performed in ecological datasets using the **gcube** package. We begin with the theoretical foundations of generating random points within uncertainty buffers and follow with a practical example of applying a uniform grid to a real dataset. The method supports both projected and geographic coordinate reference systems, making it applicable beyond simulated data.
 
 ## Method
 
@@ -70,6 +70,8 @@ Use these formulas to convert meters to degrees:
 
 These are **approximations** and may introduce distortion, especially at high latitudes.
 
+> ⚠️ **Tip**: Always prefer using a projected CRS (like UTM) for grid designation when available. This minimizes distortion and simplifies calculations. Use geographic CRS (e.g., WGS84) only if your dataset explicitly requires it or no projected CRS is available.
+
 ## Getting started with gcube
 
 In this example, we show how **gcube** can be used to perform grid designation on a custom ecological dataset.
@@ -99,6 +101,7 @@ head(mgrs10_belgium)
 ```
 
 Consider the following synthetic observation dataset with three species observed across three different years. Each row represents a record with spatial coordinates and an associated uncertainty in meters.
+Both the reference grid and observation data use the same projected CRS, which ensures that distances and buffer sizes are accurately computed.
 
 ```{r}
 # Simulate 9 observation records: 3 species x 3 years
@@ -147,8 +150,8 @@ ggplot() +
 
 ### Grid designation
 
-To perform grid designation, we loop over each species while using `grid_designation()`.
-Opt for `lapply()` or `purrr::map()` functions to improve computation time.
+To perform grid designation, we iterate over each species, filter the corresponding observations, and apply `grid_designation()` to generate a species-specific data cube.  
+For improved performance, especially with larger datasets, consider using vectorized approaches such as `lapply()` or `purrr::map()` instead of explicit loops.
 
 ```{r}
 # Get species
@@ -164,7 +167,7 @@ for (i in seq_along(taxa)) {
   
   # Filter data
   taxon_data <- example_data %>%
-    filter(taxon %in% species)
+    filter(taxon == species)
   
   # Perform grid designation
   taxon_cube <- grid_designation(
@@ -193,7 +196,8 @@ end_time <- Sys.time()
 end_time - start_time
 ```
 
-This is slow in case of big datasets due to the geometry column.
+Geometry columns are often large and complex, making operations like `distinct()` significantly slower.
+Dropping geometry before deduplication and rejoining spatial info afterward drastically improves performance on large datasets.
 A faster option is to drop the geometry and join it again with the grid after retaining unique columns.
 
 ```{r}
