@@ -111,7 +111,7 @@ sample_from_uniform_circle <- function(
   }
 
   # Get random angle and radius
-  is_degree <- sf::st_crs(observations)$units_gdal == "degree"
+  is_degree <- isTRUE(sf::st_crs(observations)$units_gdal == "degree")
 
   uncertainty_points <-
     observations %>%
