@@ -8,6 +8,11 @@
 #' the function will assume a single time point. If the latter column is not
 #' present, the function will assume no uncertainty (zero meters) around the
 #' observation points.
+#' @param missing_uncertainty A positive numeric value (default: 1000 m) used to
+#' replace missing (`NA`) values in the `coordinateUncertaintyInMeters` column.
+#' This ensures that all observations have a defined uncertainty radius for
+#' sampling. Only applied when the column is present but contains `NA` values;
+#' if the column itself is absent, a value of 0 is assumed instead.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
@@ -51,12 +56,18 @@
 
 sample_from_uniform_circle <- function(
     observations,
+    missing_uncertainty = 1000,
     seed = NA) {
   ### Start checks
   # 1. Check input type and length
   # Check if observations is an sf object
   stopifnot("`observations` must be an sf object." =
               inherits(observations, "sf"))
+
+  # Check if missing_uncertainty is a number
+  stopifnot("`missing_uncertainty` must be a numeric vector of length 1." =
+              is.numeric(missing_uncertainty) &
+              length(missing_uncertainty) == 1)
 
   # Check if seed is NA or a number
   stopifnot("`seed` must be a numeric vector of length 1 or NA." =
@@ -91,6 +102,11 @@ sample_from_uniform_circle <- function(
       "Assuming no uncertainty around observations.",
       sep = "\n"
     ))
+  } else {
+    # Fill in potential missing coordinate uncertainty
+    observations$coordinateUncertaintyInMeters <-
+      dplyr::coalesce(observations$coordinateUncertaintyInMeters,
+                      missing_uncertainty)
   }
 
   # Get random angle and radius

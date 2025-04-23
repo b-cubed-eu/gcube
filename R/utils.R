@@ -30,7 +30,7 @@ get_function_arguments <- function(f, df) {
 
   # Also get argument names of temporal_function if necessary
   if (identical(f, simulate_occurrences) &&
-      "temporal_function" %in% colnames(df)) {
+        "temporal_function" %in% colnames(df)) {
     temp_f_args <- sapply(df$temporal_function, function(f) {
       if (is.function(f)) methods::formalArgs(f)
     })

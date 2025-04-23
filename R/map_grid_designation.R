@@ -17,6 +17,8 @@
 #' to be specified as a named list where the names are the argument names of
 #' `grid_designation()`, and the associated values are the corresponding column
 #' names in `df`.
+#' @param progress Logical. Whether to show a progress bar. Set
+#' to `TRUE` to display a progress bar, `FALSE` (default) to suppress it.
 #'
 #' @returns In case of `nested = TRUE`, a dataframe identical to `df`, but each
 #' sf object with POINT geometry in the list-column
@@ -127,7 +129,8 @@
 map_grid_designation <- function(
     df,
     nested = TRUE,
-    arg_list = NA) {
+    arg_list = NA,
+    progress = FALSE) {
   ### Start checks
   # 1. Check input type and length
   # Check if df is a dataframe
@@ -170,7 +173,9 @@ map_grid_designation <- function(
   out_df <- map_simulation_functions(
     f = grid_designation,
     df = df,
-    nested = nested)
+    nested = nested,
+    progress = progress
+  )
 
   # Rename columns
   colnames(out_df)[seq_along(og_colnames)] <- og_colnames

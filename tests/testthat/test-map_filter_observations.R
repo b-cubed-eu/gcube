@@ -14,7 +14,8 @@ species_dataset_df1 <- tibble(
   spatial_pattern = "random",
   detection_probability = c(0.8, 0.9, 1),
   invert = FALSE,
-  seed = 123)
+  seed = 123
+)
 
 # Dataframe with custom column names and named list for argument conversion for
 # simple polygon. Create named list for argument conversion.
@@ -25,25 +26,29 @@ species_dataset_df2 <- species_dataset_df1 %>%
          inv = invert)
 
 arg_conv_list <- list(
-    species_range = "polygon",
-    sd_step = "sd",
-    detection_probability = "det_prob",
-    invert = "inv"
-  )
+  species_range = "polygon",
+  sd_step = "sd",
+  detection_probability = "det_prob",
+  invert = "inv"
+)
 
 # Map simulate occurrences
 sim_occ1 <- map_simulate_occurrences(
-  df = species_dataset_df1)
+  df = species_dataset_df1
+)
 sim_occ2 <- map_simulate_occurrences(
   df = species_dataset_df2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 # Map sample observations
 samp_obs1 <- map_sample_observations(
-  df = sim_occ1)
+  df = sim_occ1
+)
 samp_obs2 <- map_sample_observations(
   df = sim_occ2,
-  arg_list = arg_conv_list)
+  arg_list = arg_conv_list
+)
 
 
 ## Unit tests
@@ -71,7 +76,8 @@ test_that("map_filter_observations works with simple column names", {
   filter_obs_unnested_test <- tidyr::unnest(
     filter_obs_nested,
     cols = "observations",
-    names_repair = "minimal")
+    names_repair = "minimal"
+  )
   filter_obs_unnested_test <- filter_obs_unnested_test[
     , !duplicated(t(filter_obs_unnested_test))
   ]
@@ -105,11 +111,11 @@ test_that("map_filter_observations handles invalid inputs", {
 
   # Invalid arg_list
   invalid_arg_list <- list(
-      species_range = "polygon",
-      sd_step = "sd",
-      detection_probability = "det_prob",
-      invert = 1
-    )
+    species_range = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_prob",
+    invert = 1
+  )
   expect_error(
     map_filter_observations(df = sim_occ2,
                             arg_list = invalid_arg_list),
@@ -117,11 +123,11 @@ test_that("map_filter_observations handles invalid inputs", {
   )
 
   invalid_arg_list2 <- list(
-      species_range = "polygon",
-      sd_step = "sd",
-      detection_probability = "det_prob",
-      invert = "invert_col"
-    )
+    species_range = "polygon",
+    sd_step = "sd",
+    detection_probability = "det_prob",
+    invert = "invert_col"
+  )
   expect_error(
     map_simulate_occurrences(df = sim_occ2,
                              arg_list = invalid_arg_list2),

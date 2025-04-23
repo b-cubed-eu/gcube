@@ -4,7 +4,7 @@
 \alias{map_simulation_functions}
 \title{Map a cube simulation function over multiple rows of a dataframe}
 \usage{
-map_simulation_functions(f, df, nested = TRUE)
+map_simulation_functions(f, df, nested = TRUE, progress = FALSE)
 }
 \arguments{
 \item{f}{One of five cube simulation functions: \code{simulate_occurrences()},
@@ -19,6 +19,9 @@ function will be retained in the output.}
 \item{nested}{Logical. If \code{TRUE} (default), retains list-column containing
 dataframes calculated by \code{f}. Otherwise, expands this list-column into rows
 and columns.}
+
+\item{progress}{Logical. Whether to show a progress bar. Set
+to \code{TRUE} to display a progress bar, \code{FALSE} (default) to suppress it.}
 }
 \value{
 In case of \code{nested = TRUE}, a dataframe identical to \code{df}, with an

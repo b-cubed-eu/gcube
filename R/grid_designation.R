@@ -13,6 +13,11 @@
 #' @param id_col The column name containing unique IDs for each grid cell. If
 #' `"row_names"` (the default), a new column `cell_code` is created where the
 #' row names represent the unique IDs.
+#' @param missing_uncertainty A positive numeric value (default: 1000 m) used to
+#' replace missing (`NA`) values in the `coordinateUncertaintyInMeters` column.
+#' This ensures that all observations have a defined uncertainty radius for
+#' sampling. Only applied when the column is present but contains `NA` values;
+#' if the column itself is absent, a value of 0 is assumed instead.
 #' @param seed A positive numeric value setting the seed for random number
 #' generation to ensure reproducibility. If `NA` (default), then `set.seed()`
 #' is not called at all. If not `NA`, then the random number generator state is
@@ -91,6 +96,7 @@ grid_designation <- function(
     observations,
     grid,
     id_col = "row_names",
+    missing_uncertainty = 1000,
     seed = NA,
     aggregate = TRUE,
     randomisation = c("uniform", "normal"),
@@ -120,9 +126,9 @@ grid_designation <- function(
   # Check if randomisation is uniform or normal
   randomisation <- tryCatch({
     match.arg(randomisation, c("uniform", "normal"))
-    }, error = function(e) {
-      stop("`randomisation` must be one of 'uniform', 'normal'.",
-           call. = FALSE)
+  }, error = function(e) {
+    stop("`randomisation` must be one of 'uniform', 'normal'.",
+         call. = FALSE)
   })
 
   # 2. Other checks
@@ -137,8 +143,8 @@ grid_designation <- function(
         paste0(
           "Column name '",  id_col, "' not present in provided grid!\n",
           "Creating 'cell_code' column with ids based on row names."
-          )
         )
+      )
       id_col <- "row_names"
     } else if (length(unique(grid[[id_col]])) != nrow(grid)) {
       warning(
@@ -154,9 +160,18 @@ grid_designation <- function(
 
   # Get random point in uncertainty circle according to uniform or normal rules
   if (randomisation == "uniform") {
-    new_points <- sample_from_uniform_circle(observations, seed)
+    new_points <- sample_from_uniform_circle(
+      observations = observations,
+      missing_uncertainty = missing_uncertainty,
+      seed = seed
+    )
   } else {
-    new_points <- sample_from_binormal_circle(observations, p_norm, seed)
+    new_points <- sample_from_binormal_circle(
+      observations = observations,
+      p_norm = p_norm,
+      missing_uncertainty = missing_uncertainty,
+      seed = seed
+    )
   }
 
   # We assign each occurrence to a grid cell

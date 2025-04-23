@@ -4,7 +4,12 @@
 \alias{sample_from_binormal_circle}
 \title{Sample from a circle using the bivariate Normal distribution}
 \usage{
-sample_from_binormal_circle(observations, p_norm = 0.95, seed = NA)
+sample_from_binormal_circle(
+  observations,
+  p_norm = 0.95,
+  missing_uncertainty = 1000,
+  seed = NA
+)
 }
 \arguments{
 \item{observations}{An sf object with POINT geometry and a \code{time_point} and
@@ -17,6 +22,12 @@ observation points.}
 samples from a bivariate Normal distribution that fall within the uncertainty
 circle. Default is 0.95.
 See Details.}
+
+\item{missing_uncertainty}{A positive numeric value (default: 1000 m) used to
+replace missing (\code{NA}) values in the \code{coordinateUncertaintyInMeters} column.
+This ensures that all observations have a defined uncertainty radius for
+sampling. Only applied when the column is present but contains \code{NA} values;
+if the column itself is absent, a value of 0 is assumed instead.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}

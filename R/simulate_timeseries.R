@@ -111,15 +111,13 @@ simulate_timeseries <- function(
   ### Start checks
   # 1. Check input type and length
   # Check if initial_average_occurrences is a positive number
-  stopifnot(
-    "`initial_average_occurrences` must be a single positive number." =
-      assertthat::is.number(initial_average_occurrences) &
-      initial_average_occurrences >= 0)
+  stopifnot("`initial_average_occurrences` must be a single positive number." =
+              assertthat::is.number(initial_average_occurrences) &
+              initial_average_occurrences >= 0)
 
   # Check if n_time_points is a positive integer
-  stopifnot(
-    "`n_time_points` must be a single positive integer." =
-      assertthat::is.count(n_time_points))
+  stopifnot("`n_time_points` must be a single positive integer." =
+              assertthat::is.count(n_time_points))
 
   # Check if temporal_function is NA or a function
   stopifnot("`temporal_function` must be `NA` or a function." =

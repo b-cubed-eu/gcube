@@ -8,21 +8,21 @@ filter_observations(observations_total, invert = FALSE)
 }
 \arguments{
 \item{observations_total}{An sf object with POINT geometry or a simple
-dataframe with \code{sampling_status} column containing values \code{"detected"}.
+dataframe with \code{observed} column containing logical values (\code{TRUE}/\code{FALSE}).
 This format is typically created by the \code{sample_observations()} function.}
 
 \item{invert}{Logical. If \code{FALSE} (default), the function filters to retain
-only \code{"detected"} occurrences. If \code{TRUE}, it filters out \code{"detected"}
-occurrences and retains all other occurrences.}
+only observed occurrences. If \code{TRUE}, it filters out unobserved
+occurrences.}
 }
 \value{
 A data frame or an sf object with POINT geometry containing the
-filtered observations. If \code{invert = FALSE}, the function returns detected
-occurrences. If \code{invert = TRUE}, it returns all other occurrences.
+filtered observations. If \code{invert = FALSE}, the function returns observed
+occurrences. If \code{invert = TRUE}, it returns unobserved occurrences.
 }
 \description{
 This function filters observations from all occurrences based on the
-\code{sampling_status} column, typically created by the \code{sample_observations()}
+\code{observed} column, typically created by the \code{sample_observations()}
 function.
 }
 \examples{
@@ -30,7 +30,7 @@ function.
 occurrences_data <- data.frame(
     time_point = 1,
     sampling_prob = seq(0.5, 1, 0.1),
-    sampling_status = rep(c("undetected", "detected"), each = 3)
+    observed = rep(c(FALSE, TRUE), each = 3)
   )
 
 # Keep detected occurrences
@@ -44,6 +44,7 @@ Other main:
 \code{\link{add_coordinate_uncertainty}()},
 \code{\link{grid_designation}()},
 \code{\link{sample_observations}()},
-\code{\link{simulate_occurrences}()}
+\code{\link{simulate_occurrences}()},
+\code{\link{virtualsample_to_sf}()}
 }
 \concept{main}

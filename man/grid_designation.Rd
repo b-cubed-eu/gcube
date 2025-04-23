@@ -8,6 +8,7 @@ grid_designation(
   observations,
   grid,
   id_col = "row_names",
+  missing_uncertainty = 1000,
   seed = NA,
   aggregate = TRUE,
   randomisation = c("uniform", "normal"),
@@ -27,6 +28,12 @@ observations should be designated.}
 \item{id_col}{The column name containing unique IDs for each grid cell. If
 \code{"row_names"} (the default), a new column \code{cell_code} is created where the
 row names represent the unique IDs.}
+
+\item{missing_uncertainty}{A positive numeric value (default: 1000 m) used to
+replace missing (\code{NA}) values in the \code{coordinateUncertaintyInMeters} column.
+This ensures that all observations have a defined uncertainty radius for
+sampling. Only applied when the column is present but contains \code{NA} values;
+if the column itself is absent, a value of 0 is assumed instead.}
 
 \item{seed}{A positive numeric value setting the seed for random number
 generation to ensure reproducibility. If \code{NA} (default), then \code{set.seed()}
@@ -106,6 +113,7 @@ Other main:
 \code{\link{add_coordinate_uncertainty}()},
 \code{\link{filter_observations}()},
 \code{\link{sample_observations}()},
-\code{\link{simulate_occurrences}()}
+\code{\link{simulate_occurrences}()},
+\code{\link{virtualsample_to_sf}()}
 }
 \concept{main}

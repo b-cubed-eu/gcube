@@ -57,17 +57,23 @@ test_that("Function throws an error if bias_weights is not an sf object", {
 })
 
 test_that("Function throws an error if occurrences_sf does not have POINT", {
-  line_sf <- st_as_sf(data.frame(
-    geometry = st_sfc(st_linestring(matrix(c(0, 0, 1, 1), ncol = 2)))),
-    crs = 4326)
+  line_sf <- st_as_sf(
+    data.frame(
+      geometry = st_sfc(st_linestring(matrix(c(0, 0, 1, 1), ncol = 2)))
+    ),
+    crs = 4326
+  )
   expect_error(apply_manual_sampling_bias(line_sf, bias_weights01_sf),
                "`occurrences_sf` must be an sf object.")
 })
 
 test_that("Function throws an error if bias_weights does not have POLYGON ", {
-  point_sf <- st_as_sf(data.frame(
-    geometry = st_sfc(st_point(c(0, 0)))),
-    crs = 4326)
+  point_sf <- st_as_sf(
+    data.frame(
+      geometry = st_sfc(st_point(c(0, 0)))
+    ),
+    crs = 4326
+  )
   expect_error(apply_manual_sampling_bias(points_sf1, point_sf),
                "`bias_weights` must be an sf object.")
 })
@@ -107,12 +113,14 @@ test_that("Function throws an error if not all occurrences are within grid", {
   grid_small <- bias_weights01_sf[1, ]
   expect_error(
     apply_manual_sampling_bias(points_sf1, grid_small),
-    "`bias_weights` must be a grid that encompasses all occurrences.")
+    "`bias_weights` must be a grid that encompasses all occurrences."
+  )
 })
 
 test_that("CRS of output matches CRS of input", {
   result <- apply_manual_sampling_bias(
     st_set_crs(points_sf1, 3857),
-    st_set_crs(bias_weights01_sf, 3857))
+    st_set_crs(bias_weights01_sf, 3857)
+  )
   expect_equal(st_crs(result), st_crs(st_set_crs(points_sf1, 3857)))
 })
