@@ -197,7 +197,7 @@ end_time - start_time
 ```
 
 Geometry columns are often large and complex, making operations like `distinct()` significantly slower.
-Dropping geometry before deduplication and rejoining spatial info afterward drastically improves performance on large datasets.
+Dropping geometry before deduplication and rejoining spatial info afterwards drastically improves performance on large datasets.
 A faster option is to drop the geometry and join it again with the grid after retaining unique columns.
 
 ```{r}

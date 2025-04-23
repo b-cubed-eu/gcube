@@ -110,9 +110,9 @@ handle_mapped_warnings <- function(df, mapped_col = "mapped_col") {
 #' @param latitude Numeric. Latitude in degrees at which the conversion is made.
 #'
 #' @return A list with two elements:
-#'   - lat: Approximate latitude offset in degrees.
-#'   - lon: Approximate longitude offset in degrees, adjusted for the input
-#'          latitude.
+#'   - `lat`: Approximate latitude offset in degrees.
+#'   - `lon`: Approximate longitude offset in degrees, adjusted for the input
+#'            latitude.
 #'
 #' @noRd
 
