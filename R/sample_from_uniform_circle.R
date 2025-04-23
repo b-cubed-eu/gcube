@@ -33,6 +33,7 @@
 #'
 #' @examples
 #' library(sf)
+#' library(dplyr)
 #'
 #' # Create four random points
 #' n_points <- 4
