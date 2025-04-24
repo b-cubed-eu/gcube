@@ -1,4 +1,8 @@
-# gcube 1.3.2
+# gcube 1.3.4
+
+* Fix NEWS.md
+
+# gcube 1.3.3
 
 * Update tutorial grid designation own data
 
