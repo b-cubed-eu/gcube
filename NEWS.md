@@ -1,6 +1,6 @@
 # gcube 1.3.4
 
-* Fix NEWS.md
+* Fix NEWS file
 
 # gcube 1.3.3
 
