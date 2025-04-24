@@ -1,6 +1,6 @@
 Package: gcube
 Title: Simulating Biodiversity Data Cubes
-Version: 1.3.3
+Version: 1.3.4
 Authors@R: c(
     person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Research Institute for Nature and Forest (INBO)")),
