@@ -31,7 +31,8 @@ Authors@R: c(
     person("Mukhtar Muhammed", "Yahaya", role = "ctb",
            comment = c(ORCID = "0009-0008-9200-0863")),
     person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = "cph"),
-    person("European Union's Horizon Europe Research and Innovation Programme (ID No 101059592)", role = "fnd")
+    person("European Union's Horizon Europe Research and Innovation Programme", role = "fnd",
+           comment = "https://doi.org/10.3030/101059592")
   )
 Description: This R package provides a simulation framework for
     biodiversity data cubes. This can start from simulating multiple
