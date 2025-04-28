@@ -1,3 +1,7 @@
+# gcube 1.3.5
+
+* Use ROR for copyright holder
+
 # gcube 1.3.4
 
 * Fix NEWS file
