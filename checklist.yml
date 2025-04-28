@@ -1,7 +1,12 @@
 description: Configuration file for checklist::check_pkg()
 package: yes
 allowed:
-  warnings: []
+  warnings:
+  - motivation: Bug checklist
+    value: '`Research Institute for Nature and Forest (INBO)` must be listed as copyright
+      holder and use `info@inbo.be` as email.'
+  - motivation: Not applicable
+    value: ORCID required for `Research Institute for Nature and Forest (INBO)`
   notes:
   - motivation: This is just a note that reminds CRAN maintainers to check that the
       submission comes actually from his maintainer and not anybody else.

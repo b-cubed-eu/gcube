@@ -1,6 +1,6 @@
 {
   "title": "gcube: Simulating Biodiversity Data Cubes",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "license": "MIT",
   "upload_type": "software",
   "description": "<p>This R package provides a simulation framework for biodiversity data cubes. This can start from simulating multiple species distributed in a landscape over a temporal scope. In a second phase, the simulation of a variety of observation processes and effort can generate actual occurrence datasets. Based on their (simulated) spatial uncertainty, occurrences can then be designated to a grid to form a data cube.<\/p>",
