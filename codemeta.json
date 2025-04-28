@@ -107,8 +107,7 @@
   "copyrightHolder": [
     {
       "@type": "Organization",
-      "name": "Research Institute for Nature and Forest (INBO)",
-      "email": "info@inbo.be"
+      "name": "Research Institute for Nature and Forest (INBO)"
     }
   ],
   "funder": [
@@ -370,7 +369,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "576.245KB",
+  "fileSize": "576.295KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
