@@ -4,20 +4,16 @@
 # gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/logo.png" align="right" height="139" alt="gcube website" /></a>
 
 <!-- badges: start -->
-
-[![repo
-status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
-[![gcube status
-badge](https://b-cubed-eu.r-universe.dev/gcube/badges/version)](https://b-cubed-eu.r-universe.dev/gcube)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
-[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml)
-[![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14038996.svg)](https://doi.org/10.5281/zenodo.14038996)
-[![name status
-badge](https://b-cubed-eu.r-universe.dev/badges/:name?color=6CDDB4)](https://b-cubed-eu.r-universe.dev/)
-
+<p align="left">
+<a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="repo status" style="display:inline-block;"></a>
+<a href="https://github.com/b-cubed-eu/gcube/releases"><img src="https://img.shields.io/github/release/b-cubed-eu/gcube.svg" alt="Release" style="display:inline-block;"></a>
+<a href="https://b-cubed-eu.r-universe.dev/gcube"><img src="https://b-cubed-eu.r-universe.dev/gcube/badges/version" alt="gcube status badge" style="display:inline-block;"></a>
+<a href="https://CRAN.R-project.org/package=gcube"><img src="https://www.r-pkg.org/badges/version/gcube" alt="CRAN status" style="display:inline-block;"></a>
+<a href="https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml"><img src="https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml/badge.svg" alt="R-CMD-check" style="display:inline-block;"></a>
+<a href="https://app.codecov.io/gh/b-cubed-eu/gcube/"><img src="https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg" alt="codecov" style="display:inline-block;"></a>
+<a href="https://doi.org/10.5281/zenodo.14038996"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14038996.svg" alt="DOI" style="display:inline-block;"></a>
+<a href="https://b-cubed-eu.r-universe.dev/"><img src="https://b-cubed-eu.r-universe.dev/badges/:name?color=6CDDB4" alt="name status badge" style="display:inline-block;"></a>
+</p>
 <!-- badges: end -->
 
 The goal of **gcube** is to provide a simulation framework for
