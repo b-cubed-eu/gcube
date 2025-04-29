@@ -1,7 +1,6 @@
 # gcube 1.3.6
 
 * Use DOI for funding
-* Improve README badges for rendering on B-Cubed documentation website #127
 
 # gcube 1.3.5
 
