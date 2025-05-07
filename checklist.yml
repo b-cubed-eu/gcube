@@ -17,8 +17,6 @@ allowed:
       Maintainer: 'Ward Langeraert <ward.langeraert@inbo.be>'
 
       New submission
-  - motivation: Badges in html style for rendering on documentation website
-    value: in README fix Add a status badge cf e.g repostatus.org
 required:
 - CITATION
 - DESCRIPTION
