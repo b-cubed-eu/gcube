@@ -80,7 +80,6 @@ In this example, we show how **gcube** can be used to perform grid designation o
 # Load packages
 library(gcube)
 
-
 library(frictionless) # Load example dataset
 library(ggplot2)      # Data visualisation
 library(dplyr)        # Data wrangling
