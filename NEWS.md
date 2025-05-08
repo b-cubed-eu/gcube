@@ -1,7 +1,8 @@
 # gcube 1.3.7
 
-* Remove white line in article #131
 * Shorten example run time for mapping functions #130
+* Remove white line in tutorial "Grid designation for custom datasets" #131
+* Fix mistake in tutorial "Grid designation for custom datasets" #132
 
 # gcube 1.3.6
 
