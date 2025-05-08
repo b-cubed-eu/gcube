@@ -2,7 +2,9 @@ description: Configuration file for checklist::check_pkg()
 package: yes
 allowed:
   warnings:
-  - motivation: Bug checklist
+  - motivation: Email is not listed
+    value: '`European Union` must be listed as funder without email.'
+  - motivation: Checklist issue [153](https://github.com/inbo/checklist/issues/153)
     value: '`Research Institute for Nature and Forest (INBO)` must be listed as copyright
       holder and use `info@inbo.be` as email.'
   - motivation: Not applicable
