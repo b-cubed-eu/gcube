@@ -37,6 +37,7 @@ of a dataframe with potentially different function arguments over multiple
 columns.
 }
 \examples{
+\dontrun{
 # Load packages
 library(sf)
 library(dplyr)
@@ -70,5 +71,6 @@ sim_occ_raw_unnested <- map_simulation_functions(
 
 sim_occ_raw_unnested \%>\%
    st_sf()
+}
 }
 \concept{multispecies_low}

@@ -39,6 +39,7 @@ dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{
+\dontrun{
 # Load packages
 library(sf)
 library(dplyr)
@@ -129,6 +130,7 @@ obs_uncertainty2 <- map_add_coordinate_uncertainty(
 map_grid_designation(
   df = obs_uncertainty2,
   arg_list = arg_conv_list)
+}
 }
 \seealso{
 Other multispecies: 

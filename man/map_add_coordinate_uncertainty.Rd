@@ -44,6 +44,7 @@ dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{
+\dontrun{
 # Load packages
 library(sf)
 library(dplyr)
@@ -117,6 +118,7 @@ filter_obs2 <- map_filter_observations(
 map_add_coordinate_uncertainty(
   df = filter_obs2,
   arg_list = arg_conv_list)
+}
 }
 \seealso{
 Other multispecies: 

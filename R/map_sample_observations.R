@@ -35,6 +35,7 @@
 #' @family multispecies
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -85,6 +86,7 @@
 #' map_sample_observations(
 #'   df = sim_occ2,
 #'   arg_list = arg_conv_list)
+#' }
 
 map_sample_observations <- function(
     df,
