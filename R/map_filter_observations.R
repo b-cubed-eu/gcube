@@ -35,6 +35,7 @@
 #' @family multispecies
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -96,6 +97,7 @@
 #' map_filter_observations(
 #'   df = samp_obs2,
 #'   arg_list = arg_conv_list)
+#' }
 
 map_filter_observations <- function(
     df,

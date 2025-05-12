@@ -35,6 +35,7 @@
 #' @family multispecies
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -125,6 +126,7 @@
 #' map_grid_designation(
 #'   df = obs_uncertainty2,
 #'   arg_list = arg_conv_list)
+#' }
 
 map_grid_designation <- function(
     df,

@@ -41,6 +41,7 @@ dataframe, representing different species, with potentially
 different function arguments over multiple columns.
 }
 \examples{
+\dontrun{
 # Load packages
 library(sf)
 library(dplyr)
@@ -80,6 +81,7 @@ arg_conv_list <- list(
 map_simulate_occurrences(
   df = species_dataset_df2,
   arg_list = arg_conv_list)
+}
 }
 \seealso{
 Other multispecies: 

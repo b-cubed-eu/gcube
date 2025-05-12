@@ -37,6 +37,7 @@
 #' @family multispecies
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -76,6 +77,7 @@
 #' map_simulate_occurrences(
 #'   df = species_dataset_df2,
 #'   arg_list = arg_conv_list)
+#' }
 
 map_simulate_occurrences <- function(
     df,

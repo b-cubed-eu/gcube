@@ -35,6 +35,7 @@
 #' @family multispecies
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -108,6 +109,7 @@
 #' map_add_coordinate_uncertainty(
 #'   df = filter_obs2,
 #'   arg_list = arg_conv_list)
+#' }
 
 map_add_coordinate_uncertainty <- function(
     df,

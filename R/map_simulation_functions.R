@@ -35,6 +35,7 @@
 #' @family multispecies_low
 #'
 #' @examples
+#' \dontrun{
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
@@ -68,6 +69,7 @@
 #'
 #' sim_occ_raw_unnested %>%
 #'    st_sf()
+#' }
 
 map_simulation_functions <- function(
     f,
