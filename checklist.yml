@@ -1,7 +1,8 @@
 description: Configuration file for checklist::check_pkg()
 package: yes
 allowed:
-  warnings:
+  warnings: []
+  notes:
   - motivation: This is just a note that reminds CRAN maintainers to check that the
       submission comes actually from his maintainer and not anybody else.
     value: |-
@@ -9,7 +10,6 @@ allowed:
       Maintainer: 'Ward Langeraert <ward.langeraert@inbo.be>'
 
       New submission
-  notes: []
 required:
 - CITATION
 - DESCRIPTION
@@ -21,6 +21,7 @@ required:
 - folder conventions
 - license
 - lintr
+- organisation
 - repository secret
 - spelling
 spelling:
@@ -28,3 +29,5 @@ spelling:
   ignore:
   - .github
   - LICENSE.md
+  - docs
+pak: []
