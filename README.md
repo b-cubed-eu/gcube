@@ -41,7 +41,7 @@ prevalence, etc.
 Install **gcube** in R:
 
 ``` r
-install.packages("gcube", repos = "https://b-cubed-eu.r-universe.dev")
+install.packages("gcube", repos = c("https://b-cubed-eu.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 You can install the development version from
@@ -57,7 +57,7 @@ remotes::install_github("b-cubed-eu/gcube")
 The name **gcube** stands for “generate cube” since it can be used to
 generate biodiversity data cubes from minimal input. It was first
 developed during the hackathon “Hacking Biodiversity Data Cubes for
-Policy”, where it won the first price in the category “Visualization and
+Policy”, where it won the first prize in the category “Visualization and
 training”. You can read the full story here:
 <https://doi.org/10.37044/osf.io/vcyr7>
 
@@ -83,7 +83,7 @@ library(dplyr)   # data wrangling
 library(ggplot2) # visualisation with ggplot
 ```
 
-We create a polygon as input. It represents the spatial extend of the
+We create a polygon as input. It represents the spatial extent of the
 species.
 
 ``` r
@@ -96,7 +96,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/readme-polygon-1.png" alt="Spatial extend in which we will simulate species occurrences." width="80%" />
+<img src="man/figures/readme-polygon-1.png" alt="Spatial extent in which we will simulate species occurrences." width="80%" />
 
 ### Occurrence process
 
@@ -185,11 +185,11 @@ ggplot() +
 ### Grid designation process
 
 Finally, observations are designated to a grid with `grid_designation()`
-to create an occurrence cube. We create a grid over the spatial extend
+to create an occurrence cube. We create a grid over the spatial extent
 using `sf::st_make_grid()`.
 
 ``` r
-# Define a grid over spatial extend
+# Define a grid over spatial extent
 grid_df <- st_make_grid(
     buffered_observations,
     square = TRUE,
@@ -230,6 +230,8 @@ ggplot() +
   geom_sf(data = observations_df, colour = "firebrick") +
   labs(x = "", y = "", fill = "n") +
   theme_minimal()
+#> Ignoring unknown labels:
+#> • fill : "n"
 ```
 
 <img src="man/figures/readme-grid-designation-1.png" alt="Distribution of random samples within uncertainty circle." width="80%" />
