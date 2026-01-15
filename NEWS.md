@@ -1,3 +1,9 @@
+# gcube 1.4.0
+
+* Fix installation instructions #134
+* Fix spelling mistakes #135
+* Improve funder and rights holder descriptions #136
+
 # gcube 1.3.7
 
 * Shorten example run time for mapping functions #130
