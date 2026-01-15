@@ -32,8 +32,7 @@ Authors@R: c(
            comment = c(ORCID = "0009-0008-9200-0863")),
     person("Research Institute for Nature and Forest (INBO)", role = "cph",
            comment = c(ROR = "00j54wy13")),
-    person("European Union", role = "fnd",
-           comment = "https://doi.org/10.3030/101059592")
+    person("European Union (ID 101059592)", , , "b-cubedsupport@meisebotanicgarden.be", role = "fnd")
   )
 Description: This R package provides a simulation framework for
     biodiversity data cubes. This can start from simulating multiple

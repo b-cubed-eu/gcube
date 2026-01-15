@@ -17,6 +17,7 @@ status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14038996.svg)](https://doi.org/10.5281/zenodo.14038996)
 [![name status
 badge](https://b-cubed-eu.r-universe.dev/badges/:name?color=6CDDB4)](https://b-cubed-eu.r-universe.dev/)
+[![funder](https://badgen.net/static/funder/European%20Union/f2a)](https://doi.org/10.3030/101059592)
 
 <!-- badges: end -->
 
