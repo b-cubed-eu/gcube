@@ -1,5 +1,5 @@
 # Prepare example datasets
-## number of points and extend
+## number of points and extent
 n_points <- 4
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)

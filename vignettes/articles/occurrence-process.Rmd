@@ -36,7 +36,7 @@ The user can change these arguments to allow for more flexibility.
 In this tutorial we will demonstrate the different options.
 
 As input, we create a polygon in which we want to simulate occurrences.
-It represents the spatial extend of the species.
+It represents the spatial extent of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -47,7 +47,7 @@ The polygon looks like this.
 
 ```{r}
 #| fig.alt: >
-#|   Spatial extend in which we will simulate species occurrences.
+#|   Spatial extent in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
