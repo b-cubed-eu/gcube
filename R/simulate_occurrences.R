@@ -4,7 +4,7 @@
 #' and/or temporal extent.
 #'
 #' @param species_range An sf object with POLYGON geometry indicating the
-#' spatial extend to simulate occurrences.
+#' spatial extent to simulate occurrences.
 #' @param initial_average_occurrences A positive numeric value indicating the
 #' average number of occurrences to be simulated within the extent of
 #' `species_range` at the first time point. This value serves as the mean

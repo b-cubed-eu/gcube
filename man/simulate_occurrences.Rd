@@ -16,7 +16,7 @@ simulate_occurrences(
 }
 \arguments{
 \item{species_range}{An sf object with POLYGON geometry indicating the
-spatial extend to simulate occurrences.}
+spatial extent to simulate occurrences.}
 
 \item{initial_average_occurrences}{A positive numeric value indicating the
 average number of occurrences to be simulated within the extent of

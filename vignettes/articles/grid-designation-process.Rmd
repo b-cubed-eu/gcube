@@ -35,7 +35,7 @@ The functions are set up such that a single polygon as input is enough to go thr
 
 The user can change these arguments to allow for more flexibility.
 As input, we create a polygon in which we simulate occurrences.
-It represents the spatial extend of the species.
+It represents the spatial extent of the species.
 
 ```{r}
 polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
@@ -46,7 +46,7 @@ The polygon looks like this.
 
 ```{r}
 #| fig.alt: >
-#|   Spatial extend in which we will simulate species occurrences.
+#|   Spatial extent in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon) +
   theme_minimal()
@@ -75,7 +75,7 @@ The result looks like this.
 
 ```{r}
 #| fig.alt: >
-#|   Spatial extend with road in which we will simulate species occurrences.
+#|   Spatial extent with road in which we will simulate species occurrences.
 ggplot() +
   geom_sf(data = polygon, fill = "lightgreen") +
   geom_sf(data = road_polygon) +
