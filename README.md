@@ -229,10 +229,8 @@ ggplot() +
           fill = alpha("firebrick", 0.3)) +
   geom_sf(data = sampled_points, colour = "blue") +
   geom_sf(data = observations_df, colour = "firebrick") +
-  labs(x = "", y = "", fill = "n") +
+  labs(x = "", y = "") +
   theme_minimal()
-#> Ignoring unknown labels:
-#> • fill : "n"
 ```
 
 <img src="man/figures/readme-grid-designation-1.png" alt="Distribution of random samples within uncertainty circle." width="80%" />
