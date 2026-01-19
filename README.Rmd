@@ -218,7 +218,7 @@ ggplot() +
           fill = alpha("firebrick", 0.3)) +
   geom_sf(data = sampled_points, colour = "blue") +
   geom_sf(data = observations_df, colour = "firebrick") +
-  labs(x = "", y = "", fill = "n") +
+  labs(x = "", y = "") +
   theme_minimal()
 ```
 

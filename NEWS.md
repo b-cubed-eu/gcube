@@ -1,3 +1,7 @@
+# gcube 1.4.1
+
+* Remove warning message README code
+
 # gcube 1.4.0
 
 * Fix installation instructions #134
