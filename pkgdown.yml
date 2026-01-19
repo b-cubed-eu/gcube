@@ -1,0 +1,14 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  articles/cube-for-virtual-species: cube-for-virtual-species.html
+  articles/custom-grid-designation: custom-grid-designation.html
+  articles/detection-process: detection-process.html
+  articles/grid-designation-process: grid-designation-process.html
+  articles/multi-species-approach: multi-species-approach.html
+  articles/occurrence-process: occurrence-process.html
+last_built: 2026-01-19T16:08Z
+urls:
+  reference: https://b-cubed-eu.github.io/gcube/reference
+  article: https://b-cubed-eu.github.io/gcube/articles

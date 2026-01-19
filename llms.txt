@@ -1,0 +1,388 @@
+# gcube
+
+The goal of **gcube** is to provide a simulation framework for
+biodiversity data cubes using the R programming language. This can start
+from simulating multiple species distributed in a landscape over a
+temporal scope. In a second phase, the simulation of a variety of
+observation processes and effort can generate actual occurrence
+datasets. Based on their (simulated) spatial uncertainty, occurrences
+can then be designated to a grid to form a data cube.
+
+Simulation studies offer numerous benefits due to their ability to mimic
+real-world scenarios in controlled and customizable environments.
+Ecosystems and biodiversity data are very complex and involve a
+multitude of interacting factors. Simulations allow researchers to model
+and understand the complexity of ecological systems by varying
+parameters such as spatial and/or temporal clustering, species
+prevalence, etc.
+
+## Installation
+
+Install **gcube** in R:
+
+``` r
+
+install.packages("gcube", repos = c("https://b-cubed-eu.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+You can install the development version from
+[GitHub](https://github.com/) with:
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("b-cubed-eu/gcube")
+```
+
+## Package name rationale and origin story
+
+The name **gcube** stands for “generate cube” since it can be used to
+generate biodiversity data cubes from minimal input. It was first
+developed during the hackathon “Hacking Biodiversity Data Cubes for
+Policy”, where it won the first prize in the category “Visualization and
+training”. You can read the full story here:
+<https://doi.org/10.37044/osf.io/vcyr7>
+
+## Example
+
+This is a basic example which shows the workflow for simulating a
+biodiversity data cube. It is divided in three steps or processes:
+
+1.  Occurrence process
+2.  Detection process
+3.  Grid designation process
+
+The functions are set up such that a single polygon as input is enough
+to go through this workflow using default arguments. The user can change
+these arguments to allow for more flexibility.
+
+``` r
+
+# Load packages
+library(gcube)
+
+library(sf)      # working with spatial objects
+library(dplyr)   # data wrangling
+library(ggplot2) # visualisation with ggplot
+```
+
+We create a polygon as input. It represents the spatial extent of the
+species.
+
+``` r
+
+# Create a polygon to simulate occurrences within
+polygon <- st_polygon(list(cbind(c(5, 10, 8, 2, 3, 5), c(2, 1, 7,9, 5, 2))))
+
+# Visualise
+ggplot() + 
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+![Spatial extent in which we will simulate species
+occurrences.](reference/figures/readme-polygon-1.png)
+
+### Occurrence process
+
+We generate occurrence points within the polygon using the
+[`simulate_occurrences()`](https://b-cubed-eu.github.io/gcube/reference/simulate_occurrences.md)
+function. In this function, the user can specify different levels of
+spatial clustering, and define the trend of number of occurrences over
+time. The default is a random spatial pattern and a single time point
+with `rpois(1, 50)` occurrences.
+
+``` r
+
+# Simulate occurrences within polygon
+occurrences_df <- simulate_occurrences(
+  species_range = polygon,
+  initial_average_occurrences = 50,
+  spatial_pattern = c("random", "clustered"),
+  n_time_points = 1,
+  seed = 123)
+#> [using unconditional Gaussian simulation]
+
+# Visualise
+ggplot() + 
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
+  theme_minimal()
+```
+
+![Spatial distribution of occurrences within the
+polygon.](reference/figures/readme-simulate-occurrences-1.png)
+
+### Detection process
+
+In the second step we define the sampling process, based on the
+detection probability of the species and the sampling bias. This is done
+using the
+[`sample_observations()`](https://b-cubed-eu.github.io/gcube/reference/sample_observations.md)
+function. The default sampling bias is `"no_bias"`, but bias can be
+added using a polygon or a grid as well.
+
+``` r
+
+# Detect occurrences
+detections_df_raw <- sample_observations(
+  occurrences = occurrences_df,
+  detection_probability = 0.5,
+  sampling_bias = c("no_bias", "polygon", "manual"),
+  seed = 123)
+
+# Visualise
+ggplot() + 
+  geom_sf(data = polygon) +
+  geom_sf(data = detections_df_raw,
+          aes(colour = observed)) +
+  theme_minimal()
+```
+
+![Spatial distribution of occurrences with indication of sampling
+status.](reference/figures/readme-detect-occurrences-1.png)
+
+We select the detected occurrences and add an uncertainty to these
+observations. This can be done using the
+[`filter_observations()`](https://b-cubed-eu.github.io/gcube/reference/filter_observations.md)
+and
+[`add_coordinate_uncertainty()`](https://b-cubed-eu.github.io/gcube/reference/add_coordinate_uncertainty.md)
+functions, respectively.
+
+``` r
+
+# Select detected occurrences only
+detections_df <- filter_observations(
+  observations_total = detections_df_raw)
+
+# Add coordinate uncertainty
+set.seed(123)
+coord_uncertainty_vec <- rgamma(nrow(detections_df), shape = 2, rate = 6)
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = coord_uncertainty_vec)
+
+# Created and sf object with uncertainty circles to visualise
+buffered_observations <- st_buffer(
+  observations_df,
+  observations_df$coordinateUncertaintyInMeters)
+
+# Visualise
+ggplot() + 
+  geom_sf(data = polygon) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = observations_df, colour = "firebrick") +
+  theme_minimal()
+```
+
+![Spatial distribution of detected occurrences with coordinate
+uncertainty.](reference/figures/readme-uncertainty-occurrences-1.png)
+
+### Grid designation process
+
+Finally, observations are designated to a grid with
+[`grid_designation()`](https://b-cubed-eu.github.io/gcube/reference/grid_designation.md)
+to create an occurrence cube. We create a grid over the spatial extent
+using
+[`sf::st_make_grid()`](https://r-spatial.github.io/sf/reference/st_make_grid.html).
+
+``` r
+
+# Define a grid over spatial extent
+grid_df <- st_make_grid(
+    buffered_observations,
+    square = TRUE,
+    cellsize = c(1.2, 1.2)
+  ) %>%
+  st_sf() %>%
+  mutate(intersect = as.vector(st_intersects(geometry, polygon,
+                                             sparse = FALSE))) %>%
+  dplyr::filter(intersect == TRUE) %>%
+  dplyr::select(-"intersect")
+```
+
+To create an occurrence cube,
+[`grid_designation()`](https://b-cubed-eu.github.io/gcube/reference/grid_designation.md)
+will randomly take a point within the uncertainty circle around the
+observations. These points can be extracted by setting the argument
+`aggregate = FALSE`.
+
+``` r
+
+# Create occurrence cube
+occurrence_cube_df <- grid_designation(
+  observations = observations_df,
+  grid = grid_df,
+  seed = 123)
+
+# Get sampled points within uncertainty circle
+sampled_points <- grid_designation(
+  observations = observations_df,
+  grid = grid_df,
+  aggregate = FALSE,
+  seed = 123)
+
+# Visualise grid designation
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = sampled_points, colour = "blue") +
+  geom_sf(data = observations_df, colour = "firebrick") +
+  labs(x = "", y = "") +
+  theme_minimal()
+```
+
+![Distribution of random samples within uncertainty
+circle.](reference/figures/readme-grid-designation-1.png)
+
+The output gives the number of observations per grid cell and minimal
+coordinate uncertainty per grid cell.
+
+``` r
+
+# Visualise minimal coordinate uncertainty
+ggplot() +
+  geom_sf(data = occurrence_cube_df, aes(fill = min_coord_uncertainty),
+          alpha = 0.5, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+  scale_fill_continuous(type = "viridis") +
+  labs(x = "", y = "") +
+  theme_minimal()
+```
+
+![Distribution of minimal coordinate
+uncertainty.](reference/figures/readme-visualise-designation-1.png)
+
+### Cubes for multiple species
+
+Each cube simulation function mentioned earlier has a corresponding
+mapping function. These mapping functions are designed to handle
+operations for multiple species simultaneously by using the
+[`purrr::pmap()`](https://purrr.tidyverse.org/reference/pmap.html)
+function. Please consult the documentation for detailed information on
+how these mapping functions are implemented.
+
+| single species               | multiple species                 |
+|------------------------------|----------------------------------|
+| simulate_occurrences()       | map_simulate_occurrences()       |
+| sample_observations()        | map_sample_observations()        |
+| filter_observations()        | map_filter_observations()        |
+| add_coordinate_uncertainty() | map_add_coordinate_uncertainty() |
+| grid_designation()           | map_grid_designation()           |
+
+# Package index
+
+## Core gcube workflow functions
+
+- [`add_coordinate_uncertainty()`](https://b-cubed-eu.github.io/gcube/reference/add_coordinate_uncertainty.md)
+  : Add coordinate uncertainty to observations
+
+- [`filter_observations()`](https://b-cubed-eu.github.io/gcube/reference/filter_observations.md)
+  : Filter detected occurrences
+
+- [`grid_designation()`](https://b-cubed-eu.github.io/gcube/reference/grid_designation.md)
+  : Observations to grid designation to create a data cube
+
+- [`sample_observations()`](https://b-cubed-eu.github.io/gcube/reference/sample_observations.md)
+  : Sample observations from a larger occurrence dataset
+
+- [`simulate_occurrences()`](https://b-cubed-eu.github.io/gcube/reference/simulate_occurrences.md)
+  : Simulate species occurrences within a spatiotemporal scope
+
+- [`virtualsample_to_sf()`](https://b-cubed-eu.github.io/gcube/reference/virtualsample_to_sf.md)
+  :
+
+  Convert virtualspecies sample to `sf` format
+
+## Mapping core gcube workflow functions
+
+- [`generate_taxonomy()`](https://b-cubed-eu.github.io/gcube/reference/generate_taxonomy.md)
+  : Generate a taxonomic hierarchy
+
+- [`map_add_coordinate_uncertainty()`](https://b-cubed-eu.github.io/gcube/reference/map_add_coordinate_uncertainty.md)
+  :
+
+  Map
+  [`add_coordinate_uncertainty()`](https://b-cubed-eu.github.io/gcube/reference/add_coordinate_uncertainty.md)
+  over multiple species
+
+- [`map_filter_observations()`](https://b-cubed-eu.github.io/gcube/reference/map_filter_observations.md)
+  :
+
+  Map
+  [`filter_observations()`](https://b-cubed-eu.github.io/gcube/reference/filter_observations.md)
+  over multiple species
+
+- [`map_grid_designation()`](https://b-cubed-eu.github.io/gcube/reference/map_grid_designation.md)
+  :
+
+  Map
+  [`grid_designation()`](https://b-cubed-eu.github.io/gcube/reference/grid_designation.md)
+  over multiple species
+
+- [`map_sample_observations()`](https://b-cubed-eu.github.io/gcube/reference/map_sample_observations.md)
+  :
+
+  Map
+  [`sample_observations()`](https://b-cubed-eu.github.io/gcube/reference/sample_observations.md)
+  over multiple species
+
+- [`map_simulate_occurrences()`](https://b-cubed-eu.github.io/gcube/reference/map_simulate_occurrences.md)
+  :
+
+  Map
+  [`simulate_occurrences()`](https://b-cubed-eu.github.io/gcube/reference/simulate_occurrences.md)
+  over multiple species
+
+## Occurrence process supporting functions
+
+- [`create_spatial_pattern()`](https://b-cubed-eu.github.io/gcube/reference/create_spatial_pattern.md)
+  : Create spatial pattern within a polygon
+- [`sample_occurrences_from_raster()`](https://b-cubed-eu.github.io/gcube/reference/sample_occurrences_from_raster.md)
+  : Sample occurrences from spatial random field
+- [`simulate_random_walk()`](https://b-cubed-eu.github.io/gcube/reference/simulate_random_walk.md)
+  : Simulate a random walk over time
+- [`simulate_timeseries()`](https://b-cubed-eu.github.io/gcube/reference/simulate_timeseries.md)
+  : Simulate timeseries for species occurrences
+
+## Detection process supporting functions
+
+- [`apply_manual_sampling_bias()`](https://b-cubed-eu.github.io/gcube/reference/apply_manual_sampling_bias.md)
+  : Apply manual sampling bias to occurrences via a grid
+- [`apply_polygon_sampling_bias()`](https://b-cubed-eu.github.io/gcube/reference/apply_polygon_sampling_bias.md)
+  : Apply sampling bias to occurrences via a polygon
+
+## Grid designation process supporting functions
+
+- [`sample_from_binormal_circle()`](https://b-cubed-eu.github.io/gcube/reference/sample_from_binormal_circle.md)
+  : Sample from a circle using the bivariate Normal distribution
+- [`sample_from_uniform_circle()`](https://b-cubed-eu.github.io/gcube/reference/sample_from_uniform_circle.md)
+  : Sample from a circle using the Uniform distribution
+
+## Mapping functions supporting function
+
+- [`map_simulation_functions()`](https://b-cubed-eu.github.io/gcube/reference/map_simulation_functions.md)
+  : Map a cube simulation function over multiple rows of a dataframe
+
+# Articles
+
+### gcube simulation workflow
+
+- [1. Simulating the occurrence
+  process](https://b-cubed-eu.github.io/gcube/articles/occurrence-process.md):
+- [2. Simulating the detection
+  process](https://b-cubed-eu.github.io/gcube/articles/detection-process.md):
+- [3. Specifying the grid designation
+  process](https://b-cubed-eu.github.io/gcube/articles/grid-designation-process.md):
+- [4. Creating cubes for multiple
+  species](https://b-cubed-eu.github.io/gcube/articles/multi-species-approach.md):
+
+### Other tutorials
+
+- [Create occurrence cubes for virtual
+  species](https://b-cubed-eu.github.io/gcube/articles/cube-for-virtual-species.md):
+- [Grid designation for custom
+  datasets](https://b-cubed-eu.github.io/gcube/articles/custom-grid-designation.md):
