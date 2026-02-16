@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/b-cubed-eu/gcube",
   "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.3.7",
+  "version": "1.4.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.3 (2025-02-28 ucrt)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -107,13 +107,15 @@
   "copyrightHolder": [
     {
       "@type": "Organization",
-      "name": "Research Institute for Nature and Forest (INBO)"
+      "name": "Research Institute for Nature and Forest (INBO)",
+      "email": "info@inbo.be"
     }
   ],
   "funder": [
     {
       "@type": "Organization",
-      "name": "European Union"
+      "name": "European Union (ID 101059592)",
+      "email": "b-cubedsupport@meisebotanicgarden.be"
     }
   ],
   "maintainer": [
@@ -369,26 +371,26 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "575.752KB",
+  "fileSize": "583.201KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
-      "datePublished": "2025",
-      "author": {
-        "author": {
+      "datePublished": "2026",
+      "author": [
+        {
           "@type": "Person",
           "givenName": "Ward",
           "familyName": "Langeraert"
         }
-      },
-      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.3.7",
+      ],
+      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.4.2",
       "identifier": "10.5281/zenodo.14038996",
       "url": "https://b-cubed-eu.github.io/gcube/",
       "@id": "https://doi.org/10.5281/zenodo.14038996",
       "sameAs": "https://doi.org/10.5281/zenodo.14038996"
     }
   ],
-  "releaseNotes": "https://github.com/b-cubed-eu/gcube/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/b-cubed-eu/gcube/blob/main/NEWS.md",
   "readme": "https://github.com/b-cubed-eu/gcube/blob/main/README.md",
   "contIntegration": ["https://github.com/b-cubed-eu/gcube/actions/workflows/check_on_different_r_os.yml", "https://app.codecov.io/gh/b-cubed-eu/gcube/"],
   "developmentStatus": "https://www.repostatus.org/#active",
