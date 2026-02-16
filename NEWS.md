@@ -1,3 +1,7 @@
+# gcube 1.4.2
+
+* Test GitHub release #139
+
 # gcube 1.4.1
 
 * Remove warning message README code
