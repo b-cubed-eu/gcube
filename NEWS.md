@@ -1,3 +1,9 @@
+# gcube 1.4.3
+
+* Add grant ID for Zenodo integration #139
+* Fix ROR url bug
+* Add publisher to metadata
+
 # gcube 1.4.2
 
 * Test GitHub release #139

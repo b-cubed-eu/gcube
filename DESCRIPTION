@@ -1,6 +1,6 @@
 Package: gcube
 Title: Simulating Biodiversity Data Cubes
-Version: 1.4.2
+Version: 1.4.3
 Authors@R: c(
     person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Research Institute for Nature and Forest (INBO)")),
@@ -30,10 +30,10 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-4291-5981")),
     person("Mukhtar Muhammed", "Yahaya", role = "ctb",
            comment = c(ORCID = "0009-0008-9200-0863")),
-    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = "cph",
-           comment = c(ROR = "https://ror.org/00j54wy13")),
+    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = c("cph", "pbl"),
+           comment = c(ROR = "00j54wy13")),
     person("European Union (ID 101059592)", , , "b-cubedsupport@meisebotanicgarden.be", role = "fnd",
-           comment = c(id = "101059592"))
+           comment = c(grant_id = "10.3030/101059592::101059592"))
   )
 Description: This R package provides a simulation framework for
     biodiversity data cubes. This can start from simulating multiple

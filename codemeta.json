@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/b-cubed-eu/gcube",
   "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -371,7 +371,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "583.201KB",
+  "fileSize": "583.367KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -383,7 +383,7 @@
           "familyName": "Langeraert"
         }
       ],
-      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.4.2",
+      "name": "gcube: Simulating Biodiversity Data Cubes. Version 1.4.3",
       "identifier": "10.5281/zenodo.14038996",
       "url": "https://b-cubed-eu.github.io/gcube/",
       "@id": "https://doi.org/10.5281/zenodo.14038996",
