@@ -1,3 +1,7 @@
+# gcube 1.4.4
+
+* Do not use DOI for grant ID
+
 # gcube 1.4.3
 
 * Add grant ID for Zenodo integration #139
